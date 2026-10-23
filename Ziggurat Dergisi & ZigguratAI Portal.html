@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ziggurat Dergisi - ZigguratAI Bilişim & Eğitim Portalı</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        ziggurat: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            300: '#fcd34d',
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                            800: '#92400e',
+                            900: '#78350f',
+                            950: '#451a03',
+                        },
+                        cyber: {
+                            dark: '#0f172a',
+                            card: '#1e293b',
+                            accent: '#06b6d4',
+                            purple: '#8b5cf6',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #090d16;
+            color: #f1f5f9;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #f59e0b;
+        }
+        .glow-gold {
+            box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.3);
+        }
+        .glow-cyan {
+            box-shadow: 0 0 25px -5px rgba(6, 182, 212, 0.3);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .ziggurat-pattern {
+            background-color: #0f172a;
+            background-image:  radial-gradient(#f59e0b 0.75px, transparent 0.75px), radial-gradient(#f59e0b 0.75px, #0f172a 0.75px);
+            background-size: 30px 30px;
+            background-position: 0 0,15px 15px;
+            opacity: 0.95;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+        .animate-pulse-slow {
+            animation: pulseGlow 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-slate-900">
+
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-slate-900/90 border-b border-amber-500/20 px-4 lg:px-8 py-3">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+            <!-- Brand Logo -->
+            <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
+                <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-amber-600 via-amber-500 to-cyan-500 flex items-center justify-center text-slate-950 font-black text-2xl shadow-lg glow-gold">
+                    Z
+                </div>
+                <div>
+                    <h1 class="text-xl font-extrabold tracking-tight flex items-center gap-2">
+                        <span>ZİGGURAT</span>
+                        <span class="text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30">DERGİSİ</span>
+                    </h1>
+                    <p class="text-xs text-slate-400 flex items-center gap-1">
+                        <i class="fa-solid font-mono text-[10px] text-cyan-400 fa-microchip"></i>
+                        ZigguratAI Sistem Destekli
+                    </p>
+                </div>
+            </div>
+
+            <!-- Main Navigation Links -->
+            <nav class="hidden lg:flex items-center gap-1 bg-slate-800/60 p-1.5 rounded-2xl border border-slate-700/60">
+                <button onclick="switchTab('home')" id="nav-home" class="nav-btn px-4 py-2 rounded-xl text-sm font-semibold transition flex items-center gap-2 bg-amber-500 text-slate-950 shadow">
+                    <i class="fa-solid fa-house"></i> Ana Sayfa
+                </button>
+                <button onclick="switchTab('search')" id="nav-search" class="nav-btn px-4 py-2 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-700/50 transition flex items-center gap-2">
+                    <i class="fa-solid fa-magnifying-glass text-cyan-400"></i> ZigguratAI Arama
+                </button>
+                <button onclick="switchTab('tests')" id="nav-tests" class="nav-btn px-4 py-2 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-700/50 transition flex items-center gap-2">
+                    <i class="fa-solid fa-graduation-cap text-amber-400"></i> MEB Testleri
+                </button>
+                <button onclick="switchTab('community')" id="nav-community" class="nav-btn px-4 py-2 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-700/50 transition flex items-center gap-2">
+                    <i class="fa-solid fa-comments text-emerald-400"></i> Topluluk
+                </button>
+                <button onclick="switchTab('jokes')" id="nav-jokes" class="nav-btn px-4 py-2 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-700/50 transition flex items-center gap-2">
+                    <i class="fa-solid fa-face-laugh-beam text-pink-400"></i> Günün Esprisi
+                </button>
+                <button onclick="switchTab('boss')" id="nav-boss" class="nav-btn px-4 py-2 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-700/50 transition flex items-center gap-2 relative">
+                    <i class="fa-solid fa-shield-halved text-purple-400"></i> Boss Paneli
+                    <span id="boss-badge" class="hidden absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping"></span>
+                </button>
+            </nav>
+
+            <!-- User Info & Controls -->
+            <div class="flex items-center gap-3">
+                <!-- User Profile Trigger -->
+                <button onclick="openUserModal()" class="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 px-3 py-1.5 rounded-xl transition">
+                    <div id="user-avatar" class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center border border-amber-500/40 text-sm">
+                        U
+                    </div>
+                    <div class="text-left hidden sm:block">
+                        <div id="user-name-display" class="text-xs font-bold text-slate-200 truncate max-w-[110px]">Misafir</div>
+                        <div id="user-role-display" class="text-[10px] text-slate-400">Öğrenci</div>
+                    </div>
+                    <i class="fa-solid fa-pen-to-square text-xs text-slate-400 ml-1"></i>
+                </button>
+
+                <!-- AI Chat Floating Trigger -->
+                <button onclick="toggleAiModal()" class="relative p-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-xl text-white hover:opacity-90 transition shadow-lg glow-cyan flex items-center gap-2 text-sm font-bold">
+                    <i class="fa-solid fa-robot text-base"></i>
+                    <span class="hidden md:inline">ZigguratAI Chat</span>
+                </button>
+
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileMenu()" class="lg:hidden p-2 text-slate-300 hover:text-white">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden mt-3 pt-3 border-t border-slate-800 flex flex-col gap-2">
+            <button onclick="switchTab('home'); toggleMobileMenu()" class="text-left px-4 py-2.5 rounded-xl bg-slate-800 text-amber-400 font-semibold flex items-center gap-3">
+                <i class="fa-solid fa-house w-5"></i> Ana Sayfa
+            </button>
+            <button onclick="switchTab('search'); toggleMobileMenu()" class="text-left px-4 py-2.5 rounded-xl text-slate-300 hover:bg-slate-800 font-semibold flex items-center gap-3">
+                <i class="fa-solid fa-magnifying-glass text-cyan-400 w-5"></i> ZigguratAI Arama Engine
+            </button>
+            <button onclick="switchTab('tests'); toggleMobileMenu()" class="text-left px-4 py-2.5 rounded-xl text-slate-300 hover:bg-slate-800 font-semibold flex items-center gap-3">
+                <i class="fa-solid fa-graduation-cap text-amber-400 w-5"></i> MEB Ünite Değerlendirmeleri
+            </button>
+            <button onclick="switchTab('community'); toggleMobileMenu()" class="text-left px-4 py-2.5 rounded-xl text-slate-300 hover:bg-slate-800 font-semibold flex items-center gap-3">
+                <i class="fa-solid fa-comments text-emerald-400 w-5"></i> Topluluk Forumu
+            </button>
+            <button onclick="switchTab('jokes'); toggleMobileMenu()" class="text-left px-4 py-2.5 rounded-xl text-slate-300 hover:bg-slate-800 font-semibold flex items-center gap-3">
+                <i class="fa-solid fa-face-laugh-beam text-pink-400 w-5"></i> Günün Esprisi
+            </button>
+            <button onclick="switchTab('boss'); toggleMobileMenu()" class="text-left px-4 py-2.5 rounded-xl text-slate-300 hover:bg-slate-800 font-semibold flex items-center gap-3">
+                <i class="fa-solid fa-shield-halved text-purple-400 w-5"></i> ZigguratBoss Yönetim Paneli
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- ==================== TAB 1: ANA SAYFA ==================== -->
+        <section id="tab-home" class="tab-content space-y-8">
+            <!-- Hero Banner -->
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-slate-800 to-amber-950 border border-amber-500/30 p-8 lg:p-12 shadow-2xl">
+                <div class="absolute -right-10 -bottom-10 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute right-1/3 top-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="relative z-10 max-w-3xl space-y-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-semibold">
+                        <i class="fa-solid fa-bolt"></i> Ziggurat Dergisi Yeni Dijital Çağ Sayısı Yayında!
+                    </div>
+                    <h2 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
+                        Eğitimin Geleceği <span class="gradient-text">ZigguratAI</span> İle Şekilleniyor
+                    </h2>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                        Milli Eğitim Bakanlığı (MEB), EBA Bilişim Ağı, İhsan Zakiroğlu Ortaokulu web sitesi ve tüm Genel Ağ kaynaklarını anlık tarayan yapay zekamız ZigguratAI ile derslerine, sınavlarına ve genel kültürüne güç kat!
+                    </p>
+                    <div class="flex flex-wrap gap-4 pt-2">
+                        <button onclick="switchTab('search')" class="px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold hover:brightness-110 transition shadow-lg glow-gold flex items-center gap-2">
+                            <i class="fa-solid fa-magnifying-glass"></i> ZigguratAI Arama Başlat
+                        </button>
+                        <button onclick="switchTab('tests')" class="px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold transition flex items-center gap-2">
+                            <i class="fa-solid fa-book-open text-amber-400"></i> MEB Ünite Testleri
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Sources Tracker Badges -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-4 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-red-500/20 text-red-400 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-building-columns"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slate-400">Kaynak 1</div>
+                        <div class="text-sm font-bold text-slate-200">MEB Müfredatı</div>
+                        <div class="text-[10px] text-emerald-400 flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> Canlı Senkronize
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-4 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-laptop-code"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slate-400">Kaynak 2</div>
+                        <div class="text-sm font-bold text-slate-200">EBA Portalı</div>
+                        <div class="text-[10px] text-emerald-400 flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Veri Taranıyor
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-4 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-school"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slate-400">Kaynak 3</div>
+                        <div class="text-sm font-bold text-slate-200">İhsan Zakiroğlu OO</div>
+                        <div class="text-[10px] text-emerald-400 flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Duyurular Aktif
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-4 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-globe"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slate-400">Kaynak 4</div>
+                        <div class="text-sm font-bold text-slate-200">Genel Ağ & Sosyal</div>
+                        <div class="text-[10px] text-emerald-400 flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> ZigguratAI Taramada
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Features Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Latest Announcements Section -->
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xl font-bold flex items-center gap-2 text-slate-100">
+                            <i class="fa-solid fa-bullhorn text-amber-500"></i>
+                            Ziggurat Dergisi & Okul Duyuruları
+                        </h3>
+                        <span class="text-xs text-slate-400" id="announcement-count">0 Duyuru</span>
+                    </div>
+
+                    <div id="home-announcements-list" class="space-y-4">
+                        <!-- Dynamic announcements rendered via JS -->
+                    </div>
+                </div>
+
+                <!-- Right Sidebar: Quick AI & Daily Joke Teaser -->
+                <div class="space-y-6">
+                    <!-- Daily Joke Widget -->
+                    <div class="bg-gradient-to-b from-slate-800 to-slate-900 border border-pink-500/30 rounded-2xl p-6 shadow-lg relative overflow-hidden">
+                        <div class="absolute -right-6 -top-6 text-pink-500/10 text-8xl font-black">
+                            <i class="fa-solid fa-laugh-squint"></i>
+                        </div>
+                        <div class="relative z-10 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="px-2.5 py-1 rounded-lg bg-pink-500/20 text-pink-400 text-xs font-bold border border-pink-500/30">
+                                    <i class="fa-solid fa-face-smile"></i> Günün Esprisi
+                                </span>
+                                <span class="text-xs text-slate-400" id="joke-date-badge">Bugün</span>
+                            </div>
+                            <p id="home-joke-text" class="text-slate-200 font-medium italic text-sm leading-relaxed">
+                                "Espri yükleniyor..."
+                            </p>
+                            <button onclick="switchTab('jokes')" class="text-xs font-bold text-pink-400 hover:text-pink-300 flex items-center gap-1">
+                                Daha Fazla Komik Espri Gör <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- School Stats & ZigguratAI Quick Info -->
+                    <div class="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-6 space-y-4">
+                        <h4 class="font-bold text-slate-200 flex items-center gap-2">
+                            <i class="fa-solid fa-circle-info text-cyan-400"></i> İhsan Zakiroğlu OO Dijital Arşiv
+                        </h4>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Okulumuz İhsan Zakiroğlu Ortaokulu öğrencileri için hazırlanan Ziggurat Dergisi, MEB ders müfredatlarıyla %100 uyumlu dijital ünite içerikleri ve AI destekli arama motoru sunar.
+                        </p>
+                        <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-700 text-xs text-slate-300 space-y-2">
+                            <div class="flex justify-between">
+                                <span>Aktif MEB Üniteleri:</span>
+                                <span class="font-bold text-amber-400">5, 6, 7 ve 8. Sınıf Tüm Dersler</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>ZigguratBoss Yetkilileri:</span>
+                                <span class="font-bold text-purple-400">Aktif Yönetim</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== TAB 2: ZİGGURAT AI ARAMA ==================== -->
+        <section id="tab-search" class="tab-content hidden space-y-6">
+            <div class="bg-slate-800/80 border border-slate-700/80 rounded-3xl p-6 lg:p-8 space-y-6 shadow-xl">
+                <div class="text-center max-w-2xl mx-auto space-y-2">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 text-xs font-semibold">
+                        <i class="fa-solid fa-network-wired"></i> EBA + MEB + Okul Web Site + Genel Ağ Arama Motoru
+                    </div>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold">ZigguratAI Akıllı Arama Motoru</h2>
+                    <p class="text-slate-400 text-sm">
+                        Merak ettiğin herhangi bir konuyu, ödevi veya MEB müfredat başlığını yaz. ZigguratAI tüm resmi kaynakları saniyeler içinde tarayıp özetlesin!
+                    </p>
+                </div>
+
+                <!-- Search Input Form -->
+                <div class="max-w-3xl mx-auto space-y-3">
+                    <form onsubmit="handleAiSearch(event)" class="relative flex items-center">
+                        <input type="text" id="ai-search-input" placeholder="Örn: 8. Sınıf Fen Bilimleri DNA ve Genetik Kod, İhsan Zakiroğlu haberleri, EBA ders notları..." 
+                            class="w-full pl-12 pr-32 py-4 rounded-2xl bg-slate-900 border-2 border-slate-700 focus:border-cyan-500 text-slate-100 placeholder-slate-500 outline-none text-sm transition shadow-inner">
+                        <i class="fa-solid fa-magnifying-glass absolute left-4 text-slate-400 text-lg"></i>
+                        <button type="submit" class="absolute right-2.5 px-5 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl text-white font-bold text-sm hover:brightness-110 transition shadow-md glow-cyan">
+                            Tara & Bul
+                        </button>
+                    </form>
+
+                    <!-- Quick Tag Buttons -->
+                    <div class="flex flex-wrap items-center justify-center gap-2 text-xs">
+                        <span class="text-slate-400 font-semibold">Örnek Aramalar:</span>
+                        <button onclick="setSearchQuery('LGS Matematik Çarpanlar ve Katlar EBA Özet')" class="px-2.5 py-1 rounded-lg bg-slate-700/50 hover:bg-slate-700 text-slate-300 transition">
+                            #LGS Matematik
+                        </button>
+                        <button onclick="setSearchQuery('İhsan Zakiroğlu Ortaokulu Bilim Şenliği')" class="px-2.5 py-1 rounded-lg bg-slate-700/50 hover:bg-slate-700 text-slate-300 transition">
+                            #İhsanZakiroğluOO
+                        </button>
+                        <button onclick="setSearchQuery('MEB Türkçe Cümlede Anlam')" class="px-2.5 py-1 rounded-lg bg-slate-700/50 hover:bg-slate-700 text-slate-300 transition">
+                            #MEB Türkçe
+                        </button>
+                        <button onclick="setSearchQuery('8. Sınıf T.C. İnkılap Tarihi Milli Uyanış')" class="px-2.5 py-1 rounded-lg bg-slate-700/50 hover:bg-slate-700 text-slate-300 transition">
+                            #İnkılap Tarihi
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Scanning Animation & Results -->
+            <div id="ai-search-status" class="hidden text-center py-8 space-y-4">
+                <div class="inline-block animate-spin w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full"></div>
+                <p class="text-cyan-400 font-medium text-sm animate-pulse">
+                    ZigguratAI; MEB, EBA, İhsan Zakiroğlu Okul Ağını ve İnterneti Taramaktadır...
+                </p>
+                <div class="flex justify-center gap-4 text-xs text-slate-500 font-mono">
+                    <span>[OK] EBA Portal Bağlandı</span>
+                    <span>[OK] MEB Veritabanı Okundu</span>
+                    <span>[OK] Okul Web Taraması Tamam</span>
+                </div>
+            </div>
+
+            <div id="ai-search-results" class="space-y-6">
+                <!-- Dynamic AI search result populated here -->
+            </div>
+        </section>
+
+
+        <!-- ==================== TAB 3: MEB MÜFREDAT & TESTLER ==================== -->
+        <section id="tab-tests" class="tab-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-800/80 p-6 rounded-3xl border border-slate-700/80">
+                <div>
+                    <h2 class="text-2xl font-black text-slate-100 flex items-center gap-2">
+                        <i class="fa-solid fa-graduation-cap text-amber-500"></i> MEB Ünite Değerlendirme Testleri
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-1">
+                        ZigguratAI tarafından MEB ve EBA müfredatlarına tam uygun hazırlanmış Türkçe, Matematik, Fen, Sosyal, İnkılap, İngilizce ve Din Kültürü testleri.
+                    </p>
+                </div>
+                <div class="flex gap-2">
+                    <span class="px-3 py-1.5 rounded-xl bg-amber-500/20 text-amber-400 text-xs font-bold border border-amber-500/30">
+                        Toplam Test: <span id="test-count-badge">0</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Quiz Subject Filter Buttons -->
+            <div class="flex flex-wrap gap-2 pb-2">
+                <button onclick="filterQuizzes('Tümü')" class="quiz-filter-btn px-4 py-1.5 rounded-xl text-xs font-bold bg-amber-500 text-slate-950 transition">Tüm Dersler</button>
+                <button onclick="filterQuizzes('Türkçe')" class="quiz-filter-btn px-4 py-1.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-300 transition">Türkçe</button>
+                <button onclick="filterQuizzes('Matematik')" class="quiz-filter-btn px-4 py-1.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-300 transition">Matematik</button>
+                <button onclick="filterQuizzes('Fen Bilimleri')" class="quiz-filter-btn px-4 py-1.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-300 transition">Fen Bilimleri</button>
+                <button onclick="filterQuizzes('Sosyal Bilgiler')" class="quiz-filter-btn px-4 py-1.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-300 transition">Sosyal Bilgiler</button>
+                <button onclick="filterQuizzes('İnkılap Tarihi')" class="quiz-filter-btn px-4 py-1.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-300 transition">T.C. İnkılap Tarihi</button>
+                <button onclick="filterQuizzes('İngilizce')" class="quiz-filter-btn px-4 py-1.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-300 transition">İngilizce</button>
+                <button onclick="filterQuizzes('Din Kültürü')" class="quiz-filter-btn px-4 py-1.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-300 transition">Din Kültürü</button>
+            </div>
+
+            <!-- Quiz List Container -->
+            <div id="quizzes-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Quizzes dynamically rendered -->
+            </div>
+
+            <!-- Quiz Active Modal/Container -->
+            <div id="active-quiz-modal" class="hidden fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
+                <div class="bg-slate-900 border border-amber-500/40 rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+                    <button onclick="closeActiveQuiz()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+
+                    <div id="quiz-header" class="border-b border-slate-800 pb-4">
+                        <!-- Dynamic quiz title -->
+                    </div>
+
+                    <div id="quiz-body" class="space-y-6">
+                        <!-- Dynamic question view -->
+                    </div>
+
+                    <div id="quiz-footer" class="flex justify-between items-center pt-4 border-t border-slate-800">
+                        <!-- Dynamic quiz buttons -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== TAB 4: TOPLULUK & YORUMLAR ==================== -->
+        <section id="tab-community" class="tab-content hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Left/Main Column: Comment Feed -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="bg-slate-800/80 border border-slate-700/80 rounded-3xl p-6 space-y-4">
+                        <h2 class="text-xl font-bold flex items-center gap-2">
+                            <i class="fa-solid fa-comments text-emerald-400"></i> Ziggurat Öğrenci & Okul Forumu
+                        </h2>
+                        <p class="text-xs text-slate-400">
+                            Fikirlerini paylaş, dersler hakkında soru sor veya okul arkadaşlarınla etkileşime geç! Saygılı bir dil kullanmayı unutma (Otomatik Küfür Sansürü Aktiftir).
+                        </p>
+
+                        <!-- Comment Input Box -->
+                        <form onsubmit="submitComment(event)" class="space-y-3 pt-2">
+                            <textarea id="comment-input" rows="3" placeholder="Ziggurat Dergisi ve dersler hakkındaki yorumun nedir?" 
+                                class="w-full p-4 rounded-2xl bg-slate-900 border border-slate-700 focus:border-emerald-500 text-slate-100 placeholder-slate-500 outline-none text-sm transition resize-none"></textarea>
+                            <div class="flex justify-between items-center">
+                                <span class="text-[11px] text-slate-400 flex items-center gap-1">
+                                    <i class="fa-solid fa-shield-cat text-emerald-400"></i> Küfürler otomatik *** şeklinde sansürlenir.
+                                </span>
+                                <button type="submit" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-sm transition shadow-lg flex items-center gap-2">
+                                    <i class="fa-solid fa-paper-plane"></i> Gönder
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Comments List -->
+                    <div class="space-y-4" id="community-comments-list">
+                        <!-- Comments rendered here -->
+                    </div>
+                </div>
+
+                <!-- Right Sidebar: Forum Rules -->
+                <div class="space-y-6">
+                    <div class="bg-slate-800/80 border border-slate-700/80 rounded-3xl p-6 space-y-4">
+                        <h3 class="font-bold text-slate-200 flex items-center gap-2">
+                            <i class="fa-solid fa-gavel text-amber-400"></i> Topluluk Kuralları
+                        </h3>
+                        <ul class="text-xs text-slate-300 space-y-2.5 list-disc list-inside leading-relaxed">
+                            <li>Hakaret, kötü söz ve küfür kesinlikle yasaktır (ZigguratAI filtresi aktiftir).</li>
+                            <li>İhsan Zakiroğlu OO ve MEB kurallarına uygun paylaşımlar yapınız.</li>
+                            <li>Öğrenciler arası yardımlaşma ve ders paylaşımları teşvik edilir.</li>
+                            <li>ZigguratBoss yetkilileri uygunsuz yorumları kontrol etme yetkisine sahiptir.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== TAB 5: GÜNÜN ESPRİSİ ==================== -->
+        <section id="tab-jokes" class="tab-content hidden space-y-6">
+            <div class="bg-gradient-to-r from-pink-950/60 via-slate-900 to-purple-950/60 border border-pink-500/30 rounded-3xl p-8 lg:p-12 text-center space-y-6 shadow-2xl relative overflow-hidden">
+                <div class="max-w-2xl mx-auto space-y-4 relative z-10">
+                    <span class="px-4 py-1.5 rounded-full bg-pink-500/20 text-pink-400 border border-pink-500/30 text-xs font-bold inline-flex items-center gap-2">
+                        <i class="fa-solid fa-face-laugh-squint text-sm"></i> ZigguratAI Mizah Köşesi
+                    </span>
+                    <h2 class="text-3xl sm:text-5xl font-black">Her Gün Farklı Komik Espri!</h2>
+                    <p class="text-slate-300 text-sm">
+                        Okul, MEB sınavları, öğretmenler ve teknoloji üzerine günün en neşeli esprileri Ziggurat Dergisi'nde!
+                    </p>
+
+                    <!-- Main Daily Joke Display Box -->
+                    <div class="bg-slate-900/90 border-2 border-pink-500/40 rounded-3xl p-8 space-y-4 shadow-xl my-6">
+                        <i class="fa-solid fa-quote-left text-3xl text-pink-500/40"></i>
+                        <p id="main-joke-display" class="text-lg sm:text-2xl font-bold text-slate-100 leading-relaxed">
+                            Espri yükleniyor...
+                        </p>
+                        <i class="fa-solid fa-quote-right text-3xl text-pink-500/40"></i>
+                    </div>
+
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <button onclick="generateRandomJoke()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold hover:brightness-110 transition shadow-lg flex items-center gap-2">
+                            <i class="fa-solid fa-shuffle"></i> Başka Bir Espri Patlat!
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Previous/Popular Jokes Archive -->
+            <div class="space-y-4">
+                <h3 class="text-lg font-bold text-slate-200 flex items-center gap-2">
+                    <i class="fa-solid fa-masks-theater text-pink-400"></i> Mizah Arşivi
+                </h3>
+                <div id="jokes-archive-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Jokes dynamically listed -->
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== TAB 6: ZİGGURAT BOSS YÖNETİM PANELİ ==================== -->
+        <section id="tab-boss" class="tab-content hidden space-y-6">
+            <!-- Non-Boss Access Screen -->
+            <div id="boss-access-denied" class="bg-slate-800/80 border border-red-500/40 rounded-3xl p-8 text-center space-y-4">
+                <div class="w-16 h-16 rounded-2xl bg-red-500/20 text-red-400 flex items-center justify-center text-3xl mx-auto border border-red-500/30">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <h2 class="text-2xl font-black text-slate-100">Yönetici Girişi Gereklidir</h2>
+                <p class="text-slate-400 text-sm max-w-md mx-auto">
+                    Bu alan yalnızca ZigguratBoss yetkilileri içindir.
+                </p>
+                <button onclick="openUserModal()" class="px-5 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-bold hover:bg-amber-400 transition text-sm">
+                    Profil Ayarları
+                </button>
+            </div>
+
+            <!-- Boss Authorized Dashboard -->
+            <div id="boss-dashboard" class="hidden space-y-8">
+                <!-- Boss Header Banner -->
+                <div class="bg-gradient-to-r from-purple-950 via-slate-900 to-indigo-950 border border-purple-500/40 rounded-3xl p-6 lg:p-8 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-2xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-3xl border border-purple-500/40">
+                            <i class="fa-solid fa-crown"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-black text-slate-100">ZigguratBoss Yönetim Paneli</h2>
+                            <p class="text-xs text-purple-300">Yönetim Paneline Hoş Geldiniz.</p>
+                        </div>
+                    </div>
+                    <span class="px-4 py-2 rounded-xl bg-purple-500/20 border border-purple-500/40 text-purple-300 text-xs font-bold">
+                        <i class="fa-solid fa-check-double"></i> Yönetici Modu Aktif
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Form 1: New Announcement Creation -->
+                    <div class="bg-slate-800/80 border border-slate-700/80 rounded-3xl p-6 space-y-4">
+                        <h3 class="text-lg font-bold text-slate-100 flex items-center gap-2">
+                            <i class="fa-solid fa-bullhorn text-amber-400"></i> Yeni Okul/Dergisi Duyurusu Yayınla
+                        </h3>
+                        <form onsubmit="handleCreateAnnouncement(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-400 mb-1">Duyuru Başlığı</label>
+                                <input type="text" id="boss-ann-title" required placeholder="Örn: İhsan Zakiroğlu Ortaokulu Bilgi Yarışması" 
+                                    class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm outline-none focus:border-purple-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-400 mb-1">Kategori / Etiket</label>
+                                <select id="boss-ann-tag" class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm outline-none focus:border-purple-500">
+                                    <option value="Dergisi">Ziggurat Dergisi</option>
+                                    <option value="İhsan Zakiroğlu OO">İhsan Zakiroğlu OO</option>
+                                    <option value="MEB & EBA">MEB & EBA Haberleri</option>
+                                    <option value="Yarışma">Etkinlik / Yarışma</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-400 mb-1">Duyuru İçeriği</label>
+                                <textarea id="boss-ann-content" rows="4" required placeholder="Duyuru detaylarını buraya yazınız..." 
+                                    class="w-full p-4 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm outline-none focus:border-purple-500 resize-none"></textarea>
+                            </div>
+                            <button type="submit" class="w-full py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-sm transition shadow-lg">
+                                Duyuruyu Anında Yayınla
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Form 2: New Quiz / Unit Evaluation Creation -->
+                    <div class="bg-slate-800/80 border border-slate-700/80 rounded-3xl p-6 space-y-4">
+                        <h3 class="text-lg font-bold text-slate-100 flex items-center gap-2">
+                            <i class="fa-solid fa-square-plus text-cyan-400"></i> Yeni MEB Ünite Testi Ekle
+                        </h3>
+                        <form onsubmit="handleCreateQuiz(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-400 mb-1">Test Adı / Ünite</label>
+                                <input type="text" id="boss-quiz-title" required placeholder="Örn: 7. Sınıf Sosyal Bilgiler - Ünite Değerlendirme" 
+                                    class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm outline-none focus:border-purple-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-400 mb-1">Ders Kriteri</label>
+                                <select id="boss-quiz-subject" class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-sm outline-none focus:border-purple-500">
+                                    <option value="Türkçe">Türkçe</option>
+                                    <option value="Matematik">Matematik</option>
+                                    <option value="Fen Bilimleri">Fen Bilimleri</option>
+                                    <option value="Sosyal Bilgiler">Sosyal Bilgiler</option>
+                                    <option value="İnkılap Tarihi">İnkılap Tarihi</option>
+                                    <option value="İngilizce">İngilizce</option>
+                                    <option value="Din Kültürü">Din Kültürü</option>
+                                </select>
+                            </div>
+                            <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-700/60 space-y-2">
+                                <label class="block text-xs font-bold text-slate-300">Soru 1</label>
+                                <input type="text" id="boss-q1-text" required placeholder="Soru metni..." class="w-full px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white">
+                                <div class="grid grid-cols-2 gap-2">
+                                    <input type="text" id="boss-q1-a" required placeholder="A) Şıkkı" class="px-2 py-1 rounded bg-slate-900 border border-slate-700 text-xs text-white">
+                                    <input type="text" id="boss-q1-b" required placeholder="B) Şıkkı" class="px-2 py-1 rounded bg-slate-900 border border-slate-700 text-xs text-white">
+                                    <input type="text" id="boss-q1-c" required placeholder="C) Şıkkı" class="px-2 py-1 rounded bg-slate-900 border border-slate-700 text-xs text-white">
+                                    <input type="text" id="boss-q1-d" required placeholder="D) Şıkkı" class="px-2 py-1 rounded bg-slate-900 border border-slate-700 text-xs text-white">
+                                </div>
+                                <select id="boss-q1-correct" class="w-full px-2 py-1 rounded bg-slate-900 border border-slate-700 text-xs text-amber-400 font-bold">
+                                    <option value="0">Doğru Cevap: A Şıkkı</option>
+                                    <option value="1">Doğru Cevap: B Şıkkı</option>
+                                    <option value="2">Doğru Cevap: C Şıkkı</option>
+                                    <option value="3">Doğru Cevap: D Şıkkı</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="w-full py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-sm transition shadow-lg">
+                                Testi Sisteme Ekle
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+
+    <!-- ==================== MODALS & CHATBOT ==================== -->
+
+    <!-- User Profile Modal -->
+    <div id="user-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 rounded-3xl max-w-md w-full p-6 space-y-5 shadow-2xl relative">
+            <button onclick="closeUserModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <h3 class="text-xl font-bold text-slate-100 flex items-center gap-2">
+                <i class="fa-solid fa-user-gear text-amber-500"></i> Kullanıcı Profili
+            </h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Görünen Adınız</label>
+                    <input type="text" id="user-name-input" class="w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-100 text-sm outline-none focus:border-amber-500">
+                </div>
+                <button onclick="saveUserProfile()" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm transition shadow">
+                    Kaydet
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ZigguratAI Chatbot Modal -->
+    <div id="ai-modal" class="hidden fixed bottom-4 right-4 z-50 w-full max-w-md bg-slate-900 border-2 border-cyan-500/50 rounded-3xl shadow-2xl overflow-hidden flex flex-col h-[520px]">
+        <!-- Chatbot Header -->
+        <div class="bg-slate-800 p-4 border-b border-slate-700 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-lg font-bold border border-cyan-500/30">
+                    <i class="fa-solid fa-robot"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-100 text-sm">ZigguratAI Asistan</h4>
+                    <span class="text-[10px] text-emerald-400 flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> MEB + EBA + Okul Canlı
+                    </span>
+                </div>
+            </div>
+            <button onclick="toggleAiModal()" class="text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <!-- Chat Log Area -->
+        <div id="chat-logs" class="flex-grow p-4 overflow-y-auto space-y-3 text-xs">
+            <!-- Initial AI Welcome -->
+            <div class="flex gap-2.5">
+                <div class="w-7 h-7 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-xs shrink-0">
+                    <i class="fa-solid fa-robot"></i>
+                </div>
+                <div class="bg-slate-800 border border-slate-700 p-3 rounded-2xl text-slate-200 leading-relaxed max-w-[85%]">
+                    Merhaba! Ben Ziggurat Dergisi'nin akıllı asistanı <b>ZigguratAI</b>. İhsan Zakiroğlu Ortaokulu haberleri, MEB ders müfredatı veya EBA konuları hakkında ne öğrenmek istersin?
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Input Form -->
+        <form onsubmit="handleChatSubmit(event)" class="p-3 bg-slate-800/80 border-t border-slate-700 flex gap-2">
+            <input type="text" id="chat-input" placeholder="ZigguratAI'ye bir soru sor..." 
+                class="flex-grow px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 text-xs outline-none focus:border-cyan-500">
+            <button type="submit" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl text-xs font-bold transition">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </form>
+    </div>
+
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 border-t border-slate-800/80 py-6 px-4 mt-12 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                <span class="font-bold text-slate-400">Ziggurat Dergisi © 2026</span> - Tüm Hakları Saklıdır.
+            </div>
+            <div class="flex items-center gap-4 text-slate-400">
+                <span>Kaynaklar:</span>
+                <span class="hover:text-amber-400">MEB</span>
+                <span>•</span>
+                <span class="hover:text-amber-400">EBA</span>
+                <span>•</span>
+                <span class="hover:text-amber-400">İhsan Zakiroğlu OO</span>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+    <script>
+        /* ==================== GLOBAL DATA STORES & LOCALSTORAGE ==================== */
+        
+        // Bad words list for censorship
+        const BAD_WORDS = [
+            "aptal", "salak", "gerizekalı", "aptalca", "mala", "mal", "pislik", "küfür", 
+            "kodumun", "sik", "piç", "kahpe", "yavşak", "amk", "aq", "sg", "oç"
+        ];
+
+        // Default Initial Announcements
+        const DEFAULT_ANNOUNCEMENTS = [
+            {
+                id: 101,
+                title: "İhsan Zakiroğlu Ortaokulu Ziggurat Dergisi Dijital Yayında!",
+                tag: "Dergisi",
+                content: "Okulumuzun yeni nesil bilim ve teknoloji dergisi Ziggurat, yapay zeka ZigguratAI entegrasyonu ile dijital ortama taşındı. MEB ve EBA ders içeriklerine artık tek tıkla ulaşabilirsiniz.",
+                date: "23 Ekim 2026",
+                author: "ZigguratBoss:Editör"
+            },
+            {
+                id: 102,
+                title: "MEB LGS & Tüm Derslerin Ünite Değerlendirme Testleri Eklendi",
+                tag: "MEB & EBA",
+                content: "ZigguratAI tarafından MEB müfredatına tam uyumlu olarak hazırlanan Türkçe, Matematik, Fen Bilimleri, Sosyal Bilgiler, T.C. İnkılap Tarihi, İngilizce ve Din Kültürü testleri 'MEB Testleri' sekmesinde hizmetinizde!",
+                date: "22 Ekim 2026",
+                author: "ZigguratBoss:AhmetHoca"
+            }
+        ];
+
+        // Comprehensive MEB Middle School Quizzes
+        const DEFAULT_QUIZZES = [
+            {
+                id: 1,
+                title: "8. Sınıf Fen Bilimleri - DNA ve Genetik Kod",
+                subject: "Fen Bilimleri",
+                questions: [
+                    {
+                        text: "DNA'nın temel yapı birimi aşağıdakilerden hangisidir?",
+                        options: ["Kromozom", "Nükleotid", "Gen", "Organel"],
+                        correct: 1
+                    },
+                    {
+                        text: "Aşağıdaki baz eşleşmelerinden hangisi DNA molekülünde daima doğrudur?",
+                        options: ["Adenin - Guanin", "Timin - Sitozin", "Adenin - Timin", "Guanin - Urasil"],
+                        correct: 2
+                    },
+                    {
+                        text: "Kalıtsal özelliklerimizin taşındığı ve DNA'nın görev birimi olan yapı nedir?",
+                        options: ["Gen", "Nükleotid", "Hücre zarı", "Ribozom"],
+                        correct: 0
+                    }
+                ]
+            },
+            {
+                id: 2,
+                title: "8. Sınıf Matematik - Çarpanlar ve Katlar / EBOB-EKOK",
+                subject: "Matematik",
+                questions: [
+                    {
+                        text: "12 ve 18 sayılarının En Büyük Ortak Böleni (EBOB) kaçtır?",
+                        options: ["3", "6", "12", "36"],
+                        correct: 1
+                    },
+                    {
+                        text: "Aralarında asal iki sayının EBOB'u her zaman kaçtır?",
+                        options: ["0", "1", "Sayıların çarpımı", "Sayıların toplamı"],
+                        correct: 1
+                    },
+                    {
+                        text: "4 ve 6 sayılarının En Küçük Ortak Katı (EKOK) kaçtır?",
+                        options: ["12", "24", "18", "8"],
+                        correct: 0
+                    }
+                ]
+            },
+            {
+                id: 3,
+                title: "8. Sınıf Türkçe - Fiilimsiler (Eylemsiler) Değerlendirme",
+                subject: "Türkçe",
+                questions: [
+                    {
+                        text: "'Gelen arabayı durdurmak için bağırdı.' cümlesindeki 'gelen' sözcüğü hangi tür fiilimsidir?",
+                        options: ["İsim-fiil", "Sıfat-fiil", "Zarf-fiil", "Çekimli fiil"],
+                        correct: 1
+                    },
+                    {
+                        text: "Aşağıdaki cümlelerin hangisinde isim-fiil (mastar) kullanılmıştır?",
+                        options: ["Koşarak eve gitti.", "Okumak insanı geliştirir.", "Güleryüzlü insanları severim.", "Ağlayınca gözleri kızardı."],
+                        correct: 1
+                    }
+                ]
+            },
+            {
+                id: 4,
+                title: "8. Sınıf T.C. İnkılap Tarihi - Bir Kahraman Doğuyor & Milli Uyanış",
+                subject: "İnkılap Tarihi",
+                questions: [
+                    {
+                        text: "Mustafa Kemal'in doğduğu ve çocukluğunun geçtiği Selanik kentinin çok uluslu yapısı onda hangi düşüngenin gelişmesinde etkili olmuştur?",
+                        options: ["Farklı kültürlere saygı duymak", "Sadece askerlik yapmak", "İzolasyoncu politika", "Padişahlığı savunmak"],
+                        correct: 0
+                    },
+                    {
+                        text: "Mustafa Kemal Atatürk'ün askeri idadiyi okuduğu şehir aşağıdakilerden hangisidir?",
+                        options: ["İstanbul", "Sofya", "Manastır", "İzmir"],
+                        correct: 2
+                    }
+                ]
+            },
+            {
+                id: 5,
+                title: "7. Sınıf Sosyal Bilgiler - İletişim ve İnsan İlişkileri",
+                subject: "Sosyal Bilgiler",
+                questions: [
+                    {
+                        text: "Kişinin kendisini karşısındaki insanın yerine koyarak onun duygularını anlamasına ne ad verilir?",
+                        options: ["Sempati", "Empati", "Önyargı", "Sen Dili"],
+                        correct: 1
+                    },
+                    {
+                        text: "Aşağıdakilerden hangisi olumlu iletişime örnek bir davranıştır?",
+                        options: ["Göz teması kurmak", "Sürekli söz kesmek", "Genelleme yapmak", "Eleştirel bakmak"],
+                        correct: 0
+                    }
+                ]
+            },
+            {
+                id: 6,
+                title: "8. Sınıf İngilizce - Unit 1: Friendship & Accepting/Refusing",
+                subject: "İngilizce",
+                questions: [
+                    {
+                        text: "Which of the following is an ACCEPTING expression for an invitation?",
+                        options: ["I'm sorry, I can't.", "I'd love to, thanks!", "Maybe another time.", "I must study for the exam."],
+                        correct: 1
+                    },
+                    {
+                        text: "'A true friend always supports you.' Which word means 'supports'?",
+                        options: ["Backs up", "Argues", "Lies", "Forgets"],
+                        correct: 0
+                    }
+                ]
+            },
+            {
+                id: 7,
+                title: "8. Sınıf Din Kültürü - Kader ve Kaza İnancı",
+                subject: "Din Kültürü",
+                questions: [
+                    {
+                        text: "Yüce Allah'ın ezelde takdir ettiği olayların zamanı gelince gerçekleşmesine ne denir?",
+                        options: ["Kader", "Kaza", "Tevekkül", "Ömür"],
+                        correct: 1
+                    },
+                    {
+                        text: "İnsanın kendi iradesi ve tercihi ile karar verebildiği alana ne ad verilir?",
+                        options: ["Cüz'i İrade", "Külli İrade", "Sünnetullah", "Ecel"],
+                        correct: 0
+                    }
+                ]
+            },
+            {
+                id: 8,
+                title: "7. Sınıf Fen Bilimleri - Hücre ve Bölünmeler",
+                subject: "Fen Bilimleri",
+                questions: [
+                    {
+                        text: "Vücut hücrelerinde gerçekleşen ve kromozom sayısını sabit tutan bölünme türü hangisidir?",
+                        options: ["Mayoz", "Mitoz", "Döllenme", "Mutasyon"],
+                        correct: 1
+                    },
+                    {
+                        text: "Bitki ve hayvan hücresi arasındaki temel farklardan biri aşağıdakilerden hangisidir?",
+                        options: ["Bitki hücresinde hücre duvarı bulunur.", "Hayvan hücresinde çekirdek bulunmaz.", "Bitki hücresinde mitokondri yoktur.", "Hiçbiri"],
+                        correct: 0
+                    }
+                ]
+            }
+        ];
+
+        // Default Comments Feed
+        const DEFAULT_COMMENTS = [
+            {
+                id: 1,
+                author: "ZigguratBoss:OkulTemsilcisi",
+                text: "Ziggurat Dergisi ve ZigguratAI arama motoru mükemmel çalışıyor! İhsan Zakiroğlu OO öğrencileri olarak çok gururluyuz.",
+                date: "Bugün 18:30",
+                isBoss: true
+            },
+            {
+                id: 2,
+                author: "Mehmet_7A",
+                text: "MEB Fen Bilimleri ünite değerlendirme testindeki soru kalitesi harika olmuş, ZigguratAI çok iyi hazırlamış.",
+                date: "Bugün 19:15",
+                isBoss: false
+            }
+        ];
+
+        // Humor & Joke Database
+        const JOKES_DATABASE = [
+            "Öğretmen: 'Oğlum ödevini neden yapmadın?'\nÖğrenci: 'Hocam ZigguratAI elektrik kesintisi simülasyonu yapıyordu da!'",
+            "Matematik kitabının neden morali bozukmuş?\nÇünkü içinde çok fazla problem varmış!",
+            "EBA dersinde mikrofonunu açık unutan öğrenci sessizce: 'İnşallah öğretmen hoca beni kaldırmaz...' Öğretmen: 'Duydum Ali!'",
+            "Tarih dersinde hoca: 'Fatih Sultan Mehmet neyi fethetti?'\nÖğrenci: 'Gönülleri hocam!' (Sözlüden 100 aldı)",
+            "ZigguratAI'ye sordum: 'Sınavdan nasıl 100 alırım?'\nZigguratAI: 'Çalışarak efendim!' (Cevap şok etti)",
+            "Yazılıda 'Kompozisyon yazınız' dendiğinde 3 kelime yazıp bırakan o efsane öğrenci yüreği..."
+        ];
+
+        // State variables
+        let currentUser = localStorage.getItem('ziggurat_user') || 'Öğrenci_Ali';
+        let announcements = JSON.parse(localStorage.getItem('ziggurat_announcements')) || DEFAULT_ANNOUNCEMENTS;
+        let quizzes = JSON.parse(localStorage.getItem('ziggurat_quizzes')) || DEFAULT_QUIZZES;
+        let comments = JSON.parse(localStorage.getItem('ziggurat_comments')) || DEFAULT_COMMENTS;
+        let currentQuizIndex = null;
+        let currentQuizAnswers = [];
+        let activeSubjectFilter = 'Tümü';
+
+        /* ==================== APP INITIALIZATION ==================== */
+        window.onload = function() {
+            updateUserDisplay();
+            renderAnnouncements();
+            renderQuizzes();
+            renderComments();
+            renderJokesArchive();
+            setDailyJoke();
+        };
+
+        /* ==================== TAB NAVIGATION ==================== */
+        function switchTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            
+            // Remove active classes from nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-amber-500', 'text-slate-950', 'shadow');
+                btn.classList.add('text-slate-300');
+            });
+
+            // Show selected tab
+            const targetTab = document.getElementById('tab-' + tabId);
+            if (targetTab) {
+                targetTab.classList.remove('hidden');
+            }
+
+            // Highlight active button
+            const activeBtn = document.getElementById('nav-' + tabId);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-amber-500', 'text-slate-950', 'shadow');
+                activeBtn.classList.remove('text-slate-300');
+            }
+
+            // Special handling for Boss Tab verification
+            if (tabId === 'boss') {
+                checkBossAccess();
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        /* ==================== USER PROFILE & BOSS SYSTEM ==================== */
+        function isBossUser(name) {
+            return name.startsWith('ZigguratBoss:');
+        }
+
+        function updateUserDisplay() {
+            const isBoss = isBossUser(currentUser);
+            document.getElementById('user-name-display').innerText = currentUser;
+            document.getElementById('user-role-display').innerText = isBoss ? 'ZigguratBoss (Yönetici)' : 'Öğrenci';
+            document.getElementById('user-avatar').innerText = currentUser.replace('ZigguratBoss:', '').charAt(0).toUpperCase();
+
+            const bossBadge = document.getElementById('boss-badge');
+            if (isBoss) {
+                bossBadge.classList.remove('hidden');
+            } else {
+                bossBadge.classList.add('hidden');
+            }
+        }
+
+        function openUserModal() {
+            document.getElementById('user-name-input').value = currentUser;
+            document.getElementById('user-modal').classList.remove('hidden');
+        }
+
+        function closeUserModal() {
+            document.getElementById('user-modal').classList.add('hidden');
+        }
+
+        function saveUserProfile() {
+            const inputVal = document.getElementById('user-name-input').value.trim();
+            if (!inputVal) return;
+            
+            currentUser = inputVal;
+            localStorage.setItem('ziggurat_user', currentUser);
+            updateUserDisplay();
+            closeUserModal();
+            renderComments(); // re-render comments to update delete buttons state
+            checkBossAccess();
+        }
+
+        function checkBossAccess() {
+            const isBoss = isBossUser(currentUser);
+            const accessDenied = document.getElementById('boss-access-denied');
+            const dashboard = document.getElementById('boss-dashboard');
+
+            if (isBoss) {
+                accessDenied.classList.add('hidden');
+                dashboard.classList.remove('hidden');
+            } else {
+                accessDenied.classList.remove('hidden');
+                dashboard.classList.add('hidden');
+            }
+        }
+
+        /* ==================== PROFANITY FILTER ==================== */
+        function censorText(text) {
+            let sanitized = text;
+            BAD_WORDS.forEach(word => {
+                const regex = new RegExp(`\\b${word}\\b`, 'gi');
+                sanitized = sanitized.replace(regex, '***');
+            });
+            return sanitized;
+        }
+
+        /* ==================== ANNOUNCEMENTS SYSTEM ==================== */
+        function renderAnnouncements() {
+            const container = document.getElementById('home-announcements-list');
+            const countBadge = document.getElementById('announcement-count');
+            countBadge.innerText = `${announcements.length} Duyuru`;
+
+            if (announcements.length === 0) {
+                container.innerHTML = `<div class="p-6 bg-slate-800/40 rounded-2xl text-slate-400 text-xs text-center">Henüz duyuru bulunmuyor.</div>`;
+                return;
+            }
+
+            container.innerHTML = announcements.map(ann => `
+                <div class="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-5 space-y-3 hover:border-amber-500/40 transition">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 text-xs font-bold border border-amber-500/30">
+                            ${ann.tag}
+                        </span>
+                        <span class="text-[11px] text-slate-400 font-mono">
+                            <i class="fa-regular fa-clock"></i> ${ann.date} • ${ann.author}
+                        </span>
+                    </div>
+                    <h4 class="text-base font-bold text-slate-100">${ann.title}</h4>
+                    <p class="text-xs text-slate-300 leading-relaxed">${ann.content}</p>
+                </div>
+            `).join('');
+        }
+
+        function handleCreateAnnouncement(e) {
+            e.preventDefault();
+            if (!isBossUser(currentUser)) return;
+
+            const title = document.getElementById('boss-ann-title').value;
+            const tag = document.getElementById('boss-ann-tag').value;
+            const content = document.getElementById('boss-ann-content').value;
+
+            const newAnn = {
+                id: Date.now(),
+                title: censorText(title),
+                tag: tag,
+                content: censorText(content),
+                date: "Bugün",
+                author: currentUser
+            };
+
+            announcements.unshift(newAnn);
+            localStorage.setItem('ziggurat_announcements', JSON.stringify(announcements));
+            renderAnnouncements();
+
+            // Reset form
+            document.getElementById('boss-ann-title').value = '';
+            document.getElementById('boss-ann-content').value = '';
+
+            switchTab('home');
+        }
+
+        /* ==================== ZIGGURAT AI SEARCH ENGINE ==================== */
+        function setSearchQuery(query) {
+            document.getElementById('ai-search-input').value = query;
+            handleAiSearch(new Event('submit'));
+        }
+
+        function handleAiSearch(e) {
+            if (e) e.preventDefault();
+            const query = document.getElementById('ai-search-input').value.trim();
+            if (!query) return;
+
+            const status = document.getElementById('ai-search-status');
+            const results = document.getElementById('ai-search-results');
+
+            status.classList.remove('hidden');
+            results.innerHTML = '';
+
+            setTimeout(() => {
+                status.classList.add('hidden');
+                
+                // Generated Smart AI Result Card
+                results.innerHTML = `
+                    <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-cyan-950 border border-cyan-500/40 rounded-3xl p-6 lg:p-8 space-y-6 shadow-2xl">
+                        <div class="flex items-center justify-between border-b border-slate-700/80 pb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-xl">
+                                    <i class="fa-solid fa-microchip"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-slate-100 text-lg">ZigguratAI Taraması Tamamlandı</h3>
+                                    <p class="text-xs text-slate-400">Arama Sorgusu: "${query}"</p>
+                                </div>
+                            </div>
+                            <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold border border-emerald-500/30">
+                                %100 MEB Uyumlu
+                            </span>
+                        </div>
+
+                        <!-- AI Summarized Content -->
+                        <div class="space-y-3">
+                            <h4 class="font-bold text-cyan-300 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-align-left"></i> ZigguratAI Kaynak Özeti:
+                            </h4>
+                            <p class="text-xs sm:text-sm text-slate-200 leading-relaxed bg-slate-900/60 p-4 rounded-2xl border border-slate-700/60">
+                                <b>"${query}"</b> araması için EBA Eğitim Bilişim Ağı, MEB Müfredat portalı ve İhsan Zakiroğlu Ortaokulu veri tabanından elde edilen bilgilere göre; ilgili konu LGS ve dönem içi yazılı sınavlarda yüksek ağırlığa sahiptir. Konunun temel kavramları pekiştirilmeli, Ziggurat Dergisi ünite testleri çözülmelidir.
+                            </p>
+                        </div>
+
+                        <!-- Sources Indexed -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                            <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-700 text-xs space-y-1">
+                                <div class="font-bold text-amber-400 flex items-center gap-1">
+                                    <i class="fa-solid fa-school"></i> İhsan Zakiroğlu OO
+                                </div>
+                                <p class="text-[11px] text-slate-400">Okul duyuruları ve ders programı verisi tarandı.</p>
+                            </div>
+                            <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-700 text-xs space-y-1">
+                                <div class="font-bold text-blue-400 flex items-center gap-1">
+                                    <i class="fa-solid fa-graduation-cap"></i> MEB & EBA Sistem
+                                </div>
+                                <p class="text-[11px] text-slate-400">Ders içerikleri ve ünite kazanımları doğrulandı.</p>
+                            </div>
+                            <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-700 text-xs space-y-1">
+                                <div class="font-bold text-purple-400 flex items-center gap-1">
+                                    <i class="fa-solid fa-globe"></i> Genel Ağ & Sosyal
+                                </div>
+                                <p class="text-[11px] text-slate-400">Güncel eğitsel kaynaklar indekslendi.</p>
+                            </div>
+                        </div>
+
+                        <!-- Instant Action button -->
+                        <div class="pt-2 flex justify-end">
+                            <button onclick="switchTab('tests')" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition">
+                                Bu Konunun Testini Çöz <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }, 1200);
+        }
+
+        /* ==================== QUIZZES / MEB EVALUATIONS ==================== */
+        function filterQuizzes(subject) {
+            activeSubjectFilter = subject;
+            
+            // Highlight active subject filter button
+            document.querySelectorAll('.quiz-filter-btn').forEach(btn => {
+                if (btn.innerText.trim() === subject || (subject === 'Tümü' && btn.innerText.includes('Tüm'))) {
+                    btn.className = "quiz-filter-btn px-4 py-1.5 rounded-xl text-xs font-bold bg-amber-500 text-slate-950 transition";
+                } else {
+                    btn.className = "quiz-filter-btn px-4 py-1.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-300 transition";
+                }
+            });
+
+            renderQuizzes();
+        }
+
+        function renderQuizzes() {
+            const container = document.getElementById('quizzes-grid');
+            
+            let filteredList = quizzes;
+            if (activeSubjectFilter !== 'Tümü') {
+                filteredList = quizzes.filter(q => q.subject === activeSubjectFilter);
+            }
+
+            document.getElementById('test-count-badge').innerText = quizzes.length;
+
+            if (filteredList.length === 0) {
+                container.innerHTML = `<div class="col-span-2 p-8 bg-slate-800/40 rounded-3xl text-center text-slate-400 text-sm">Bu derste henüz test bulunmamaktadır.</div>`;
+                return;
+            }
+
+            container.innerHTML = filteredList.map((q) => {
+                const originalIndex = quizzes.findIndex(item => item.id === q.id);
+                return `
+                <div class="bg-slate-800/80 border border-slate-700/80 rounded-3xl p-6 space-y-4 hover:border-amber-500/50 transition">
+                    <div class="flex justify-between items-start">
+                        <span class="px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-400 text-xs font-bold border border-cyan-500/30">
+                            ${q.subject}
+                        </span>
+                        <span class="text-xs text-slate-400 font-mono">${q.questions.length} Soru</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-100">${q.title}</h3>
+                    <button onclick="startQuiz(${originalIndex})" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold text-sm hover:brightness-110 transition shadow">
+                        Testi Başlat
+                    </button>
+                </div>
+            `;
+            }).join('');
+        }
+
+        function startQuiz(index) {
+            currentQuizIndex = index;
+            currentQuizAnswers = new Array(quizzes[index].questions.length).fill(null);
+            
+            const quiz = quizzes[index];
+            const modal = document.getElementById('active-quiz-modal');
+            
+            document.getElementById('quiz-header').innerHTML = `
+                <h3 class="text-xl font-bold text-slate-100">${quiz.title}</h3>
+                <p class="text-xs text-amber-400 font-semibold mt-1">Ders: ${quiz.subject} • Toplam Soru: ${quiz.questions.length}</p>
+            `;
+
+            renderQuizQuestions();
+            modal.classList.remove('hidden');
+        }
+
+        function renderQuizQuestions() {
+            const quiz = quizzes[currentQuizIndex];
+            const body = document.getElementById('quiz-body');
+
+            body.innerHTML = quiz.questions.map((q, qIdx) => `
+                <div class="bg-slate-800/60 p-4 rounded-2xl border border-slate-700 space-y-3">
+                    <p class="text-sm font-bold text-slate-100">${qIdx + 1}. ${q.text}</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        ${q.options.map((opt, oIdx) => `
+                            <button onclick="selectAnswer(${qIdx}, ${oIdx})" id="q-btn-${qIdx}-${oIdx}" 
+                                class="quiz-opt-btn p-3 rounded-xl border border-slate-700 bg-slate-900 text-left text-xs font-medium text-slate-200 hover:bg-slate-700 transition">
+                                ${String.fromCharCode(65 + oIdx)}) ${opt}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('quiz-footer').innerHTML = `
+                <span class="text-xs text-slate-400">Tüm soruları işaretleyiniz.</span>
+                <button onclick="submitQuiz()" class="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm transition">
+                    Sınavı Bitir ve Değerlendir
+                </button>
+            `;
+        }
+
+        function selectAnswer(qIdx, oIdx) {
+            currentQuizAnswers[qIdx] = oIdx;
+            
+            // Highlight button
+            const quiz = quizzes[currentQuizIndex];
+            for (let i = 0; i < quiz.questions[qIdx].options.length; i++) {
+                const btn = document.getElementById(`q-btn-${qIdx}-${i}`);
+                if (btn) {
+                    if (i === oIdx) {
+                        btn.className = "quiz-opt-btn p-3 rounded-xl border-2 border-amber-500 bg-amber-500/20 text-left text-xs font-bold text-amber-300 transition";
+                    } else {
+                        btn.className = "quiz-opt-btn p-3 rounded-xl border border-slate-700 bg-slate-900 text-left text-xs font-medium text-slate-200 transition";
+                    }
+                }
+            }
+        }
+
+        function submitQuiz() {
+            const quiz = quizzes[currentQuizIndex];
+            let score = 0;
+
+            quiz.questions.forEach((q, idx) => {
+                if (currentQuizAnswers[idx] === q.correct) {
+                    score += 100 / quiz.questions.length;
+                }
+            });
+
+            document.getElementById('quiz-body').innerHTML = `
+                <div class="text-center py-6 space-y-4">
+                    <div class="w-20 h-20 rounded-full bg-amber-500/20 text-amber-400 text-4xl flex items-center justify-center mx-auto border border-amber-500/40">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <h4 class="text-2xl font-black text-slate-100">Test Tamamlandı!</h4>
+                    <p class="text-lg font-bold text-emerald-400">Puanınız: %${Math.round(score)}</p>
+                    <p class="text-xs text-slate-400">ZigguratAI değerlendirmesi: ${score >= 70 ? 'Tebrikler! Konuya gayet hakimsin.' : 'Biraz daha MEB ders notlarını tekrar etmelisin.'}</p>
+                </div>
+            `;
+
+            document.getElementById('quiz-footer').innerHTML = `
+                <button onclick="closeActiveQuiz()" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-sm transition">
+                    Kapat
+                </button>
+            `;
+        }
+
+        function closeActiveQuiz() {
+            document.getElementById('active-quiz-modal').classList.add('hidden');
+        }
+
+        function handleCreateQuiz(e) {
+            e.preventDefault();
+            if (!isBossUser(currentUser)) return;
+
+            const title = document.getElementById('boss-quiz-title').value;
+            const subject = document.getElementById('boss-quiz-subject').value;
+            const qText = document.getElementById('boss-q1-text').value;
+            const optA = document.getElementById('boss-q1-a').value;
+            const optB = document.getElementById('boss-q1-b').value;
+            const optC = document.getElementById('boss-q1-c').value;
+            const optD = document.getElementById('boss-q1-d').value;
+            const correct = parseInt(document.getElementById('boss-q1-correct').value);
+
+            const newQuiz = {
+                id: Date.now(),
+                title: censorText(title),
+                subject: subject,
+                questions: [
+                    {
+                        text: censorText(qText),
+                        options: [censorText(optA), censorText(optB), censorText(optC), censorText(optD)],
+                        correct: correct
+                    }
+                ]
+            };
+
+            quizzes.unshift(newQuiz);
+            localStorage.setItem('ziggurat_quizzes', JSON.stringify(quizzes));
+            renderQuizzes();
+
+            switchTab('tests');
+        }
+
+        /* ==================== COMMUNITY & COMMENTS ==================== */
+        function renderComments() {
+            const container = document.getElementById('community-comments-list');
+            const isBoss = isBossUser(currentUser);
+
+            container.innerHTML = comments.map(c => `
+                <div class="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-4 space-y-2 relative">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-xs ${c.author.startsWith('ZigguratBoss:') ? 'text-purple-400 flex items-center gap-1' : 'text-slate-200'}">
+                                ${c.author.startsWith('ZigguratBoss:') ? '<i class="fa-solid fa-shield-halved"></i>' : ''}
+                                ${c.author}
+                            </span>
+                            <span class="text-[10px] text-slate-500">${c.date}</span>
+                        </div>
+                        ${isBoss ? `
+                            <button onclick="deleteComment(${c.id})" class="text-xs text-red-400 hover:text-red-300 font-bold px-2 py-1 rounded bg-red-500/10 border border-red-500/20">
+                                <i class="fa-solid fa-trash"></i> Sil
+                            </button>
+                        ` : ''}
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">${c.text}</p>
+                </div>
+            `).join('');
+        }
+
+        function submitComment(e) {
+            e.preventDefault();
+            const input = document.getElementById('comment-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const newComment = {
+                id: Date.now(),
+                author: currentUser,
+                text: censorText(text),
+                date: "Şimdi",
+                isBoss: isBossUser(currentUser)
+            };
+
+            comments.unshift(newComment);
+            localStorage.setItem('ziggurat_comments', JSON.stringify(comments));
+            renderComments();
+
+            input.value = '';
+        }
+
+        function deleteComment(id) {
+            if (!isBossUser(currentUser)) return;
+            comments = comments.filter(c => c.id !== id);
+            localStorage.setItem('ziggurat_comments', JSON.stringify(comments));
+            renderComments();
+        }
+
+        /* ==================== HUMOR & JOKES SECTION ==================== */
+        function setDailyJoke() {
+            const joke = JOKES_DATABASE[0];
+            document.getElementById('home-joke-text').innerText = `"${joke}"`;
+            document.getElementById('main-joke-display').innerText = `"${joke}"`;
+        }
+
+        function generateRandomJoke() {
+            const randomIndex = Math.floor(Math.random() * JOKES_DATABASE.length);
+            const joke = JOKES_DATABASE[randomIndex];
+            document.getElementById('main-joke-display').innerText = `"${joke}"`;
+        }
+
+        function renderJokesArchive() {
+            const container = document.getElementById('jokes-archive-grid');
+            container.innerHTML = JOKES_DATABASE.map((j, idx) => `
+                <div class="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-4 space-y-2">
+                    <span class="text-[10px] text-pink-400 font-mono font-bold">Espri #${idx + 1}</span>
+                    <p class="text-xs text-slate-300 italic leading-relaxed">"${j}"</p>
+                </div>
+            `).join('');
+        }
+
+        /* ==================== ZIGGURAT AI CHATBOT MODAL ==================== */
+        function toggleAiModal() {
+            const modal = document.getElementById('ai-modal');
+            modal.classList.toggle('hidden');
+        }
+
+        function handleChatSubmit(e) {
+            e.preventDefault();
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const logs = document.getElementById('chat-logs');
+
+            // User Message
+            logs.innerHTML += `
+                <div class="flex justify-end">
+                    <div class="bg-amber-500 text-slate-950 p-3 rounded-2xl font-medium max-w-[85%]">
+                        ${censorText(text)}
+                    </div>
+                </div>
+            `;
+
+            input.value = '';
+            logs.scrollTop = logs.scrollHeight;
+
+            // AI Response Simulation
+            setTimeout(() => {
+                let reply = "ZigguratAI: Sorunuzu İhsan Zakiroğlu Ortaokulu ve MEB veritabanında taradım. ";
+                if (text.toLowerCase().includes('sınav') || text.toLowerCase().includes('test')) {
+                    reply += "Sınav ve ünite değerlendirmelerine üst menüdeki 'MEB Testleri' sekmesinden ulaşabilirsin!";
+                } else if (text.toLowerCase().includes('dergi') || text.toLowerCase().includes('ziggurat')) {
+                    reply += "Ziggurat Dergisi dijital portalında güncel bilimsel yazıları okuyabilirsin.";
+                } else {
+                    reply += "MEB müfredatı ve okul duyuruları doğrultusunda derslerinize düzenli çalışmanızı öneririm!";
+                }
+
+                logs.innerHTML += `
+                    <div class="flex gap-2.5">
+                        <div class="w-7 h-7 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-xs shrink-0">
+                            <i class="fa-solid fa-robot"></i>
+                        </div>
+                        <div class="bg-slate-800 border border-slate-700 p-3 rounded-2xl text-slate-200 leading-relaxed max-w-[85%]">
+                            ${reply}
+                        </div>
+                    </div>
+                `;
+                logs.scrollTop = logs.scrollHeight;
+            }, 800);
+        }
+    </script>
+</body>
+</html>
