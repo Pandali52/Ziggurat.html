@@ -1,1137 +1,927 @@
 <!DOCTYPE html>
-<html lang="tr" class="dark">
+<html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ziggurat Online Dergi & ZigguratAI - İhsan Zakiroğlu Ortaokulu</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            purple: '#8b5cf6',
-                            pink: '#ec4899',
-                            magenta: '#d946ef',
-                            navy: '#0f172a',
-                            dark: '#090d16'
-                        }
-                    },
-                    backgroundImage: {
-                        'vibrant-glow': 'radial-gradient(circle at 20% 20%, rgba(139, 92, 246, 0.25) 0%, transparent 40%), radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.25) 0%, transparent 40%), radial-gradient(circle at 50% 50%, rgba(217, 70, 239, 0.15) 0%, transparent 60%)'
-                    }
-                }
-            }
-        }
-    </script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Firebase SDKs (Realtime Database & App) -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MinEFarm Aİ - Minecraft Farm & Skin Asistanı</title>
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #060911;
-        }
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(15, 23, 42, 0.6);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(139, 92, 246, 0.4);
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(236, 72, 153, 0.6);
-        }
-        .glass-panel {
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        .glass-input {
-            background: rgba(30, 41, 59, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-        }
-        .glass-input:focus {
-            border-color: #a855f7;
-            box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
-        }
-    </style>
+  <style>
+    :root {
+      --mc-green: #5b8731;
+      --mc-dark-green: #3a591f;
+      --mc-dirt: #866043;
+      --mc-stone: #737373;
+      --mc-dark-stone: #3c3c3c;
+      --mc-gold: #fca800;
+      --mc-diamond: #4cedd9;
+      --mc-bg: #1e1e24;
+      --mc-card: #2a2a32;
+      --mc-text: #f0f0f0;
+      --mc-accent: #32cd32;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background-color: var(--mc-bg);
+      color: var(--mc-text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pixel-font {
+      font-family: 'Press Start 2P', cursive;
+    }
+
+    .retro-font {
+      font-family: 'VT323', monospace;
+    }
+
+    /* HEADER & NAV */
+    header {
+      background: linear-gradient(180deg, #2c2c35 0%, #1a1a20 100%);
+      border-bottom: 4px solid var(--mc-green);
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 42px;
+      height: 42px;
+      background: var(--mc-green);
+      border: 3px solid #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 3px 3px 0px #000;
+    }
+
+    .logo-title {
+      font-size: 1.2rem;
+      color: #fff;
+      text-shadow: 2px 2px 0px #000;
+    }
+
+    .user-bar {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background: rgba(0,0,0,0.3);
+      padding: 8px 15px;
+      border-radius: 8px;
+      border: 1px solid #444;
+    }
+
+    .admin-badge {
+      background: var(--mc-gold);
+      color: #000;
+      padding: 3px 8px;
+      font-size: 0.65rem;
+      font-weight: bold;
+      border-radius: 4px;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.8; }
+      50% { opacity: 1; transform: scale(1.05); }
+      100% { opacity: 0.8; }
+    }
+
+    /* MAIN LAYOUT */
+    .container {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* SIDEBAR NAV */
+    sidebar {
+      width: 240px;
+      background: #22222a;
+      border-right: 2px solid #333;
+      padding: 20px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .nav-btn {
+      background: #2c2c36;
+      color: #ccc;
+      border: 2px solid #3a3a46;
+      padding: 12px 15px;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover, .nav-btn.active {
+      background: var(--mc-green);
+      color: #fff;
+      border-color: #7bc437;
+      transform: translateX(4px);
+    }
+
+    .nav-btn i {
+      font-size: 1.1rem;
+      width: 20px;
+    }
+
+    /* CONTENT AREA */
+    main {
+      flex: 1;
+      padding: 25px;
+      overflow-y: auto;
+      background: #18181c;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    /* CARD STYLING */
+    .card {
+      background: var(--mc-card);
+      border: 2px solid #383844;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+      color: var(--mc-gold);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid #383844;
+      padding-bottom: 10px;
+    }
+
+    /* FORM INPUTS & BUTTONS */
+    input, textarea, select {
+      width: 100%;
+      background: #18181c;
+      border: 2px solid #383844;
+      color: #fff;
+      padding: 10px 12px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      outline: none;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--mc-green);
+    }
+
+    .btn {
+      background: var(--mc-green);
+      color: #fff;
+      border: none;
+      padding: 10px 18px;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+
+    .btn:hover {
+      background: #4a7227;
+    }
+
+    .btn-secondary {
+      background: var(--mc-stone);
+    }
+
+    .btn-secondary:hover {
+      background: #5a5a5a;
+    }
+
+    /* FARMS SECTION */
+    .farm-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .farm-card {
+      background: #23232b;
+      border: 2px solid #333340;
+      border-radius: 8px;
+      padding: 15px;
+      transition: transform 0.2s;
+    }
+
+    .farm-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--mc-green);
+    }
+
+    .farm-badge {
+      display: inline-block;
+      background: var(--mc-dark-green);
+      color: var(--mc-accent);
+      padding: 2px 8px;
+      font-size: 0.75rem;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+
+    /* 152x152 CANVAS STYLING */
+    .canvas-container-wrapper {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .canvas-box {
+      background: #111;
+      border: 3px solid #444;
+      padding: 10px;
+      display: inline-block;
+      border-radius: 8px;
+    }
+
+    #pixelCanvas {
+      background: #ffffff;
+      cursor: crosshair;
+      image-rendering: pixelated;
+      display: block;
+    }
+
+    .canvas-tools {
+      flex: 1;
+      min-width: 250px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .color-picker-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    /* AI CHAT SECTION */
+    .chat-box {
+      height: 350px;
+      overflow-y: auto;
+      background: #151518;
+      border: 2px solid #333;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .chat-msg {
+      padding: 10px 14px;
+      border-radius: 8px;
+      max-width: 80%;
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    .chat-msg.user {
+      background: #2e431d;
+      align-self: flex-end;
+      border: 1px solid var(--mc-green);
+    }
+
+    .chat-msg.ai {
+      background: #282832;
+      align-self: flex-start;
+      border: 1px solid #444;
+    }
+
+    /* SKIN EDITOR CANVAS */
+    #skinCanvas {
+      background: #222;
+      border: 2px solid #555;
+      image-rendering: pixelated;
+      cursor: crosshair;
+    }
+
+    /* SPLASH OVERLAY */
+    #splashOverlay {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 9999;
+    }
+
+    .splash-content {
+      background: #22222a;
+      border: 4px solid var(--mc-gold);
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 450px;
+      box-shadow: 0 0 30px rgba(252, 168, 0, 0.4);
+    }
+
+    .cube-spinner {
+      width: 50px;
+      height: 50px;
+      background: var(--mc-green);
+      margin: 20px auto;
+      animation: rotateCube 1.2s infinite ease-in-out;
+      border: 3px solid #fff;
+    }
+
+    @keyframes rotateCube {
+      0% { transform: rotateX(0deg) rotateY(0deg); }
+      50% { transform: rotateX(180deg) rotateY(0deg); background: var(--mc-gold); }
+      100% { transform: rotateX(180deg) rotateY(180deg); }
+    }
+  </style>
 </head>
-<body class="text-slate-100 min-h-screen bg-vibrant-glow bg-fixed flex flex-col justify-between">
+<body>
 
-    <!-- Top Navigation Header -->
-    <header class="sticky top-0 z-50 glass-panel border-b border-purple-900/30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                
-                <!-- Brand Logo & Title -->
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20 shrink-0">
-                        <span class="text-3xl font-black bg-gradient-to-tr from-purple-700 via-magenta-600 to-pink-600 bg-clip-text text-transparent">Z</span>
-                    </div>
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight bg-gradient-to-r from-white via-purple-200 to-pink-400 bg-clip-text text-transparent">
-                                ZİGGURAT ONLINE DERGİ
-                            </h1>
-                            <span class="bg-gradient-to-r from-purple-600 to-pink-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
-                                Live Cloud Edition
-                            </span>
-                        </div>
-                        <p class="text-xs text-purple-300/80 font-medium hidden sm:block">İhsan Zakiroğlu Ortaokulu Dijital Yayın Organı</p>
-                    </div>
-                </div>
+  <!-- SPLASH OVERLAY -->
+  <div id="splashOverlay">
+    <div class="splash-content">
+      <h3 class="pixel-font" style="color: var(--mc-gold); font-size: 0.9rem;">TOPIC PIXEL ART YÜKLENİYOR...</h3>
+      <div class="cube-spinner"></div>
+      <canvas id="splashPreviewCanvas" width="152" height="152" style="border: 2px solid #555; margin: 10px auto; display: block; width: 152px; height: 152px; image-rendering: pixelated;"></canvas>
+      <p id="splashTopicText" style="margin-top: 10px; font-weight: bold; color: var(--mc-accent);"></p>
+    </div>
+  </div>
 
-                <!-- Online Status & Profile -->
-                <div class="flex items-center gap-3">
-                    <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/80 border border-slate-800 text-xs">
-                        <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></span>
-                        <span class="text-slate-300 font-semibold">Çevrimiçi:</span>
-                        <span id="onlineCountBadge" class="text-emerald-400 font-black">1</span>
-                    </div>
+  <!-- HEADER -->
+  <header>
+    <div class="logo-container">
+      <div class="logo-icon"><i class="fa-solid font-awesome fa-cubes" style="color: #fff;"></i></div>
+      <div>
+        <h1 class="pixel-font logo-title">MinEFarm Aİ</h1>
+        <p style="font-size: 0.75rem; color: #aaa;">Minecraft Farming & Pixel Assistant</p>
+      </div>
+    </div>
 
-                    <button onclick="toggleProfileModal()" class="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 transition">
-                        <div id="userAvatar" class="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center font-bold text-white text-sm">
-                            K
-                        </div>
-                        <div class="text-left hidden md:block">
-                            <div id="displayUsername" class="text-xs font-bold text-slate-200">Kullanıcı</div>
-                            <div id="displayRole" class="text-[10px] text-purple-400 font-semibold">Öğrenci</div>
-                        </div>
-                        <i class="fa-solid fa-gear text-slate-400 text-xs ml-1"></i>
-                    </button>
-                </div>
-            </div>
+    <div class="user-bar">
+      <i class="fa-solid fa-user-gear" style="color: var(--mc-gold);"></i>
+      <div>
+        <span id="currentUsernameDisplay" style="font-weight: bold; font-size: 0.9rem;">Misafir</span>
+        <span id="adminBadge" class="admin-badge" style="display: none;">YÖNETİCİ</span>
+      </div>
+      <button class="btn btn-secondary" onclick="changeUsername()" style="padding: 4px 10px; font-size: 0.75rem;"><i class="fa-solid fa-right-from-bracket"></i> Giriş Yap</button>
+    </div>
+  </header>
 
-            <!-- Tabs Navigation -->
-            <nav class="flex space-x-1 sm:space-x-2 overflow-x-auto pb-2 pt-1 no-scrollbar border-t border-slate-800/60">
-                <button onclick="switchTab('ai-search')" id="tab-ai-search" class="nav-tab active flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl transition whitespace-nowrap bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg shadow-purple-900/30">
-                    <i class="fa-solid fa-wand-magic-sparkles text-amber-300"></i> ZigguratAI (EBA & MEB & Genel Ağ)
-                </button>
-                <button onclick="switchTab('community')" id="tab-community" class="nav-tab flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl transition whitespace-nowrap text-slate-300 hover:text-white hover:bg-slate-800/60">
-                    <i class="fa-solid fa-comments text-pink-400"></i> Online Topluluk Forumu
-                </button>
-                <button onclick="switchTab('teacher-corner')" id="tab-teacher-corner" class="nav-tab flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl transition whitespace-nowrap text-slate-300 hover:text-white hover:bg-slate-800/60">
-                    <i class="fa-solid fa-chalkboard-user text-purple-400"></i> Öğretmen Köşesi <i id="teacherLockIcon" class="fa-solid fa-lock text-xs text-amber-400 ml-0.5"></i>
-                </button>
-                <button onclick="switchTab('meb-tests')" id="tab-meb-tests" class="nav-tab flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl transition whitespace-nowrap text-slate-300 hover:text-white hover:bg-slate-800/60">
-                    <i class="fa-solid fa-file-pen text-cyan-400"></i> MEB Testleri
-                </button>
-                <button onclick="switchTab('daily-joke')" id="tab-daily-joke" class="nav-tab flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl transition whitespace-nowrap text-slate-300 hover:text-white hover:bg-slate-800/60">
-                    <i class="fa-solid fa-face-laugh-beam text-yellow-400"></i> Günün Esprisi
-                </button>
-            </nav>
+  <!-- CONTAINER -->
+  <div class="container">
+    
+    <!-- SIDEBAR -->
+    <sidebar>
+      <button class="nav-btn active" onclick="switchTab('farms')"><i class="fa-solid fa-wheat-awn"></i> Farm Rehberleri</button>
+      <button class="nav-btn" onclick="switchTab('canvas')"><i class="fa-solid fa-palette"></i> 152x152 Pixel Tuval</button>
+      <button class="nav-btn" onclick="switchTab('ai')"><i class="fa-solid fa-robot"></i> MinEFarm Aİ Chat</button>
+      <button class="nav-btn" onclick="switchTab('skin')"><i class="fa-solid fa-shirt"></i> Skin Editörü</button>
+      <button class="nav-btn" onclick="switchTab('community')"><i class="fa-solid fa-code"></i> Kod Önerileri</button>
+    </sidebar>
+
+    <!-- MAIN CONTENT -->
+    <main>
+
+      <!-- FARMS SECTION -->
+      <section id="farms" class="section active">
+        
+        <!-- ADMIN PANEL (Sadece MinEFarm Mr.A için) -->
+        <div id="adminPanel" class="card" style="display: none; border-color: var(--mc-gold);">
+          <div class="card-title"><i class="fa-solid fa-crown"></i> YÖNETİCİ PANELİ: Yeni Farm Kategori & Rehberi Ekle</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <input type="text" id="newFarmName" placeholder="Farm Adı (ör: Çimento Farmı)">
+            <input type="text" id="newFarmCategory" placeholder="Kategori (ör: Blok Üretimi, Kızıltaş)">
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <input type="text" id="newFarmDifficulty" placeholder="Zorluk (ör: Kolay, Orta, İleri)">
+            <input type="text" id="newFarmItems" placeholder="Gerekli Malzemeler (virgülle ayırın)">
+          </div>
+          <textarea id="newFarmDesc" rows="3" placeholder="Adım Adım Yapılış Rehberi ve Açıklamalar..."></textarea>
+          <button class="btn" onclick="addNewFarm()"><i class="fa-solid fa-plus"></i> Farmı Sisteme Yayınla</button>
         </div>
-    </header>
 
-    <!-- Main Dynamic Content Container -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-wheat-field"></i> Topluluk & Yönetici Farm Rehberleri</div>
+          <div class="farm-grid" id="farmGrid">
+            <!-- Dinamik Farmlar Yüklenecek -->
+          </div>
+        </div>
 
-        <!-- TAB 1: ZIGGURAT AI SEARCH & ASSISTANT (EBA, MEB, GENEL AĞ) -->
-        <section id="content-ai-search" class="tab-content block space-y-6">
-            <div class="glass-panel rounded-3xl p-6 sm:p-8 relative overflow-hidden">
-                <div class="absolute -right-10 -top-10 w-40 h-40 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
-                
-                <div class="max-w-3xl mx-auto text-center space-y-3 mb-8">
-                    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/10 border border-purple-500/30 text-purple-300 inline-flex items-center gap-2">
-                        <i class="fa-solid fa-globe"></i> EBA • T.C. MEB • Genel Ağ Hibrit Akıllı Asistanı
-                    </span>
-                    <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Ders Konusu veya Sorunu Yaz, Anında Anlaşılır Özet Al</h2>
-                    <p class="text-sm text-slate-400">EBA Ders portalları, MEB müfredat havuzu ve Genel Ağ kaynaklarından gerçek zamanlı sentezlenmiş içerikler.</p>
-                </div>
+      </section>
 
-                <!-- AI Search Bar Input -->
-                <div class="max-w-3xl mx-auto space-y-3">
-                    <form onsubmit="handleAISearch(event)" class="relative flex items-center">
-                        <input type="text" id="aiQueryInput" placeholder="Örn: Fotosentez evreleri, Üslü sayılar, İnkılap tarihi cepheleri..." class="w-full glass-input text-sm sm:text-base text-white pl-5 pr-32 py-4 rounded-2xl focus:outline-none transition">
-                        <button type="submit" class="absolute right-2 px-5 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold text-sm rounded-xl transition flex items-center gap-2 shadow-md">
-                            <i class="fa-solid fa-sparkles"></i> <span>Arayıp Özetle</span>
-                        </button>
-                    </form>
-
-                    <!-- Quick Prompt Suggestions -->
-                    <div class="flex flex-wrap gap-2 justify-center text-xs text-slate-400 pt-2">
-                        <span class="text-slate-500 self-center">Hızlı Konular:</span>
-                        <button onclick="quickAISearch('Hücre bölünmesi mitoz ve mayoz farkları')" class="bg-slate-800/80 hover:bg-purple-900/40 border border-slate-700/60 px-3 py-1.5 rounded-lg text-purple-300 transition">Mitoz ve Mayoz</button>
-                        <button onclick="quickAISearch('LGS Türkçe fiilimsiler ve ekler')" class="bg-slate-800/80 hover:bg-purple-900/40 border border-slate-700/60 px-3 py-1.5 rounded-lg text-purple-300 transition">Fiilimsiler</button>
-                        <button onclick="quickAISearch('Kareköklü ifadelerde toplama ve çarpma')" class="bg-slate-800/80 hover:bg-purple-900/40 border border-slate-700/60 px-3 py-1.5 rounded-lg text-purple-300 transition">Kareköklü İfadeler</button>
-                        <button onclick="quickAISearch('Atatürk ilkeleri ve anlamları')" class="bg-slate-800/80 hover:bg-purple-900/40 border border-slate-700/60 px-3 py-1.5 rounded-lg text-purple-300 transition">Atatürk İlkeleri</button>
-                    </div>
-                </div>
-
-                <!-- AI Response Section Area -->
-                <div id="aiResponseContainer" class="hidden max-w-4xl mx-auto mt-8 border-t border-slate-800 pt-6">
-                    <!-- Loading Spinner -->
-                    <div id="aiLoader" class="hidden flex flex-col items-center justify-center py-12 space-y-3">
-                        <div class="w-10 h-10 border-4 border-purple-500/20 border-t-purple-500 rounded-full animate-spin"></div>
-                        <p class="text-xs text-purple-300 animate-pulse">ZigguratAI EBA, MEB ve Genel Ağ veritabanını tarıyor...</p>
-                    </div>
-
-                    <!-- AI Result Display -->
-                    <div id="aiResultCard" class="hidden glass-panel rounded-2xl p-6 border-purple-500/30 bg-slate-900/90 space-y-6">
-                        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-pink-600 flex items-center justify-center text-white">
-                                    <i class="fa-solid fa-robot text-lg"></i>
-                                </div>
-                                <div>
-                                    <h3 id="aiTopicTitle" class="text-lg font-bold text-white">---</h3>
-                                    <p class="text-xs text-slate-400">ZigguratAI Hibrit Veri Sentez Raporu</p>
-                                </div>
-                            </div>
-                            <span class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full flex items-center gap-1.5">
-                                <i class="fa-solid fa-circle-check text-[10px]"></i> EBA & MEB Onaylı
-                            </span>
-                        </div>
-
-                        <!-- Content Summary Points -->
-                        <div class="space-y-4 text-sm text-slate-200">
-                            <div>
-                                <h4 class="text-xs uppercase tracking-wider font-bold text-purple-400 mb-2 flex items-center gap-2">
-                                    <i class="fa-solid fa-align-left"></i> Kapsamlı Konu Özeti
-                                </h4>
-                                <p id="aiSummaryText" class="leading-relaxed bg-slate-800/40 p-4 rounded-xl border border-slate-800 text-slate-300">
-                                    --
-                                </p>
-                            </div>
-
-                            <div>
-                                <h4 class="text-xs uppercase tracking-wider font-bold text-pink-400 mb-2 flex items-center gap-2">
-                                    <i class="fa-solid fa-list-check"></i> Önemli Kavramlar & LGS İpuçları
-                                </h4>
-                                <ul id="aiKeyPoints" class="space-y-2 list-none">
-                                    <!-- Dynamic List Items -->
-                                </ul>
-                            </div>
-
-                            <!-- Source Verification Badge List -->
-                            <div class="pt-2">
-                                <h4 class="text-xs uppercase tracking-wider font-bold text-cyan-400 mb-2 flex items-center gap-2">
-                                    <i class="fa-solid fa-shield-halved"></i> Doğrulanmış Kaynaklar
-                                </h4>
-                                <div class="flex flex-wrap gap-2" id="aiSourcesList">
-                                    <span class="text-xs bg-slate-800 text-slate-300 px-3 py-1 rounded-lg border border-slate-700 flex items-center gap-1">
-                                        <i class="fa-solid fa-book-bookmark text-purple-400"></i> EBA Ders Portalı
-                                    </span>
-                                    <span class="text-xs bg-slate-800 text-slate-300 px-3 py-1 rounded-lg border border-slate-700 flex items-center gap-1">
-                                        <i class="fa-solid fa-building-columns text-pink-400"></i> T.C. MEB Kazanım Havuzu
-                                    </span>
-                                    <span class="text-xs bg-slate-800 text-slate-300 px-3 py-1 rounded-lg border border-slate-700 flex items-center gap-1">
-                                        <i class="fa-solid fa-globe text-cyan-400"></i> Genel Ağ Dijital Kütüphane
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+      <!-- 152x152 CANVAS SECTION -->
+      <section id="canvas" class="section">
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-paintbrush"></i> 152x152 Pixel Art Tuvali (Sürükleyerek Çizim Yap)</div>
+          <div class="canvas-container-wrapper">
+            <div class="canvas-box">
+              <canvas id="pixelCanvas" width="152" height="152"></canvas>
             </div>
-        </section>
+            <div class="canvas-tools">
+              <label style="font-weight: bold; font-size: 0.85rem;">Fırça Rengi:</label>
+              <div class="color-picker-group">
+                <input type="color" id="brushColor" value="#5b8731" style="width: 50px; height: 40px; padding: 0; cursor: pointer;">
+                <button class="btn btn-secondary" onclick="setEraser()"><i class="fa-solid fa-eraser"></i> Silgi</button>
+                <button class="btn btn-secondary" onclick="clearCanvas()"><i class="fa-solid fa-trash"></i> Temizle</button>
+              </div>
 
-        <!-- TAB 2: ONLINE TOPLULUK FORUMU (Realtime Database Chat) -->
-        <section id="content-community" class="tab-content hidden space-y-4">
-            <div class="glass-panel rounded-3xl p-4 sm:p-6 flex flex-col h-[650px]">
-                
-                <!-- Chat Header -->
-                <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-pink-600/20 text-pink-400 border border-pink-500/30 flex items-center justify-center">
-                            <i class="fa-solid fa-comments text-xl"></i>
-                        </div>
-                        <div>
-                            <h2 class="text-lg font-bold text-white">İhsan Zakiroğlu Canlı Okul Forumu (Online)</h2>
-                            <p class="text-xs text-slate-400">Başka cihazlardaki arkadaşlarınızla anlık mesajlaşma</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-ping"></span>
-                        <span class="text-xs font-semibold text-emerald-400">Bulut Senkronize</span>
-                        <button onclick="clearChatHistory()" id="clearChatBtn" class="hidden ml-2 px-2.5 py-1 text-xs bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/30 rounded-lg transition">
-                            Tümünü Temizle
-                        </button>
-                    </div>
-                </div>
+              <label style="font-weight: bold; font-size: 0.85rem; margin-top: 10px;">Tuvale Metin Yaz:</label>
+              <input type="text" id="canvasTextInput" placeholder="Eklenecek metni yazın...">
+              <button class="btn btn-secondary" onclick="drawTextToCanvas()"><i class="fa-solid fa-font"></i> Metni Tuvale Yazdır</button>
 
-                <!-- Messages Container -->
-                <div id="chatMessagesBox" class="flex-grow overflow-y-auto space-y-3 pr-2 mb-4">
-                    <!-- Dynamic Cloud Messages Inserted Here -->
-                </div>
+              <label style="font-weight: bold; font-size: 0.85rem; margin-top: 10px;">Çizim Konu Etiketi (Örn: Çimento Farmı):</label>
+              <input type="text" id="canvasTopicInput" placeholder="Hangi konu sorulduğunda çıksın?">
 
-                <!-- Chat Input Form -->
-                <form onsubmit="postChatMessage(event)" class="mt-auto pt-3 border-t border-slate-800/80 flex items-center gap-2">
-                    <input type="text" id="chatInput" placeholder="Mesajınızı yazın (Küfürler otomatik filtrelenir)..." required class="flex-grow glass-input text-sm text-white px-4 py-3 rounded-xl focus:outline-none">
-                    <button type="submit" class="px-5 py-3 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-semibold text-sm rounded-xl transition flex items-center gap-2 shadow-lg">
-                        <span>Gönder</span> <i class="fa-solid fa-paper-plane text-xs"></i>
-                    </button>
-                </form>
+              <button class="btn" onclick="saveCanvasDrawing()"><i class="fa-solid fa-cloud-arrow-up"></i> Çizimi Kaydet & Yayınla</button>
             </div>
-        </section>
+          </div>
+        </div>
+      </section>
 
-        <!-- TAB 3: ÖĞRETMEN KÖŞESİ (Locked Admin Dashboard) -->
-        <section id="content-teacher-corner" class="tab-content hidden space-y-6">
-            
-            <!-- Access Guard Prompt when Locked -->
-            <div id="teacherLockScreen" class="glass-panel rounded-3xl p-8 text-center space-y-5 max-w-xl mx-auto my-10">
-                <div class="w-16 h-16 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-2xl flex items-center justify-center mx-auto text-3xl">
-                    <i class="fa-solid fa-lock"></i>
-                </div>
-                <div>
-                    <h3 class="text-2xl font-bold text-white">Öğretmen Yetkisi Gereklidir</h3>
-                    <p class="text-xs text-slate-400 mt-2 leading-relaxed">
-                        Öğretmen Köşesinde test oluşturabilmek için kullanıcı adınızın <code class="bg-slate-800 text-pink-400 px-2 py-0.5 rounded border border-slate-700">ZigguratBoss:</code> ile başlaması gerekir ya da aşağıdaki butonla öğretmen modunu aktifleştirebilirsiniz.
-                    </p>
-                </div>
-                <div class="pt-2 flex justify-center gap-3">
-                    <button onclick="toggleTeacherAccess()" class="px-5 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold text-sm rounded-xl hover:opacity-90 transition shadow-lg">
-                        <i class="fa-solid fa-key mr-1.5"></i> Öğretmen Modunu Aktif Et
-                    </button>
-                </div>
+      <!-- AI CHAT SECTION -->
+      <section id="ai" class="section">
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-headset"></i> MinEFarm Aİ Asistanı</div>
+          <div class="chat-box" id="chatBox">
+            <div class="chat-msg ai">Merhaba! Ben MinEFarm Aİ. Minecraft farmları, kızıltaş sistemleri, mod, map veya tohum (seed) önerileri hakkında bana soru sorabilirsin!</div>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <input type="text" id="chatInput" placeholder="Mesajınızı yazın (ör: Demir farmı nasıl yapılır?, Tohum öner)" onkeydown="if(event.key==='Enter') sendChatMessage()">
+            <button class="btn" onclick="sendChatMessage()" style="width: auto;"><i class="fa-solid fa-paper-plane"></i></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SKIN EDITOR SECTION -->
+      <section id="skin" class="section">
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-user-ninja"></i> 64x64 Minecraft Skin Editörü</div>
+          <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start;">
+            <canvas id="skinCanvas" width="64" height="64" style="width: 256px; height: 256px;"></canvas>
+            <div style="flex: 1; min-width: 200px;">
+              <label style="font-weight: bold;">Renk Seçici:</label>
+              <input type="color" id="skinColor" value="#00a8ff" style="height: 40px;">
+              <button class="btn" onclick="generateRandomSkin()" style="width: 100%; margin-bottom: 10px;"><i class="fa-solid fa-wand-magic-sparkles"></i> Rastgele Skin Üret</button>
+              <button class="btn btn-secondary" onclick="downloadSkin()" style="width: 100%;"><i class="fa-solid fa-download"></i> Skin PNG İndir</button>
             </div>
+          </div>
+        </div>
+      </section>
 
-            <!-- Quiz Creator Interface (Shown when Unlocked) -->
-            <div id="teacherDashboard" class="hidden space-y-6">
-                <div class="glass-panel rounded-3xl p-6 sm:p-8 space-y-6">
-                    <div class="flex items-center justify-between border-b border-slate-800 pb-4">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-purple-600/20 text-purple-400 border border-purple-500/30 flex items-center justify-center">
-                                <i class="fa-solid fa-pen-ruler text-xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-bold text-white">Online MEB Testi Oluşturucu</h3>
-                                <p class="text-xs text-slate-400">Hazırladığınız testler anında tüm bağlı cihazlarda MEB Testleri sekmesinde yayınlanır.</p>
-                            </div>
-                        </div>
-                        <span class="text-xs bg-purple-500/20 text-purple-300 border border-purple-500/40 px-3 py-1.5 rounded-xl font-bold">
-                            <i class="fa-solid fa-user-shield"></i> Boss / Öğretmen Yetkisi
-                        </span>
-                    </div>
+      <!-- COMMUNITY CODE SECTION -->
+      <section id="community" class="section">
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-code-commit"></i> Kod & Kızıltaş Tasarımı Öner</div>
+          <input type="text" id="codeTitle" placeholder="Kod veya Tasarım Başlığı">
+          <textarea id="codeBody" rows="3" placeholder="/give @p diamond_block 64 veya Kızıltaş Saat Devresi Tarifi..."></textarea>
+          <button class="btn" onclick="submitCodeSnippet()"><i class="fa-solid fa-share-nodes"></i> Kod Önerisi Gönder</button>
+        </div>
 
-                    <!-- Quiz Meta Settings Form -->
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-300 mb-1">Sınıf Seviyesi</label>
-                            <select id="quizGrade" class="w-full glass-input text-sm text-white px-3 py-2.5 rounded-xl focus:outline-none">
-                                <option value="5. Sınıf">5. Sınıf</option>
-                                <option value="6. Sınıf">6. Sınıf</option>
-                                <option value="7. Sınıf">7. Sınıf</option>
-                                <option value="8. Sınıf (LGS)">8. Sınıf (LGS)</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-300 mb-1">Ders Kategori</label>
-                            <select id="quizSubject" class="w-full glass-input text-sm text-white px-3 py-2.5 rounded-xl focus:outline-none">
-                                <option value="Türkçe">Türkçe</option>
-                                <option value="Matematik">Matematik</option>
-                                <option value="Fen">Fen Bilimleri</option>
-                                <option value="Sosyal">Sosyal / İnkılap</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-300 mb-1">Test Başlığı / Konu</label>
-                            <input type="text" id="quizTitleInput" placeholder="Örn: Cümlede Anlam ve Deyimler" class="w-full glass-input text-sm text-white px-3 py-2.5 rounded-xl focus:outline-none">
-                        </div>
-                    </div>
-
-                    <!-- Question List Builder Area -->
-                    <div class="space-y-4 pt-4 border-t border-slate-800">
-                        <div class="flex items-center justify-between">
-                            <h4 class="text-sm font-bold text-purple-300 flex items-center gap-2">
-                                <i class="fa-solid fa-list-ol"></i> Test Soruları
-                            </h4>
-                            <button onclick="addQuestionField()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-purple-300 border border-purple-500/30 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-plus text-xs"></i> Yeni Soru Ekle
-                            </button>
-                        </div>
-
-                        <div id="questionsBuilderContainer" class="space-y-4">
-                            <!-- Dynamic Question Item Cards will be appended here -->
-                        </div>
-                    </div>
-
-                    <div class="pt-4 border-t border-slate-800 flex justify-end">
-                        <button onclick="saveAndPublishQuiz()" class="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold text-sm rounded-xl transition shadow-lg flex items-center gap-2">
-                            <i class="fa-solid fa-cloud-arrow-up"></i> Testi Buluta Yayınla
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 4: MEB TESTLERİ (Interactive Quiz Solver) -->
-        <section id="content-meb-tests" class="tab-content hidden space-y-6">
-            <div class="glass-panel rounded-3xl p-6 sm:p-8 space-y-6">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
-                    <div>
-                        <h2 class="text-2xl font-extrabold text-white">MEB Kazanım & Deneme Testleri (Online)</h2>
-                        <p class="text-xs text-slate-400">Öğretmenler tarafından buluta yüklenen güncel soru bankası</p>
-                    </div>
-
-                    <!-- Category Filters -->
-                    <div class="flex flex-wrap gap-2">
-                        <button onclick="filterQuizzes('Tümü')" class="quiz-filter active px-3 py-1.5 rounded-xl text-xs font-semibold bg-purple-600 text-white transition">Tümü</button>
-                        <button onclick="filterQuizzes('Türkçe')" class="quiz-filter px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Türkçe</button>
-                        <button onclick="filterQuizzes('Matematik')" class="quiz-filter px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Matematik</button>
-                        <button onclick="filterQuizzes('Fen')" class="quiz-filter px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Fen</button>
-                        <button onclick="filterQuizzes('Sosyal')" class="quiz-filter px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Sosyal</button>
-                    </div>
-                </div>
-
-                <!-- Quizzes Grid -->
-                <div id="quizzesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Dynamic Quizzes Rendered Here -->
-                </div>
-
-                <!-- Active Test Solving Modal/Overlay Container -->
-                <div id="activeTestRunner" class="hidden glass-panel rounded-2xl p-6 border-purple-500/40 bg-slate-900/95 space-y-6">
-                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                        <div>
-                            <span id="activeQuizSubject" class="text-[10px] font-bold text-pink-400 uppercase tracking-wider">Matematik</span>
-                            <h3 id="activeQuizTitle" class="text-lg font-bold text-white">---</h3>
-                        </div>
-                        <button onclick="closeActiveQuiz()" class="text-slate-400 hover:text-white px-3 py-1 text-xs bg-slate-800 rounded-lg">
-                            <i class="fa-solid fa-xmark"></i> Testten Çık
-                        </button>
-                    </div>
-
-                    <div id="quizQuestionBox" class="space-y-4">
-                        <!-- Current Question Card -->
-                    </div>
-
-                    <div class="flex justify-between items-center pt-4 border-t border-slate-800">
-                        <button id="prevQBtn" onclick="navigateQuestion(-1)" class="px-4 py-2 bg-slate-800 text-slate-300 hover:bg-slate-700 rounded-xl text-xs font-semibold transition">
-                            <i class="fa-solid fa-arrow-left mr-1"></i> Önceki
-                        </button>
-                        <span id="quizProgressText" class="text-xs text-slate-400">Soru 1 / 5</span>
-                        <button id="nextQBtn" onclick="navigateQuestion(1)" class="px-4 py-2 bg-purple-600 text-white hover:bg-purple-500 rounded-xl text-xs font-semibold transition">
-                            Sonraki <i class="fa-solid fa-arrow-right ml-1"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 5: GÜNÜN ESPRİSİ (Daily Student Humor) -->
-        <section id="content-daily-joke" class="tab-content hidden space-y-6">
-            <div class="glass-panel rounded-3xl p-6 sm:p-10 max-w-2xl mx-auto text-center space-y-6 relative overflow-hidden">
-                <div class="w-20 h-20 bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 rounded-3xl flex items-center justify-center mx-auto text-4xl shadow-lg">
-                    <i class="fa-solid fa-face-laugh-squint"></i>
-                </div>
-
-                <div>
-                    <span class="text-xs font-bold text-yellow-400 uppercase tracking-widest bg-yellow-500/10 px-3 py-1 rounded-full border border-yellow-500/20">
-                        Ziggurat Mizah Köşesi
-                    </span>
-                    <h2 class="text-2xl font-extrabold text-white mt-3">Günün Okul Esprisi</h2>
-                </div>
-
-                <div class="bg-slate-900/80 p-6 rounded-2xl border border-slate-800 relative">
-                    <i class="fa-solid fa-quote-left text-3xl text-purple-500/20 absolute top-3 left-4"></i>
-                    <p id="jokeTextDisplay" class="text-base sm:text-lg text-slate-200 font-medium relative z-10 leading-relaxed italic px-4 py-2">
-                        "Öğretmen: Sözlüye kaldırıyorum! Sınıf: Sessizce göz temasını keser..."
-                    </p>
-                    <i class="fa-solid fa-quote-right text-3xl text-purple-500/20 absolute bottom-3 right-4"></i>
-                </div>
-
-                <div class="flex flex-wrap justify-center gap-3">
-                    <button onclick="generateRandomJoke()" class="px-6 py-3 bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-400 hover:to-amber-500 text-slate-950 font-extrabold text-sm rounded-xl transition shadow-lg flex items-center gap-2">
-                        <i class="fa-solid fa-dice"></i> Başka Espri Getir
-                    </button>
-                    <button onclick="copyJokeToClipboard()" class="px-4 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-semibold rounded-xl transition border border-slate-700 flex items-center gap-2">
-                        <i class="fa-solid fa-copy"></i> Kopyala
-                    </button>
-                </div>
-            </div>
-        </section>
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-list-check"></i> Paylaşılan Kod Önerileri</div>
+          <div id="codeList">
+            <!-- Kodlar yüklenecek -->
+          </div>
+        </div>
+      </section>
 
     </main>
+  </div>
 
-    <!-- Footer -->
-    <footer class="glass-panel border-t border-slate-800/80 py-4 mt-8">
-        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
-            <div>© 2026 İhsan Zakiroğlu Ortaokulu - Ziggurat Online Dijital Yayın</div>
-            <div class="flex items-center gap-3">
-                <span class="text-purple-400/80">EBA & MEB & Genel Ağ Entegre</span>
-                <span>•</span>
-                <span class="text-pink-400/80">Firebase Live Engine v4.0</span>
+  <script>
+    // --- FIREBASE INITIALIZATION ---
+    const firebaseConfig = {
+      databaseURL: "https://minefarm-ai-default-rtdb.firebaseio.com" // Genel test veritabanı
+    };
+    
+    let isFirebaseReady = false;
+    try {
+      firebase.initializeApp(firebaseConfig);
+      isFirebaseReady = true;
+    } catch(e) {
+      console.log("Firebase varsayılan modda başlatıldı / Yerel hafıza aktif.");
+    }
+
+    const db = isFirebaseReady ? firebase.database() : null;
+
+    // --- GLOBAL STATE ---
+    let currentUser = localStorage.getItem('minefarm_user') || 'Misafir';
+    let isAdmin = (currentUser === 'MinEFarm Mr.A');
+
+    // Default Farms Data
+    let defaultFarms = [
+      {
+        id: 'f1',
+        name: 'Demir Farmı',
+        category: 'Maden & Materyal',
+        difficulty: 'Kolay',
+        items: '3 Köylü, 1 Zombi, 3 Yatak, Su, Lav',
+        desc: 'Köylülerin zombiden korkarak Demir Golem oluşturması mantığına dayanır. Golemler lavda eritilerek demir elde edilir.'
+      },
+      {
+        id: 'f2',
+        name: 'Altın & XP Farmı',
+        category: 'XP & Maden',
+        difficulty: 'Orta',
+        items: 'Obsidyen, Magma Blokları, Tuzak Kapısı',
+        desc: 'Nether portalı mekanikleri veya Nether tavanında Zombileşmiş Piglinlerin magmayla öldürülmesiyle çalışır.'
+      },
+      {
+        id: 'f3',
+        name: 'Otomatik Buğday Farmı',
+        category: 'Tarım',
+        difficulty: 'Kolay',
+        items: '1 Köylü, Su, Huni, Gözlemci',
+        desc: 'Çiftçi köylünün buğdayları toplayıp envanteri dolunca huniye atması esasına dayanır.'
+      }
+    ];
+
+    // Initialize Page
+    window.onload = function() {
+      updateUserUI();
+      initCanvas();
+      initSkinCanvas();
+      loadFarms();
+      loadCommunityCodes();
+    };
+
+    // User Login Handler
+    function changeUsername() {
+      const name = prompt("Kullanıcı adınızı girin (Yönetici yetkisi için: MinEFarm Mr.A):", currentUser);
+      if(name && name.trim() !== "") {
+        currentUser = name.trim();
+        localStorage.setItem('minefarm_user', currentUser);
+        isAdmin = (currentUser === 'MinEFarm Mr.A');
+        updateUserUI();
+        loadFarms();
+      }
+    }
+
+    function updateUserUI() {
+      document.getElementById('currentUsernameDisplay').innerText = currentUser;
+      const badge = document.getElementById('adminBadge');
+      const adminPanel = document.getElementById('adminPanel');
+
+      if(isAdmin) {
+        badge.style.display = 'inline-block';
+        adminPanel.style.display = 'block';
+      } else {
+        badge.style.display = 'none';
+        adminPanel.style.display = 'none';
+      }
+    }
+
+    // Navigation Switcher
+    function switchTab(tabId) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+
+    // --- FARMS SYSTEM ---
+    function loadFarms() {
+      const grid = document.getElementById('farmGrid');
+      grid.innerHTML = '';
+
+      let farms = [...defaultFarms];
+      
+      // Load Custom Admin Added Farms from LocalStorage
+      const customFarms = JSON.parse(localStorage.getItem('minefarm_custom_farms') || '[]');
+      farms = [...farms, ...customFarms];
+
+      farms.forEach(f => {
+        grid.innerHTML += `
+          <div class="farm-card">
+            <span class="farm-badge">${f.category}</span>
+            <h3 style="color: #fff; margin-bottom: 5px;">${f.name}</h3>
+            <p style="font-size: 0.8rem; color: var(--mc-gold); margin-bottom: 8px;">Zorluk: ${f.difficulty}</p>
+            <p style="font-size: 0.85rem; color: #ccc; margin-bottom: 8px;"><strong>Malzemeler:</strong> ${f.items}</p>
+            <p style="font-size: 0.85rem; color: #aaa;">${f.desc}</p>
+          </div>
+        `;
+      });
+    }
+
+    function addNewFarm() {
+      if(!isAdmin) {
+        alert("Sadece yönetici (MinEFarm Mr.A) yeni farm ekleyebilir!");
+        return;
+      }
+
+      const name = document.getElementById('newFarmName').value.trim();
+      const cat = document.getElementById('newFarmCategory').value.trim();
+      const diff = document.getElementById('newFarmDifficulty').value.trim();
+      const items = document.getElementById('newFarmItems').value.trim();
+      const desc = document.getElementById('newFarmDesc').value.trim();
+
+      if(!name || !desc) {
+        alert("Lütfen en az Farm Adı ve Yapılış Rehberini doldurun!");
+        return;
+      }
+
+      const newFarmObj = {
+        id: 'custom_' + Date.now(),
+        name: name,
+        category: cat || 'Özel Farm',
+        difficulty: diff || 'Orta',
+        items: items || 'Standart Bloklar',
+        desc: desc
+      };
+
+      // Save locally
+      const customFarms = JSON.parse(localStorage.getItem('minefarm_custom_farms') || '[]');
+      customFarms.push(newFarmObj);
+      localStorage.setItem('minefarm_custom_farms', JSON.stringify(customFarms));
+
+      // Sync to Firebase if available
+      if(db) {
+        db.ref('farms/' + newFarmObj.id).set(newFarmObj);
+      }
+
+      alert(`"${name}" başarıyla eklendi! Tüm kullanıcılar görebilir.`);
+      
+      // Reset form
+      document.getElementById('newFarmName').value = '';
+      document.getElementById('newFarmCategory').value = '';
+      document.getElementById('newFarmDifficulty').value = '';
+      document.getElementById('newFarmItems').value = '';
+      document.getElementById('newFarmDesc').value = '';
+
+      loadFarms();
+    }
+
+    // --- 152x152 CANVAS ENGINE ---
+    let canvas, ctx;
+    let isDrawing = false;
+    let currentColor = '#5b8731';
+
+    function initCanvas() {
+      canvas = document.getElementById('pixelCanvas');
+      ctx = canvas.getContext('2d');
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, 152, 152);
+
+      document.getElementById('brushColor').addEventListener('input', (e) => {
+        currentColor = e.target.value;
+      });
+
+      // Mouse Events for Drag Drawing
+      canvas.addEventListener('mousedown', (e) => { isDrawing = true; drawPixel(e); });
+      canvas.addEventListener('mousemove', (e) => { if(isDrawing) drawPixel(e); });
+      window.addEventListener('mouseup', () => { isDrawing = false; });
+
+      // Touch Support
+      canvas.addEventListener('touchstart', (e) => { isDrawing = true; drawPixel(e.touches[0]); });
+      canvas.addEventListener('touchmove', (e) => { if(isDrawing) drawPixel(e.touches[0]); });
+      window.addEventListener('touchend', () => { isDrawing = false; });
+    }
+
+    function drawPixel(e) {
+      const rect = canvas.getBoundingClientRect();
+      const x = Math.floor((e.clientX - rect.left) * (152 / rect.width));
+      const y = Math.floor((e.clientY - rect.top) * (152 / rect.height));
+
+      ctx.fillStyle = currentColor;
+      ctx.fillRect(x, y, 4, 4); // 4x4 Pixel Brush Size
+    }
+
+    function setEraser() {
+      currentColor = "#ffffff";
+    }
+
+    function clearCanvas() {
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, 152, 152);
+    }
+
+    function drawTextToCanvas() {
+      const text = document.getElementById('canvasTextInput').value;
+      if(!text) return;
+      ctx.fillStyle = currentColor;
+      ctx.font = '12px "Press Start 2P", monospace';
+      ctx.fillText(text, 10, 80);
+    }
+
+    function saveCanvasDrawing() {
+      const topic = document.getElementById('canvasTopicInput').value.trim().toLowerCase();
+      if(!topic) {
+        alert("Lütfen bu resmin hangi konu arandığında çıkacağını belirten bir etiket girin!");
+        return;
+      }
+
+      const dataURL = canvas.toDataURL();
+      const drawings = JSON.parse(localStorage.getItem('minefarm_drawings') || '{}');
+      drawings[topic] = dataURL;
+      localStorage.setItem('minefarm_drawings', JSON.stringify(drawings));
+
+      if(db) {
+        db.ref('drawings/' + topic).set(dataURL);
+      }
+
+      alert(`Çiziminiz "${topic}" konusu için başarıyla kaydedildi! Chat'e bu kelime yazıldığında yüklenecektir.`);
+    }
+
+    // --- AI CHAT SYSTEM ---
+    function sendChatMessage() {
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if(!text) return;
+
+      const chatBox = document.getElementById('chatBox');
+      
+      // User Message
+      chatBox.innerHTML += `<div class="chat-msg user">${text}</div>`;
+      input.value = '';
+
+      // Check Drawing Trigger
+      const drawings = JSON.parse(localStorage.getItem('minefarm_drawings') || '{}');
+      let matchedTopic = null;
+
+      Object.keys(drawings).forEach(topic => {
+        if(text.toLowerCase().includes(topic)) {
+          matchedTopic = topic;
+        }
+      });
+
+      if(matchedTopic) {
+        showSplashAndRespond(matchedTopic, drawings[matchedTopic]);
+      } else {
+        setTimeout(() => {
+          let aiResponse = generateAIResponse(text);
+          chatBox.innerHTML += `<div class="chat-msg ai">${aiResponse}</div>`;
+          chatBox.scrollTop = chatBox.scrollHeight;
+        }, 600);
+      }
+    }
+
+    function showSplashAndRespond(topic, imageData) {
+      const splash = document.getElementById('splashOverlay');
+      const splashCanvas = document.getElementById('splashPreviewCanvas');
+      const splashCtx = splashCanvas.getContext('2d');
+      
+      const img = new Image();
+      img.onload = function() {
+        splashCtx.drawImage(img, 0, 0);
+      };
+      img.src = imageData;
+
+      document.getElementById('splashTopicText').innerText = `Konu: "${topic.toUpperCase()}"`;
+      splash.style.display = 'flex';
+
+      setTimeout(() => {
+        splash.style.display = 'none';
+        const chatBox = document.getElementById('chatBox');
+        chatBox.innerHTML += `
+          <div class="chat-msg ai">
+            <strong>MinEFarm Aİ:</strong> "${topic}" ile ilgili özel çizim bulundu!
+            <br><img src="${imageData}" style="width: 152px; height: 152px; border: 2px solid var(--mc-gold); margin-top: 8px; image-rendering: pixelated;">
+          </div>
+        `;
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }, 2000);
+    }
+
+    function generateAIResponse(msg) {
+      const m = msg.toLowerCase();
+      if(m.includes('tohum') || m.includes('seed')) {
+        return "🌱 **Önerilen Seed:** `-741803896490086383` (Doğuşta Köy & Yağmacı Karakolu bir arada!)";
+      } else if(m.includes('mod')) {
+        return "⚙️ **Mod Önerileri:** Create Mod (Mekanik otomasyonlar için) & Just Enough Items (JEI).";
+      } else if(m.includes('map') || m.includes('harita')) {
+        return "🗺️ **Harita Önerisi:** SkyBlock V2.1 veya Dropper Extreme denemelisin!";
+      } else {
+        return `MinEFarm Aİ: "${msg}" hakkında analiz yapıldı. Çimento, Demir veya XP farmları rehberi için Farm bölümünü inceleyebilirsin!`;
+      }
+    }
+
+    // --- SKIN EDITOR ENGINE ---
+    let skinCanvas, skinCtx;
+    function initSkinCanvas() {
+      skinCanvas = document.getElementById('skinCanvas');
+      skinCtx = skinCanvas.getContext('2d');
+      generateRandomSkin();
+    }
+
+    function generateRandomSkin() {
+      const color = document.getElementById('skinColor').value;
+      skinCtx.fillStyle = color;
+      skinCtx.fillRect(0, 0, 64, 64);
+      
+      // Face elements
+      skinCtx.fillStyle = "#ffffff";
+      skinCtx.fillRect(16, 20, 8, 8);
+      skinCtx.fillRect(40, 20, 8, 8);
+
+      skinCtx.fillStyle = "#000000";
+      skinCtx.fillRect(20, 22, 4, 4);
+      skinCtx.fillRect(44, 22, 4, 4);
+    }
+
+    function downloadSkin() {
+      const link = document.createElement('a');
+      link.download = 'minefarm_skin.png';
+      link.href = skinCanvas.toDataURL();
+      link.click();
+    }
+
+    // --- COMMUNITY CODE SYSTEM ---
+    function submitCodeSnippet() {
+      const title = document.getElementById('codeTitle').value.trim();
+      const body = document.getElementById('codeBody').value.trim();
+
+      if(!title || !body) {
+        alert("Lütfen başlık ve kod içeriğini doldurun!");
+        return;
+      }
+
+      const codeObj = {
+        author: currentUser,
+        title: title,
+        body: body,
+        date: new Date().toLocaleDateString()
+      };
+
+      const codes = JSON.parse(localStorage.getItem('minefarm_codes') || '[]');
+      codes.unshift(codeObj);
+      localStorage.setItem('minefarm_codes', JSON.stringify(codes));
+
+      alert("Kod öneriniz kaydedildi!");
+      document.getElementById('codeTitle').value = '';
+      document.getElementById('codeBody').value = '';
+      loadCommunityCodes();
+    }
+
+    function loadCommunityCodes() {
+      const list = document.getElementById('codeList');
+      const codes = JSON.parse(localStorage.getItem('minefarm_codes') || '[]');
+
+      if(codes.length === 0) {
+        list.innerHTML = '<p style="color: #888;">Henüz kod önerisi yapılmadı.</p>';
+        return;
+      }
+
+      list.innerHTML = '';
+      codes.forEach(c => {
+        list.innerHTML += `
+          <div style="background: #191920; border: 1px solid #333; padding: 12px; border-radius: 6px; margin-bottom: 10px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+              <strong style="color: var(--mc-gold);">${c.title}</strong>
+              <small style="color: #777;">${c.author} - ${c.date}</small>
             </div>
-        </div>
-    </footer>
-
-    <!-- User Profile Modal -->
-    <div id="profileModal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="glass-panel rounded-3xl p-6 max-w-md w-full bg-slate-900 border-purple-500/40 space-y-5">
-            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-user-gear text-purple-400"></i> Profil & Çevrimiçi Ayarları
-                </h3>
-                <button onclick="toggleProfileModal()" class="text-slate-400 hover:text-white">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
-
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">Kullanıcı Adı</label>
-                    <input type="text" id="usernameInput" class="w-full glass-input text-sm text-white px-3 py-2.5 rounded-xl focus:outline-none">
-                    <p class="text-[11px] text-slate-400 mt-1">
-                        İpucu: Yönetici / Öğretmen yetkileri için kullanıcı adınızın başına <code class="text-purple-300 font-bold">ZigguratBoss:</code> ekleyin.
-                    </p>
-                </div>
-
-                <div class="p-3 bg-purple-950/40 rounded-xl border border-purple-500/20 text-xs space-y-1">
-                    <div class="text-purple-300 font-bold">Boss Yetkisi Durumu:</div>
-                    <div id="bossStatusInfo" class="text-slate-300">Deaktif (Normal Kullanıcı)</div>
-                </div>
-            </div>
-
-            <div class="flex justify-end gap-2 pt-2">
-                <button onclick="toggleProfileModal()" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-xs font-semibold">İptal</button>
-                <button onclick="saveUserProfile()" class="px-5 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl text-xs font-bold">Kaydet</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Notification Toast -->
-    <div id="toastNotification" class="fixed bottom-5 right-5 z-50 hidden px-4 py-3 rounded-2xl bg-slate-900 border border-purple-500/50 text-white text-xs font-medium shadow-2xl flex items-center gap-2">
-        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400"></i>
-        <span id="toastMessage">İşlem başarılı!</span>
-    </div>
-
-    <!-- APP JAVASCRIPT LOGIC & FIREBASE REALTIME SYNC -->
-    <script>
-        // --- FIREBASE CONFIGURATION & INITIALIZATION ---
-        const firebaseConfig = {
-            databaseURL: "https://ziggurat-online-dergi-default-rtdb.firebaseio.com"
-        };
-
-        let db = null;
-        let connectedRef = null;
-        let onlineUsersRef = null;
-        let myPresenceRef = null;
-
-        try {
-            firebase.initializeApp(firebaseConfig);
-            db = firebase.database();
-            
-            // Presence & Online Count System
-            connectedRef = db.ref(".info/connected");
-            onlineUsersRef = db.ref("onlineUsers");
-
-            connectedRef.on("value", (snap) => {
-                if (snap.val() === true) {
-                    myPresenceRef = onlineUsersRef.push();
-                    myPresenceRef.onDisconnect().remove();
-                    myPresenceRef.set({
-                        name: currentUser.name,
-                        time: firebase.database.ServerValue.TIMESTAMP
-                    });
-                }
-            });
-
-            onlineUsersRef.on("value", (snap) => {
-                const count = snap.numChildren() || 1;
-                document.getElementById('onlineCountBadge').innerText = count;
-            });
-
-        } catch (e) {
-            console.log("Firebase online mode fallback to local sync:", e);
-        }
-
-        // Global App State
-        let currentUser = {
-            name: localStorage.getItem('ziggurat_user') || 'Öğrenci_' + Math.floor(Math.random()*1000),
-            isBoss: false,
-            isTeacher: false
-        };
-
-        // Profanity Filter Dictionary
-        const badWords = ['küfür1', 'küfür2', 'aptal', 'salak', 'mal', 'gerizekalı'];
-
-        // Default Sample Quizzes (Fallback & Initial)
-        let defaultQuizzes = [
-            {
-                id: 101,
-                grade: '8. Sınıf (LGS)',
-                subject: 'Matematik',
-                title: 'Üslü İfadeler and Kareköklü Sayılar',
-                author: 'ZigguratBoss:MatematikZümresi',
-                questions: [
-                    {
-                        q: '√144 + √81 işleminin sonucu kaçtır?',
-                        options: ['A) 19', 'B) 21', 'C) 25', 'D) 15'],
-                        answer: 1
-                    },
-                    {
-                        q: '2^5 ile 2^3 çarpımının üslü biçimde gösterimi nedir?',
-                        options: ['A) 2^15', 'B) 2^8', 'C) 4^8', 'D) 2^2'],
-                        answer: 1
-                    }
-                ]
-            },
-            {
-                id: 102,
-                grade: '7. Sınıf',
-                subject: 'Fen',
-                title: 'Hücre Organelleri ve Mitoz Bölünme',
-                author: 'ZigguratBoss:FenHocası',
-                questions: [
-                    {
-                        q: 'Hücrenin enerji santrali olarak bilinen organel hangisidir?',
-                        options: ['A) Ribozom', 'B) Lizozom', 'C) Mitokondri', 'D) Golgi aygıtı'],
-                        answer: 2
-                    }
-                ]
-            }
-        ];
-
-        let quizzes = [...defaultQuizzes];
-        let chatMessages = [];
-
-        // Jokes Archive
-        const jokesList = [
-            "Öğretmen: Sözlüye kaldırıyorum! Sınıf: Sessizce göz temasını kesip sıranın altına doğru süzülür...",
-            "Matematik kitabının derdi neymiş? İçinde çok fazla 'problem' varmış!",
-            "Sınavda 15 dakika kalmıştır ve sen daha 2. sorudasındır: 'I've got a bad feeling about this!'",
-            "Öğretmen: 'Ev ödevini neden yapmadın?' Öğrenci: 'Hocam ev ödevi dediniz, okulda yapamazdım ki!'",
-            "Sınavdan 100 alan arkadaşın 'Çok kötü geçti kanka' demesi kadar dramatik bir şey yok."
-        ];
-
-        let currentActiveQuiz = null;
-        let currentQuestionIdx = 0;
-        let selectedUserAnswers = {};
-
-        // Page Load Initializer
-        window.onload = function () {
-            loadUserProfile();
-            setupFirebaseListeners();
-            setupDynamicQuestionsDefault();
-        };
-
-        // --- FIREBASE REALTIME LISTENERS FOR CHAT & QUIZZES ---
-        function setupFirebaseListeners() {
-            if (!db) {
-                // Fallback to localStorage if Firebase not connected
-                chatMessages = JSON.parse(localStorage.getItem('ziggurat_chat') || '[]');
-                renderChatMessages();
-                renderQuizzes('Tümü');
-                return;
-            }
-
-            // Sync Chat Messages
-            db.ref('chatMessages').on('value', (snapshot) => {
-                const data = snapshot.val();
-                chatMessages = [];
-                if (data) {
-                    Object.keys(data).forEach(key => {
-                        chatMessages.push({ id: key, ...data[key] });
-                    });
-                }
-                renderChatMessages();
-            });
-
-            // Sync Quizzes
-            db.ref('quizzes').on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    let cloudQuizzes = [];
-                    Object.keys(data).forEach(key => {
-                        cloudQuizzes.push(data[key]);
-                    });
-                    quizzes = [...defaultQuizzes, ...cloudQuizzes];
-                } else {
-                    quizzes = [...defaultQuizzes];
-                }
-                renderQuizzes('Tümü');
-            });
-        }
-
-        // Navigation Tabs Controller
-        function switchTab(tabId) {
-            document.querySelectorAll('.nav-tab').forEach(tab => {
-                tab.classList.remove('bg-gradient-to-r', 'from-purple-600', 'to-pink-600', 'text-white', 'shadow-lg');
-                tab.classList.add('text-slate-300');
-            });
-
-            const activeBtn = document.getElementById(`tab-${tabId}`);
-            if (activeBtn) {
-                activeBtn.classList.add('bg-gradient-to-r', 'from-purple-600', 'to-pink-600', 'text-white', 'shadow-lg');
-                activeBtn.classList.remove('text-slate-300');
-            }
-
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.add('hidden');
-                content.classList.remove('block');
-            });
-
-            const targetContent = document.getElementById(`content-${tabId}`);
-            if (targetContent) {
-                targetContent.classList.remove('hidden');
-                targetContent.classList.add('block');
-            }
-        }
-
-        // Profile Management & Boss Role Logic
-        function loadUserProfile() {
-            if(!localStorage.getItem('ziggurat_user')) {
-                localStorage.setItem('ziggurat_user', currentUser.name);
-            } else {
-                currentUser.name = localStorage.getItem('ziggurat_user');
-            }
-
-            currentUser.isBoss = currentUser.name.startsWith('ZigguratBoss:');
-
-            document.getElementById('displayUsername').innerText = currentUser.name;
-            document.getElementById('usernameInput').value = currentUser.name;
-            document.getElementById('userAvatar').innerText = currentUser.name.charAt(0).toUpperCase();
-
-            const roleElem = document.getElementById('displayRole');
-            const bossInfo = document.getElementById('bossStatusInfo');
-            const clearChatBtn = document.getElementById('clearChatBtn');
-            const lockIcon = document.getElementById('teacherLockIcon');
-
-            if (currentUser.isBoss || currentUser.isTeacher) {
-                roleElem.innerText = 'Boss / Öğretmen';
-                roleElem.className = 'text-[10px] text-pink-400 font-bold';
-                bossInfo.innerText = 'Aktif (ZigguratBoss Yetkisi)';
-                bossInfo.className = 'text-emerald-400 font-bold';
-                if (clearChatBtn) clearChatBtn.classList.remove('hidden');
-                if (lockIcon) lockIcon.className = 'fa-solid fa-unlock text-xs text-emerald-400 ml-0.5';
-
-                document.getElementById('teacherLockScreen').classList.add('hidden');
-                document.getElementById('teacherDashboard').classList.remove('hidden');
-            } else {
-                roleElem.innerText = 'Öğrenci';
-                roleElem.className = 'text-[10px] text-purple-400 font-semibold';
-                bossInfo.innerText = 'Deaktif (Normal Kullanıcı)';
-                bossInfo.className = 'text-slate-400 font-semibold';
-                if (clearChatBtn) clearChatBtn.classList.add('hidden');
-                if (lockIcon) lockIcon.className = 'fa-solid fa-lock text-xs text-amber-400 ml-0.5';
-
-                document.getElementById('teacherLockScreen').classList.remove('hidden');
-                document.getElementById('teacherDashboard').classList.add('hidden');
-            }
-        }
-
-        function saveUserProfile() {
-            const newName = document.getElementById('usernameInput').value.trim() || 'Kullanıcı';
-            currentUser.name = newName;
-            localStorage.setItem('ziggurat_user', newName);
-            loadUserProfile();
-            toggleProfileModal();
-            showToast('Profil güncellendi!');
-        }
-
-        function toggleProfileModal() {
-            document.getElementById('profileModal').classList.toggle('hidden');
-        }
-
-        function toggleTeacherAccess() {
-            currentUser.isTeacher = true;
-            document.getElementById('teacherLockScreen').classList.add('hidden');
-            document.getElementById('teacherDashboard').classList.remove('hidden');
-            showToast('Öğretmen moduna geçiş yapıldı.');
-        }
-
-        // Feature 1: ZigguratAI Educational Engine (EBA, MEB, Genel Ağ Entegre)
-        function handleAISearch(e) {
-            e.preventDefault();
-            const query = document.getElementById('aiQueryInput').value.trim();
-            if (!query) return;
-
-            document.getElementById('aiResponseContainer').classList.remove('hidden');
-            document.getElementById('aiLoader').classList.remove('hidden');
-            document.getElementById('aiResultCard').classList.add('hidden');
-
-            setTimeout(() => {
-                generateAIContent(query);
-                document.getElementById('aiLoader').classList.add('hidden');
-                document.getElementById('aiResultCard').classList.remove('hidden');
-            }, 900);
-        }
-
-        function quickAISearch(topic) {
-            document.getElementById('aiQueryInput').value = topic;
-            handleAISearch(new Event('submit'));
-        }
-
-        function generateAIContent(topic) {
-            document.getElementById('aiTopicTitle').innerText = topic;
-
-            const summaryText = `"${topic}" konusu; EBA ders modülleri, T.C. Millî Eğitim Bakanlığı (MEB) müfredat kazanımları ve Genel Ağ'daki akademik eğitim kaynakları taranarak sentezlenmiştir. Bu konu, ortaokul ve LGS hazırlık süreçlerinde öğrencilerin en çok dikkat etmesi gereken temel kavramları barındırır.`;
-            document.getElementById('aiSummaryText').innerText = summaryText;
-
-            const keyPointsList = document.getElementById('aiKeyPoints');
-            keyPointsList.innerHTML = `
-                <li class="flex items-start gap-2 bg-slate-800/60 p-3 rounded-xl border border-slate-800">
-                    <i class="fa-solid fa-check text-purple-400 mt-1"></i>
-                    <div>
-                        <strong class="text-white">Genel Ağ & EBA Veri Analizi:</strong> 
-                        ${topic} ile ilgili temel formüller, tanımlar ve kurallar EBA soru bankalarından derlenmiştir.
-                    </div>
-                </li>
-                <li class="flex items-start gap-2 bg-slate-800/60 p-3 rounded-xl border border-slate-800">
-                    <i class="fa-solid fa-check text-pink-400 mt-1"></i>
-                    <div>
-                        <strong class="text-white">MEB Kazanım İpucu:</strong> 
-                        Sınavlarda bu konudan gelebilecek sorular için tanımları ezberlemek yerine mantığını kavramaya özen gösterin.
-                    </div>
-                </li>
-            `;
-        }
-
-        // Feature 2: Online Chat Engine (Cloud Realtime Sync)
-        function censorText(text) {
-            let clean = text;
-            badWords.forEach(word => {
-                const reg = new RegExp(word, 'gi');
-                clean = clean.replace(reg, '***');
-            });
-            return clean;
-        }
-
-        function renderChatMessages() {
-            const box = document.getElementById('chatMessagesBox');
-            if(!box) return;
-            box.innerHTML = '';
-
-            if (chatMessages.length === 0) {
-                box.innerHTML = '<div class="text-center text-slate-500 py-10 text-xs">Henüz mesaj yok. İlk mesajı siz yazın!</div>';
-                return;
-            }
-
-            chatMessages.forEach((msg) => {
-                const isMe = msg.user === currentUser.name;
-                const msgDiv = document.createElement('div');
-                msgDiv.className = `flex flex-col ${isMe ? 'items-end' : 'items-start'} space-y-1`;
-
-                const nameTag = msg.isBoss ? `<span class="text-pink-400 font-bold text-xs"><i class="fa-solid fa-crown text-[10px] mr-1"></i>${msg.user}</span>` : `<span class="text-purple-300 font-medium text-xs">${msg.user}</span>`;
-
-                const deleteBtn = (currentUser.isBoss) ? `<button onclick="deleteChatMessage('${msg.id}')" class="ml-2 text-red-400 hover:text-red-300 text-[10px]"><i class="fa-solid fa-trash"></i></button>` : '';
-
-                msgDiv.innerHTML = `
-                    <div class="flex items-center gap-2">
-                        ${nameTag}
-                        <span class="text-[10px] text-slate-500">${msg.time}</span>
-                        ${deleteBtn}
-                    </div>
-                    <div class="px-4 py-2.5 rounded-2xl max-w-md text-sm leading-relaxed ${isMe ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-tr-none' : 'bg-slate-800 text-slate-200 border border-slate-700/70 rounded-tl-none'}">
-                        ${censorText(msg.text)}
-                    </div>
-                `;
-                box.appendChild(msgDiv);
-            });
-
-            box.scrollTop = box.scrollHeight;
-        }
-
-        function postChatMessage(e) {
-            e.preventDefault();
-            const input = document.getElementById('chatInput');
-            const text = input.value.trim();
-            if (!text) return;
-
-            const now = new Date();
-            const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-
-            const newMsg = {
-                user: currentUser.name,
-                text: text,
-                time: timeStr,
-                isBoss: currentUser.isBoss
-            };
-
-            if (db) {
-                db.ref('chatMessages').push(newMsg);
-            } else {
-                chatMessages.push({ id: Date.now(), ...newMsg });
-                localStorage.setItem('ziggurat_chat', JSON.stringify(chatMessages));
-                renderChatMessages();
-            }
-
-            input.value = '';
-            showToast('Mesaj buluta gönderildi');
-        }
-
-        function deleteChatMessage(id) {
-            if (db) {
-                db.ref('chatMessages/' + id).remove();
-            } else {
-                chatMessages = chatMessages.filter(m => m.id != id);
-                localStorage.setItem('ziggurat_chat', JSON.stringify(chatMessages));
-                renderChatMessages();
-            }
-            showToast('Mesaj silindi');
-        }
-
-        function clearChatHistory() {
-            if (confirm('Tüm sohbet mesajlarını buluttan temizlemek istediğinize emin misiniz?')) {
-                if (db) {
-                    db.ref('chatMessages').remove();
-                } else {
-                    chatMessages = [];
-                    localStorage.removeItem('ziggurat_chat');
-                    renderChatMessages();
-                }
-                showToast('Chat sıfırlandı');
-            }
-        }
-
-        // Feature 3: Teacher Corner Dynamic Quiz Creator (Cloud Published)
-        function setupDynamicQuestionsDefault() {
-            const container = document.getElementById('questionsBuilderContainer');
-            if (container && container.children.length === 0) {
-                addQuestionField();
-            }
-        }
-
-        function addQuestionField() {
-            const container = document.getElementById('questionsBuilderContainer');
-            const count = container.children.length + 1;
-            if (count > 10) {
-                showToast('En fazla 10 soru eklenebilir!');
-                return;
-            }
-
-            const qCard = document.createElement('div');
-            qCard.className = 'q-build-card p-4 rounded-2xl bg-slate-800/80 border border-slate-700 space-y-3';
-            qCard.innerHTML = `
-                <div class="flex justify-between items-center">
-                    <span class="text-xs font-bold text-purple-400">Soru ${count}</span>
-                    ${count > 1 ? `<button onclick="this.parentElement.parentElement.remove()" class="text-red-400 text-xs"><i class="fa-solid fa-xmark"></i> Sil</button>` : ''}
-                </div>
-                <input type="text" placeholder="Soru metnini buraya yazın..." class="q-title-input w-full glass-input text-xs text-white p-2.5 rounded-xl focus:outline-none">
-                
-                <div class="grid grid-cols-2 gap-2">
-                    <input type="text" placeholder="A Şıkkı" class="opt-a glass-input text-xs text-white p-2 rounded-lg">
-                    <input type="text" placeholder="B Şıkkı" class="opt-b glass-input text-xs text-white p-2 rounded-lg">
-                    <input type="text" placeholder="C Şıkkı" class="opt-c glass-input text-xs text-white p-2 rounded-lg">
-                    <input type="text" placeholder="D Şıkkı" class="opt-d glass-input text-xs text-white p-2 rounded-lg">
-                </div>
-
-                <div class="flex items-center gap-2 pt-1">
-                    <span class="text-xs text-slate-400">Doğru Cevap Anahtarı:</span>
-                    <select class="correct-opt-select glass-input text-xs text-white p-1.5 rounded-lg">
-                        <option value="0">A Şıkkı</option>
-                        <option value="1">B Şıkkı</option>
-                        <option value="2">C Şıkkı</option>
-                        <option value="3">D Şıkkı</option>
-                    </select>
-                </div>
-            `;
-            container.appendChild(qCard);
-        }
-
-        function saveAndPublishQuiz() {
-            const grade = document.getElementById('quizGrade').value;
-            const subject = document.getElementById('quizSubject').value;
-            const title = document.getElementById('quizTitleInput').value.trim();
-
-            if (!title) {
-                showToast('Lütfen test başlığını giriniz!');
-                return;
-            }
-
-            const cards = document.querySelectorAll('.q-build-card');
-            const compiledQuestions = [];
-
-            cards.forEach(card => {
-                const qText = card.querySelector('.q-title-input').value.trim();
-                const optA = card.querySelector('.opt-a').value.trim() || 'A)';
-                const optB = card.querySelector('.opt-b').value.trim() || 'B)';
-                const optC = card.querySelector('.opt-c').value.trim() || 'C)';
-                const optD = card.querySelector('.opt-d').value.trim() || 'D)';
-                const correct = parseInt(card.querySelector('.correct-opt-select').value);
-
-                if (qText) {
-                    compiledQuestions.push({
-                        q: qText,
-                        options: [`A) ${optA}`, `B) ${optB}`, `C) ${optC}`, `D) ${optD}`],
-                        answer: correct
-                    });
-                }
-            });
-
-            if (compiledQuestions.length === 0) {
-                showToast('En az 1 geçerli soru doldurmalısınız!');
-                return;
-            }
-
-            const newQuiz = {
-                id: 'quiz_' + Date.now(),
-                grade,
-                subject,
-                title,
-                author: currentUser.name,
-                questions: compiledQuestions
-            };
-
-            if (db) {
-                db.ref('quizzes/' + newQuiz.id).set(newQuiz);
-            } else {
-                quizzes.push(newQuiz);
-                renderQuizzes('Tümü');
-            }
-
-            switchTab('meb-tests');
-            showToast('Test buluta yayınlandı ve tüm cihazlarda aktif!');
-        }
-
-        // Feature 4: MEB Quizzes Renderer & Interactive Solver
-        function renderQuizzes(filter) {
-            const grid = document.getElementById('quizzesGrid');
-            if(!grid) return;
-            grid.innerHTML = '';
-
-            const filtered = filter === 'Tümü' ? quizzes : quizzes.filter(q => q.subject === filter);
-
-            if (filtered.length === 0) {
-                grid.innerHTML = `<div class="col-span-2 text-center py-8 text-slate-500 text-sm">Bu kategoride henüz yayınlanmış test bulunmuyor.</div>`;
-                return;
-            }
-
-            filtered.forEach(q => {
-                const card = document.createElement('div');
-                card.className = 'glass-panel rounded-2xl p-5 hover:border-purple-500/50 transition space-y-3 flex flex-col justify-between';
-                card.innerHTML = `
-                    <div>
-                        <div class="flex items-center justify-between text-xs mb-2">
-                            <span class="px-2.5 py-0.5 rounded-md bg-purple-500/20 text-purple-300 font-bold border border-purple-500/30">${q.subject}</span>
-                            <span class="text-slate-400">${q.grade}</span>
-                        </div>
-                        <h4 class="text-base font-bold text-white">${q.title}</h4>
-                        <p class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-user-pen text-[10px]"></i> ${q.author}</p>
-                    </div>
-                    <div class="flex items-center justify-between pt-3 border-t border-slate-800">
-                        <span class="text-xs text-slate-400"><i class="fa-solid fa-clipboard-question"></i> ${q.questions.length} Soru</span>
-                        <button onclick="startQuiz('${q.id}')" class="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white rounded-xl text-xs font-bold transition shadow-md">
-                            Testi Çöz
-                        </button>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function filterQuizzes(cat) {
-            document.querySelectorAll('.quiz-filter').forEach(btn => {
-                btn.className = 'quiz-filter px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition';
-            });
-            event.target.className = 'quiz-filter active px-3 py-1.5 rounded-xl text-xs font-semibold bg-purple-600 text-white transition';
-            renderQuizzes(cat);
-        }
-
-        function startQuiz(id) {
-            currentActiveQuiz = quizzes.find(q => q.id == id);
-            if (!currentActiveQuiz) return;
-
-            currentQuestionIdx = 0;
-            selectedUserAnswers = {};
-
-            document.getElementById('quizzesGrid').classList.add('hidden');
-            document.getElementById('activeTestRunner').classList.remove('hidden');
-
-            document.getElementById('activeQuizSubject').innerText = `${currentActiveQuiz.subject} • ${currentActiveQuiz.grade}`;
-            document.getElementById('activeQuizTitle').innerText = currentActiveQuiz.title;
-
-            renderActiveQuestion();
-        }
-
-        function closeActiveQuiz() {
-            document.getElementById('activeTestRunner').classList.add('hidden');
-            document.getElementById('quizzesGrid').classList.remove('hidden');
-        }
-
-        function renderActiveQuestion() {
-            const q = currentActiveQuiz.questions[currentQuestionIdx];
-            const box = document.getElementById('quizQuestionBox');
-
-            document.getElementById('quizProgressText').innerText = `Soru ${currentQuestionIdx + 1} / ${currentActiveQuiz.questions.length}`;
-
-            let optionsHTML = '';
-            q.options.forEach((opt, idx) => {
-                const isSelected = selectedUserAnswers[currentQuestionIdx] === idx;
-                const isCorrect = idx === q.answer;
-                let btnStyle = 'bg-slate-800/80 border-slate-700 text-slate-200 hover:bg-slate-700';
-
-                if (isSelected) {
-                    btnStyle = isCorrect ? 'bg-emerald-600/30 border-emerald-500 text-emerald-300 font-bold' : 'bg-red-600/30 border-red-500 text-red-300 font-bold';
-                }
-
-                optionsHTML += `
-                    <button onclick="selectAnswer(${idx})" class="w-full text-left p-3.5 rounded-xl border text-xs sm:text-sm transition ${btnStyle}">
-                        ${opt}
-                    </button>
-                `;
-            });
-
-            box.innerHTML = `
-                <div class="space-y-4">
-                    <p class="text-sm sm:text-base font-semibold text-white leading-relaxed">
-                        ${currentQuestionIdx + 1}. ${q.q}
-                    </p>
-                    <div class="space-y-2">
-                        ${optionsHTML}
-                    </div>
-                </div>
-            `;
-        }
-
-        function selectAnswer(optIdx) {
-            selectedUserAnswers[currentQuestionIdx] = optIdx;
-            renderActiveQuestion();
-        }
-
-        function navigateQuestion(direction) {
-            const newIndex = currentQuestionIdx + direction;
-            if (newIndex >= 0 && newIndex < currentActiveQuiz.questions.length) {
-                currentQuestionIdx = newIndex;
-                renderActiveQuestion();
-            } else if (newIndex >= currentActiveQuiz.questions.length) {
-                showToast('Testi tamamladınız!');
-            }
-        }
-
-        // Feature 5: Daily Humor Generator
-        function generateRandomJoke() {
-            const display = document.getElementById('jokeTextDisplay');
-            const random = jokesList[Math.floor(Math.random() * jokesList.length)];
-            display.innerText = `"${random}"`;
-        }
-
-        function copyJokeToClipboard() {
-            const text = document.getElementById('jokeTextDisplay').innerText;
-            const tempInput = document.createElement('textarea');
-            tempInput.value = text;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempInput);
-            showToast('Espri panoya kopyalandı!');
-        }
-
-        // Utility Toast System
-        function showToast(msg) {
-            const toast = document.getElementById('toastNotification');
-            const msgElem = document.getElementById('toastMessage');
-            msgElem.innerText = msg;
-            toast.classList.remove('hidden');
-            setTimeout(() => {
-                toast.classList.add('hidden');
-            }, 3000);
-        }
-    </script>
+            <pre style="background: #0d0d10; padding: 8px; border-radius: 4px; color: var(--mc-accent); font-family: monospace; overflow-x: auto;">${c.body}</pre>
+          </div>
+        `;
+      });
+    }
+  </script>
 </body>
 </html>
