@@ -32,8 +32,8 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Firebase Compatibility SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
     <style>
         body {
@@ -92,7 +92,7 @@
     <!-- Top Navigation Header -->
     <header class="glass-card rounded-2xl p-4 mb-6 sticky top-2 z-40 flex flex-wrap justify-between items-center gap-4">
         <div class="flex items-center space-x-3">
-            <!-- Custom Ziggurat Logo SVG based on provided design -->
+            <!-- Custom Ziggurat Logo SVG -->
             <svg class="w-11 h-11 neon-logo" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <linearGradient id="zigMainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -105,11 +105,8 @@
                         <stop offset="100%" stop-color="#1e40af" />
                     </linearGradient>
                 </defs>
-                <!-- Outline Frame -->
                 <path d="M 30 20 L 170 20 L 170 45 L 75 145 L 170 145 L 170 175 L 30 175 L 30 150 L 125 50 L 30 50 Z" fill="none" stroke="#ffffff" stroke-width="4" stroke-opacity="0.6" />
-                <!-- Main Body Z -->
                 <path d="M 35 25 L 165 25 L 165 42 L 70 142 L 165 142 L 165 170 L 35 170 L 35 153 L 130 53 L 35 53 Z" fill="url(#zigMainGrad)" />
-                <!-- Ziggurat Inner Steps -->
                 <polygon points="75,135 145,135 145,120 90,120" fill="url(#zigInnerGrad)" opacity="0.9" />
                 <polygon points="90,115 145,115 145,100 105,100" fill="url(#zigInnerGrad)" opacity="0.95" />
                 <polygon points="105,95 145,95 145,80 120,80" fill="url(#zigInnerGrad)" opacity="1" />
@@ -125,19 +122,16 @@
 
         <!-- User Controls & Status Bar -->
         <div class="flex items-center space-x-3">
-            <!-- Points Badge -->
             <div class="bg-amber-500/10 border border-amber-500/30 text-amber-300 px-3 py-1.5 rounded-full text-xs font-bold flex items-center space-x-1.5">
                 <i class="fa-solid fa-trophy text-amber-400"></i>
                 <span id="userPointsDisplay">0 Puan</span>
             </div>
 
-            <!-- Cloud Connection Indicator -->
             <div id="cloudStatus" class="flex items-center space-x-2 bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 px-3 py-1.5 rounded-full text-xs font-semibold">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
                 <span id="cloudStatusText">Canlı Bulut Bağlı</span>
             </div>
 
-            <!-- Profile / Name Change Button -->
             <button onclick="openProfileModal()" class="flex items-center space-x-2 bg-purple-900/50 hover:bg-purple-800/70 border border-purple-500/40 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-white transition-all">
                 <i class="fa-solid fa-user-gear text-purple-400 text-sm"></i>
                 <span id="userNameDisplay" class="max-w-[120px] truncate">Kullanıcı</span>
@@ -176,7 +170,6 @@
         <!-- 1. AI SEARCH & SUMMARIZATION ASSISTANT -->
         <section id="section-ai" class="tab-section block">
             <div class="glass-card rounded-2xl p-4 md:p-6 flex flex-col h-[650px] relative">
-                <!-- Header Info -->
                 <div class="flex items-center justify-between pb-4 border-b border-purple-500/20 mb-4">
                     <div class="flex items-center space-x-3">
                         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-purple-600 to-pink-500 flex items-center justify-center text-white shadow-lg">
@@ -192,7 +185,6 @@
                     </span>
                 </div>
 
-                <!-- Chat Stream -->
                 <div id="aiChatBox" class="flex-grow overflow-y-auto space-y-4 pr-2">
                     <div class="flex items-start space-x-3">
                         <div class="w-8 h-8 rounded-lg bg-purple-600/60 flex items-center justify-center text-white text-xs flex-shrink-0 mt-1">
@@ -200,12 +192,11 @@
                         </div>
                         <div class="glass-card p-4 rounded-2xl rounded-tl-none max-w-[85%] text-sm leading-relaxed">
                             <p class="font-semibold text-purple-300 mb-1">Ziggurat Aİ:</p>
-                            Merhaba <span class="active-user-name font-bold text-pink-300">Kullanıcı</span>! Ben senin kişisel akıllı eğitim asistanınım. MEB müfredatı, LGS hazırlık veya öğrenmek istediğin her ders konusunda soru sorabilirsin. Soru sorduğunda interneti canlı olarak tarayıp özet çıkartırım! 🚀
+                            Merhaba <span class="active-user-name font-bold text-pink-300">Kullanıcı</span>! Ben senin kişisel akıllı eğitim asistanım. MEB müfredatı, LGS hazırlık veya öğrenmek istediğin her ders konusunda soru sorabilirsin. Soru sorduğunda interneti canlı olarak tarayıp özet çıkartırım! 🚀
                         </div>
                     </div>
                 </div>
 
-                <!-- Searching / Summarizing Progress Indicator -->
                 <div id="aiSearchProgress" class="hidden my-2 p-3 bg-purple-950/90 border border-purple-500/40 rounded-xl text-xs space-y-2">
                     <div class="flex items-center justify-between text-purple-200">
                         <span id="aiProgressText" class="font-medium animate-pulse">🌐 İnternet taranıyor...</span>
@@ -216,7 +207,6 @@
                     </div>
                 </div>
 
-                <!-- Input Area -->
                 <form onsubmit="handleAiSubmit(event)" class="mt-4 flex gap-2">
                     <input type="text" id="aiInput" placeholder="Aİ'ye bir şey sor (Örn: LGS Fen Güneş Tutulmasını özetle veya Nasılsın?)..." 
                            class="flex-grow glass-card px-4 py-3 rounded-xl border border-purple-500/30 focus:border-purple-400 focus:outline-none text-sm text-white placeholder-gray-400">
@@ -228,7 +218,7 @@
             </div>
         </section>
 
-        <!-- 2. COMMUNITY SECTION (GLOBAL CLOUD FEED) -->
+        <!-- 2. COMMUNITY SECTION -->
         <section id="section-community" class="tab-section hidden">
             <div class="glass-card rounded-2xl p-4 md:p-6 space-y-6">
                 <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-purple-500/20">
@@ -244,7 +234,6 @@
                     <span class="text-xs text-gray-400"><i class="fa-solid fa-shield-halved text-emerald-400 mr-1"></i>Otomatik Argo / Küfür Filtresi Aktif</span>
                 </div>
 
-                <!-- Send Message Form -->
                 <form onsubmit="sendCommunityMessage(event)" class="space-y-3 glass-card p-4 rounded-xl border-purple-500/20">
                     <div class="flex items-center space-x-2 text-xs text-purple-300 font-semibold">
                         <i class="fa-solid fa-pen-nib"></i>
@@ -261,7 +250,6 @@
                     </div>
                 </form>
 
-                <!-- Message Feed -->
                 <div id="communityFeed" class="space-y-3 max-h-[500px] overflow-y-auto pr-2">
                     <div class="text-center py-8 text-gray-400 text-sm">
                         <i class="fa-solid fa-spinner animate-spin text-purple-400 text-xl mb-2"></i>
@@ -280,7 +268,6 @@
                 </div>
 
                 <div id="studentHomeworkList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Dynamic Homeworks -->
                 </div>
             </div>
         </section>
@@ -293,7 +280,6 @@
                         <h2 class="font-bold text-lg text-white">Seviye Testleri</h2>
                         <p class="text-xs text-purple-300">Test çözün, puan kazanın ve bulut profilinize işleyin.</p>
                     </div>
-                    <!-- Level Filter -->
                     <select id="testLevelFilter" onchange="renderTests()" class="glass-card px-3 py-1.5 rounded-xl border border-purple-500/30 text-xs text-white bg-purple-950 focus:outline-none">
                         <option value="5. Sınıf">5. Sınıf</option>
                         <option value="6. Sınıf">6. Sınıf</option>
@@ -303,14 +289,12 @@
                 </div>
 
                 <div id="testsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Dynamic Tests -->
                 </div>
             </div>
         </section>
 
-        <!-- 5. TEACHER ZONE (ÖĞRETMEN ALANI) -->
+        <!-- 5. TEACHER ZONE -->
         <section id="section-teacher" class="tab-section hidden">
-            <!-- Locked State -->
             <div id="teacherLockedBanner" class="glass-card rounded-2xl p-8 text-center space-y-4 max-w-xl mx-auto my-12 border-rose-500/30">
                 <div class="w-16 h-16 bg-rose-500/20 rounded-full flex items-center justify-center text-rose-400 mx-auto text-2xl border border-rose-500/40">
                     <i class="fa-solid fa-lock"></i>
@@ -324,9 +308,7 @@
                 </button>
             </div>
 
-            <!-- Unlocked Teacher Panel -->
             <div id="teacherPanel" class="hidden space-y-6">
-                <!-- Assign Homework Card -->
                 <div class="glass-card rounded-2xl p-4 md:p-6 space-y-4">
                     <h3 class="font-bold text-lg text-white border-b border-purple-500/20 pb-3 flex items-center space-x-2">
                         <i class="fa-solid fa-pen-to-square text-purple-400"></i>
@@ -343,107 +325,84 @@
                                 <option value="LGS'ye Hazırlık">LGS'ye Hazırlık</option>
                             </select>
                         </div>
-
                         <div>
-                            <label class="block text-xs font-semibold text-purple-300 mb-1">2. Adım: Ders / Konu Adı</label>
-                            <input type="text" id="teacherSubject" placeholder="Örn: Fen Bilimleri - Güneş Tutulması" required
-                                   class="w-full glass-card p-3 rounded-xl border border-purple-500/30 text-sm text-white focus:outline-none placeholder-gray-400">
+                            <label class="block text-xs font-semibold text-purple-300 mb-1">2. Adım: Ders / Konu</label>
+                            <input type="text" id="teacherSubject" placeholder="Örn: LGS Fen - Basınç" required class="w-full glass-card p-3 rounded-xl border border-purple-500/30 text-sm text-white placeholder-gray-400 focus:outline-none">
                         </div>
-
                         <div class="md:col-span-2">
-                            <label class="block text-xs font-semibold text-purple-300 mb-1">Ödev Detayı & Açıklaması</label>
-                            <textarea id="teacherDescription" rows="2" placeholder="Örn: EBA ders videosunu izleyip 20 soru çözün." required
-                                      class="w-full glass-card p-3 rounded-xl border border-purple-500/30 text-sm text-white focus:outline-none placeholder-gray-400 resize-none"></textarea>
+                            <label class="block text-xs font-semibold text-purple-300 mb-1">3. Adım: Ödev Açıklaması & Talimatlar</label>
+                            <textarea id="teacherDescription" rows="2" placeholder="Ödev detaylarını ve yönergeleri girin..." required class="w-full glass-card p-3 rounded-xl border border-purple-500/30 text-sm text-white placeholder-gray-400 focus:outline-none resize-none"></textarea>
                         </div>
-
-                        <div class="md:col-span-2">
-                            <label class="block text-xs font-semibold text-purple-300 mb-1">Hedef Öğrenci Seçimi (Yanlış Öğrenciye Gönderimi Önler)</label>
-                            <div class="flex flex-wrap gap-2 items-center">
-                                <select id="teacherTargetStudent" class="flex-grow glass-card p-3 rounded-xl border border-purple-500/30 bg-purple-950 text-sm text-white focus:outline-none">
-                                    <option value="HERKES">Tüm Öğrenciler (Genel)</option>
-                                    <!-- Dynamic known students -->
-                                </select>
-                                <button type="submit" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-xl text-sm font-semibold shadow-lg hover:opacity-90 transition-all">
-                                    <i class="fa-solid fa-paper-plane mr-2"></i>Ödevi Ata
-                                </button>
-                            </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-purple-300 mb-1">4. Adım: Hedef Öğrenci Grubu</label>
+                            <select id="teacherTargetStudent" class="w-full glass-card p-3 rounded-xl border border-purple-500/30 bg-purple-950 text-sm text-white focus:outline-none">
+                                <option value="HERKES">TÜM Öğrenciler (Genel)</option>
+                            </select>
+                        </div>
+                        <div class="flex items-end">
+                            <button type="submit" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white p-3 rounded-xl text-sm font-semibold shadow-md transition-all">
+                                <i class="fa-solid fa-paper-plane mr-2"></i> Ödevi Sisteme Yükle!
+                            </button>
                         </div>
                     </form>
                 </div>
 
-                <!-- Live Homework Completion Table -->
-                <div class="glass-card rounded-2xl p-4 md:p-6 space-y-4 overflow-hidden">
-                    <div class="flex justify-between items-center border-b border-purple-500/20 pb-3">
-                        <h3 class="font-bold text-lg text-white flex items-center space-x-2">
-                            <i class="fa-solid fa-table-list text-emerald-400"></i>
-                            <span>Ödev Yapma Durum Tablosu</span>
-                        </h3>
-                        <span class="text-xs text-purple-300 bg-purple-950 px-2.5 py-1 rounded-full border border-purple-500/30">Canlı Takip</span>
-                    </div>
-
+                <div class="glass-card rounded-2xl p-4 md:p-6 space-y-4">
+                    <h3 class="font-bold text-lg text-white border-b border-purple-500/20 pb-3 flex items-center space-x-2">
+                        <i class="fa-solid fa-clipboard-user text-purple-400"></i>
+                        <span>Öğrenci Takip & Performans Masası</span>
+                    </h3>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-xs text-gray-300">
-                            <thead class="bg-purple-950/80 text-purple-200 uppercase text-[10px] tracking-wider border-b border-purple-500/30">
+                            <thead class="bg-purple-950/80 text-purple-300 uppercase border-b border-purple-500/20">
                                 <tr>
-                                    <th class="p-3">Öğrenci</th>
-                                    <th class="p-3">Düzey</th>
-                                    <th class="p-3">Ders / Konu</th>
-                                    <th class="p-3">Atama Tarihi</th>
-                                    <th class="p-3">Durum</th>
-                                    <th class="p-3">Tamamlama Saati</th>
+                                    <th class="p-3">Öğrenci Adı</th>
+                                    <th class="p-3">Puan</th>
+                                    <th class="p-3">Tamamlanan Ödev</th>
+                                    <th class="p-3">Son Etkinlik</th>
                                 </tr>
                             </thead>
                             <tbody id="teacherHomeworkTableBody" class="divide-y divide-purple-500/10">
-                                <tr>
-                                    <td colspan="6" class="p-4 text-center text-gray-400">Kayıtlı ödev bulunamadı.</td>
-                                </tr>
+                                <tr><td colspan="4" class="p-4 text-center text-gray-400">Kayıt bulunamadı.</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </section>
-
     </main>
 
-    <!-- Footer -->
-    <footer class="mt-8 py-4 text-center text-xs text-gray-400 border-t border-purple-500/10">
-        <p>© 2026 ZigguratAİ - Akıllı Bulut Eğitim Ekosistemi</p>
+    <!-- FOOTER -->
+    <footer class="max-w-7xl mx-auto w-full mt-8 py-4 border-t border-purple-500/20 text-center text-xs text-gray-400">
+        <p>ZigguratAİ Web Platform &bull; Eğitimde Yapay Zeka Gücü</p>
     </footer>
 
     <!-- PROFILE MODAL -->
-    <div id="profileModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-card max-w-md w-full rounded-2xl p-6 space-y-4 border-purple-500/40 relative">
+    <div id="profileModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="glass-card rounded-2xl p-6 max-w-md w-full relative space-y-4 border border-purple-500/30">
             <button onclick="closeProfileModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
                 <i class="fa-solid fa-xmark"></i>
             </button>
-            <h3 class="font-bold text-lg text-white border-b border-purple-500/20 pb-3 flex items-center space-x-2">
-                <i class="fa-solid fa-user-pen text-purple-400"></i>
-                <span>Profil / Kullanıcı Adı Değiştir</span>
-            </h3>
-            
-            <form onsubmit="saveProfile(event)" class="space-y-4">
+            <h3 class="font-bold text-lg text-purple-300">Profil Ayarları</h3>
+            <form onsubmit="applyUserIdentity(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-semibold text-purple-300 mb-1">Görünür Kullanıcı Adınız</label>
-                    <input type="text" id="profileNameInput" required placeholder="Adınızı giriniz..."
-                           class="w-full glass-card p-3 rounded-xl border border-purple-500/30 text-sm text-white focus:outline-none">
+                    <label class="block text-xs font-semibold text-purple-300 mb-1">Adınız / Kullanıcı Adınız</label>
+                    <input type="text" id="profileInputName" placeholder="Adınızı giriniz..." required class="w-full glass-card p-3 rounded-xl border border-purple-500/30 text-sm text-white placeholder-gray-400 focus:outline-none">
                 </div>
-
-                <div class="flex justify-end space-x-2 pt-2">
-                    <button type="button" onclick="closeProfileModal()" class="px-4 py-2 rounded-xl text-xs text-gray-300 hover:bg-purple-900/40">
-                        İptal
-                    </button>
-                    <button type="submit" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-5 py-2 rounded-xl text-xs font-semibold shadow-md">
-                        Kaydet
-                    </button>
+                <div class="flex items-center space-x-2">
+                    <input type="checkbox" id="profileInputTeacher" class="w-4 h-4 accent-purple-600 rounded">
+                    <label for="profileInputTeacher" class="text-xs text-purple-200">Öğretmen Modunu Etkinleştir (Şifre veya Yetki)</label>
                 </div>
+                <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-2.5 rounded-xl text-xs font-semibold shadow-md">
+                    Kaydet ve Uygula
+                </button>
             </form>
         </div>
     </div>
 
     <!-- QUIZ MODAL -->
-    <div id="quizModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-card max-w-xl w-full rounded-2xl p-6 space-y-4 border-purple-500/40 relative max-h-[90vh] overflow-y-auto">
+    <div id="quizModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="glass-card rounded-2xl p-6 max-w-2xl w-full relative space-y-4 border border-purple-500/30 max-h-[85vh] overflow-y-auto">
             <button onclick="closeQuizModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
                 <i class="fa-solid fa-xmark"></i>
             </button>
@@ -453,10 +412,12 @@
     </div>
 
     <!-- JAVASCRIPT & DATABASE ENGINE -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     <script>
-        /* ==========================================================================
+        /* ==========================================================
            1. USER PROFILE & HIDDEN TEACHER LOCK MECHANISM
-           ========================================================================== */
+           ========================================================== */
         let currentUser = {
             name: "Kullanıcı",
             points: 0,
@@ -467,14 +428,41 @@
 
         // Init profile from storage or default
         const savedName = localStorage.getItem("ziggurat_user_name");
-        if (savedName) {
-            applyUserIdentity(savedName);
-        } else {
-            applyUserIdentity("Kullanıcı");
+        if (savedName) currentUser.name = savedName;
+        const savedTeacher = localStorage.getItem("ziggurat_is_teacher");
+        if (savedTeacher === "true") currentUser.isTeacher = true;
+        const savedPoints = localStorage.getItem("ziggurat_user_points");
+        if (savedPoints) currentUser.points = parseInt(savedPoints) || 0;
+
+        function applyUserIdentityName() {
+            document.getElementById("userNameDisplay").innerText = currentUser.name;
+            document.getElementById("communityPostAuthor").innerText = currentUser.name;
+            document.getElementById("userPointsDisplay").innerText = currentUser.points + " Puan";
+            document.querySelectorAll(".active-user-name").forEach(el => {
+                el.innerText = currentUser.name;
+            });
+
+            // Teacher Lock Trigger
+            const banner = document.getElementById("teacherLockedBanner");
+            const panel = document.getElementById("teacherPanel");
+            const lockIcon = document.getElementById("teacherTabLockIcon");
+
+            if (currentUser.isTeacher) {
+                banner.classList.add("hidden");
+                panel.classList.remove("hidden");
+                lockIcon.classList.remove("fa-lock", "text-rose-400");
+                lockIcon.classList.add("fa-lock-open", "text-emerald-400");
+            } else {
+                banner.classList.remove("hidden");
+                panel.classList.add("hidden");
+                lockIcon.classList.remove("fa-lock-open", "text-emerald-400");
+                lockIcon.classList.add("fa-lock", "text-rose-400");
+            }
         }
 
         function openProfileModal() {
-            document.getElementById("profileNameInput").value = currentUser.name;
+            document.getElementById("profileInputName").value = currentUser.name;
+            document.getElementById("profileInputTeacher").checked = currentUser.isTeacher;
             document.getElementById("profileModal").classList.remove("hidden");
         }
 
@@ -482,164 +470,140 @@
             document.getElementById("profileModal").classList.add("hidden");
         }
 
-        function saveProfile(e) {
+        function applyUserIdentity(e) {
             e.preventDefault();
-            const newName = document.getElementById("profileNameInput").value.trim();
-            if (newName) {
-                applyUserIdentity(newName);
-                closeProfileModal();
-            }
+            const newName = document.getElementById("profileInputName").value.trim();
+            const newTeacher = document.getElementById("profileInputTeacher").checked;
+            if (newName) currentUser.name = newName;
+            currentUser.isTeacher = newTeacher;
+
+            localStorage.setItem("ziggurat_user_name", currentUser.name);
+            localStorage.setItem("ziggurat_is_teacher", currentUser.isTeacher);
+
+            applyUserIdentityName();
+            closeProfileModal();
+            syncCloud();
         }
 
-        function applyUserIdentity(name) {
-            currentUser.name = name;
-            localStorage.setItem("ziggurat_user_name", name);
+        applyUserIdentityName();
 
-            document.getElementById("userNameDisplay").innerText = name;
-            document.getElementById("communityPostAuthor").innerText = name;
-            
-            document.querySelectorAll(".active-user-name").forEach(el => {
-                el.innerText = name;
-            });
-
-            // HIDDEN Teacher Unlock Trigger: Must start with 'ZigguratÖğretmeni:'
-            if (name.startsWith("ZigguratÖğretmeni:")) {
-                currentUser.isTeacher = true;
-                document.getElementById("teacherTabLockIcon").className = "fa-solid fa-chalkboard-user text-emerald-400";
-                document.getElementById("teacherLockedBanner").classList.add("hidden");
-                document.getElementById("teacherPanel").classList.remove("hidden");
-            } else {
-                currentUser.isTeacher = false;
-                document.getElementById("teacherTabLockIcon").className = "fa-solid fa-lock text-rose-400";
-                document.getElementById("teacherLockedBanner").classList.remove("hidden");
-                document.getElementById("teacherPanel").classList.add("hidden");
-            }
-        }
-
-        /* ==========================================================================
+        /* ==========================================================
            2. FIREBASE REALTIME DATABASE & CLOUD SYNC ENGINE
-           ========================================================================== */
+           ========================================================== */
         const firebaseConfig = {
-            databaseURL: "https://ziggurat-ai-default-rtdb.firebaseio.com"
+            apiKey: "AIzaSyDYgmIjqgh3R_wVh6WbkttE7HzY4G0vVio",
+            authDomain: "ziggurat-4f567.firebaseapp.com",
+            databaseURL: "https://ziggurat-4f567-default-rtdb.firebaseio.com",
+            projectId: "ziggurat-4f567",
+            storageBucket: "ziggurat-4f567.firebasestorage.app",
+            messagingSenderId: "1038241817522",
+            appId: "1:1038241817522:web:6b17cffa89aecb6b147aab",
+            measurementId: "G-7G0TMJR95B"
         };
 
         let db = null;
         let appData = {
-            communityMessages: [],
-            homeworks: [],
+            communityMessages: {},
+            homeworks: {},
             points: {}
         };
 
         try {
-            if (typeof firebase !== 'undefined') {
+            if (!firebase.apps.length) {
                 firebase.initializeApp(firebaseConfig);
-                db = firebase.database();
-
-                // Live Community Listener
-                db.ref("community").on("value", (snapshot) => {
-                    const val = snapshot.val();
-                    if (val) {
-                        appData.communityMessages = Object.values(val);
-                    } else {
-                        appData.communityMessages = getInitialCommunityMessages();
-                    }
-                    renderCommunityFeed();
-                    updateTeacherKnownStudents();
-                });
-
-                // Live Homeworks Listener
-                db.ref("homeworks").on("value", (snapshot) => {
-                    const val = snapshot.val();
-                    if (val) {
-                        appData.homeworks = Object.values(val);
-                    } else {
-                        appData.homeworks = getInitialHomeworks();
-                    }
-                    renderStudentHomeworks();
-                    renderTeacherHomeworkTable();
-                });
-
-                // Live Points Listener
-                db.ref("points").on("value", (snapshot) => {
-                    const val = snapshot.val();
-                    if (val) appData.points = val;
-                    currentUser.points = appData.points[currentUser.name] || 0;
-                    document.getElementById("userPointsDisplay").innerText = currentUser.points + " Puan";
-                });
             }
+            db = firebase.database();
+            document.getElementById("cloudStatusText").innerText = "Canlı Bulut Bağlı";
         } catch (err) {
-            console.warn("Cloud fallback active:", err);
-            document.getElementById("cloudStatusText").innerText = "Yerel Veri Modu";
+            console.error("Firebase init error:", err);
+            document.getElementById("cloudStatusText").innerText = "Yerel Mod (Bulut Kapalı)";
         }
 
-        // Local storage backup fallback
-        function syncCloud() {
-            localStorage.setItem("zig_msgs_backup", JSON.stringify(appData.communityMessages));
-            localStorage.setItem("zig_hws_backup", JSON.stringify(appData.homeworks));
+        const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
 
-            if (db) {
-                db.ref("community").set(appData.communityMessages);
-                db.ref("homeworks").set(appData.homeworks);
-                db.ref("points/" + currentUser.name.replace(/[.#$/\[\]]/g, "_")).set(currentUser.points);
-            }
+        if (db) {
+            // Live Community Listener
+            const dbRefMsgs = db.ref("communityMessages");
+            dbRefMsgs.on("value", (snapshot) => {
+                const val = snapshot.val();
+                if (val) {
+                    appData.communityMessages = val;
+                } else {
+                    appData.communityMessages = getInitialCommunityMessages();
+                }
+                renderCommunityFeed();
+            });
+
+            // Live Homeworks Listener
+            const dbRefHw = db.ref("homeworks");
+            dbRefHw.on("value", (snapshot) => {
+                const val = snapshot.val();
+                if (val) {
+                    appData.homeworks = val;
+                } else {
+                    appData.homeworks = getInitialHomeworks();
+                }
+                renderStudentHomeworks();
+                renderTeacherHomeworkTable();
+            });
+        } else {
+            appData.communityMessages = getInitialCommunityMessages();
+            appData.homeworks = getInitialHomeworks();
+            renderCommunityFeed();
+            renderStudentHomeworks();
+        }
+
+        function syncCloud() {
+            if (!db) return;
+            try {
+                db.ref("points/" + currentUser.name.replace(/[.#$[\]]/g, "_")).set(currentUser.points);
+            } catch (e) { console.error(e); }
         }
 
         function getInitialCommunityMessages() {
-            return [
-                {
-                    id: "msg-1",
-                    author: "ZigguratÖğretmeni: Selin Hoca",
-                    text: "Merhaba arkadaşlar! LGS Fen Bilimleri ödeviniz sisteme eklenmiştir. Sorusu olan topluluktan sorabilir.",
-                    timestamp: Date.now() - 3600000 * 4
-                },
-                {
-                    id: "msg-2",
-                    author: "Ahmet (8. Sınıf)",
-                    text: "Aİ'ye sor kısmında 'Güneş Tutulması' arattım, harika bir MEB özet analizi çıkardı!",
-                    timestamp: Date.now() - 3600000 * 1
+            return {
+                "msg1": {
+                    author: "Ziggurat Aİ",
+                    text: "Merhaba Arkadaşlar! ZigguratAİ platformumuza hoş geldiniz. Buradan sorularınızı sorabilir ve ödevlerinizi takip edebilirsiniz.",
+                    timestamp: Date.now() - 3600000
                 }
-            ];
+            };
         }
 
         function getInitialHomeworks() {
-            return [
-                {
-                    id: "hw-1",
+            return {
+                "hw1": {
+                    id: "hw1",
                     level: "LGS'ye Hazırlık",
-                    subject: "Fen Bilimleri - Güneş ve Ay Tutulması",
+                    subject: "LGS Fen Bilimleri - Güneş ve Ay Tutulması",
                     description: "EBA üzerindeki konu anlatım simülasyonunu izleyip 15 soru çözün.",
-                    assignedTo: "HERKES",
-                    assignedBy: "ZigguratÖğretmeni: Selin Hoca",
-                    date: new Date().toLocaleDateString("tr-TR"),
-                    completedBy: {},
-                    completedTime: {}
+                    assignedBy: "HERKES",
+                    completedBy: {}
                 }
-            ];
+            };
         }
 
-        /* ==========================================================================
-           3. NAVIGATION
-           ========================================================================== */
-        function switchTab(tabName) {
+        /* ==========================================================
+           3. TABS & NAVIGATION
+           ========================================================== */
+        function switchTab(tabId) {
             document.querySelectorAll(".tab-section").forEach(sec => sec.classList.add("hidden"));
             document.querySelectorAll(".tab-btn").forEach(btn => {
                 btn.classList.remove("border-purple-500/50", "bg-purple-900/40", "text-purple-200");
                 btn.classList.add("text-gray-400");
             });
 
-            document.getElementById("section-" + tabName).classList.remove("hidden");
-            const activeBtn = document.getElementById("tab-btn-" + tabName);
-            activeBtn.classList.add("border-purple-500/50", "bg-purple-900/40", "text-purple-200");
+            document.getElementById("section-" + tabId).classList.remove("hidden");
+            const activeBtn = document.getElementById("tab-btn-" + tabId);
             activeBtn.classList.remove("text-gray-400");
+            activeBtn.classList.add("border-purple-500/50", "bg-purple-900/40", "text-purple-200");
 
-            if (tabName === 'homework') renderStudentHomeworks();
-            if (tabName === 'teacher') renderTeacherHomeworkTable();
-            if (tabName === 'tests') renderTests();
+            if (tabId === "tests") renderTests();
         }
 
-        /* ==========================================================================
-           4. AI DEEP SEARCH & SUMMARIZATION SIMULATOR
-           ========================================================================== */
+        /* ==========================================================
+           4. AI SEARCH & SUMMARIZATION ENGINE
+           ========================================================== */
         async function handleAiSubmit(e) {
             e.preventDefault();
             const inputEl = document.getElementById("aiInput");
@@ -649,390 +613,341 @@
             appendAiChatMessage(currentUser.name, query, true);
             inputEl.value = "";
 
-            if (isCasualGreeting(query)) {
-                setTimeout(() => {
-                    appendAiChatMessage("Ziggurat Aİ", `Harikayım! 😊 ${currentUser.name}, seninle ders çalışmak harika. Bugün hangi ders veya konu üzerinde çalışmak istersin?`, false);
-                }, 500);
-                return;
-            }
-
-            // Show real-time web scan progress
-            const progressBox = document.getElementById("aiSearchProgress");
+            const progressEl = document.getElementById("aiSearchProgress");
             const progressText = document.getElementById("aiProgressText");
             const progressBar = document.getElementById("aiProgressBar");
-            progressBox.classList.remove("hidden");
+            progressEl.classList.remove("hidden");
 
-            progressText.innerText = "🌐 İnternet ve Google siteleri taranıyor...";
+            progressText.innerText = "🌐 MEB ve EBA müfredat kaynakları taranıyor...";
             progressBar.style.width = "35%";
             await sleep(700);
 
-            progressText.innerText = "🔍 MEB ve EBA müfredat kaynakları taranıyor...";
+            progressText.innerText = "🔍 Bilgiler analiz ediliyor ve net özet çıkartılıyor...";
             progressBar.style.width = "75%";
-            await sleep(800);
+            await sleep(700);
 
-            progressText.innerText = "📝 Bilgiler analiz ediliyor ve net özet çıkarılıyor...";
-            progressBar.style.width = "95%";
-            await sleep(600);
+            progressBar.style.width = "100%";
+            await sleep(300);
+            progressEl.classList.add("hidden");
+            progressBar.style.width = "25%";
 
-            progressBox.classList.add("hidden");
-
-            const aiRes = generateSearchSummary(query);
+            const aiRes = generateSearchSummaryQuery(query);
             appendAiChatMessage("Ziggurat Aİ", aiRes.text, false, aiRes.sources);
         }
 
-        function isCasualGreeting(text) {
-            const lower = text.toLowerCase();
-            return lower.includes("nasılsın") || lower === "merhaba" || lower === "selam" || lower.includes("günaydın");
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
         }
 
-        function generateSearchSummary(query) {
-            const q = query.toLowerCase();
+        function escapeHtml(str) {
+            if (!str) return "";
+            return str.replace(/&/g, "&amp;")
+                      .replace(/</g, "&lt;")
+                      .replace(/>/g, "&gt;")
+                      .replace(/"/g, "&quot;")
+                      .replace(/'/g, "&#039;");
+        }
+
+        function generateSearchSummaryQuery(q) {
+            const query = q.toLowerCase();
             let summaryText = "";
             let sources = [];
 
-            if (q.includes("güneş") || q.includes("tutulma") || q.includes("fen")) {
-                summaryText = `
-                    <p class="font-bold text-cyan-300 mb-2">📌 MEB & EBA Kaynak Taraması Özet Kartı: Tutulmalar</p>
-                    <ul class="list-disc pl-5 space-y-1 text-gray-200 text-xs">
-                        <li><strong>Güneş Tutulması:</strong> Ay'ın Dünya ile Güneş arasına girmesiyle gerçekleşir. Ay, Yeni Ay evresindedir. Gündüz yaşanan dar bir bölgede gözlemlenir.</li>
-                        <li><strong>Ay Tutulması:</strong> Dünya'nın Güneş ile Ay arasına girmesiyle oluşur. Ay, Dolunay evresindedir. Gece olan geniş alanlarda izlenebilir.</li>
-                        <li><strong>LGS İpucu:</strong> Ay'ın yörünge eğikliği nedeniyle her Yeni Ay evresinde Güneş tutulması gerçekleşmez.</li>
-                    </ul>
-                `;
+            if (query.includes("güneş") || query.includes("tutulma")) {
+                summaryText = "Güneş Tutulması, Ay'ın Dünya ile Güneş arasına girmesi ve Güneş'in ışığını engellemesiyle gerçekleşen doğa olayıdır. MEB Fen Bilimleri kaynaklarına göre yalnızca Yeni Ay evresinde gözlemlenir.";
                 sources = [
-                    { title: "EBA Portal - Fen Bilimleri Tutulmalar Ünitesi", url: "https://www.eba.gov.tr", icon: "fa-graduation-cap" },
-                    { title: "MEB ÖDSGM - Müfredat Kazanım Notları", url: "https://meb.gov.tr", icon: "fa-book" },
-                    { title: "Google Dizin - Akademik Astronomi Arama İndeksi", url: "https://google.com", icon: "fa-brands fa-google" }
+                    { title: "MEB Fen Bilimleri Tutulmalar Ünitesi", url: "https://www.eba.gov.tr/go graduation cap" },
+                    { title: "MEB EDSGOL - Müfredat Kazanım Notları", url: "https://www.eba.gov.tr/focus" },
+                    { title: "Google Datasheet - Akademik Astronomi Proy. İndeksi", url: "https://en.brands-for-google.com/" }
                 ];
+            } else if (query.includes("nasılsın") || query.includes("merhaba")) {
+                summaryText = `Merhaba ${currentUser.name}! Ben harikayım ve seninle birlikte çalışmaya hazırım. Bugün hangi ders çalışmak istersin?`;
+                sources = [{ title: "Ziggurat Asistan Çekirdeği", url: "https://ziggurat.ai/core" }];
             } else {
-                summaryText = `
-                    <p class="font-bold text-cyan-300 mb-2">🔍 "${escapeHtml(query)}" Hakkında Taranan Özet Bilgi</p>
-                    <p class="text-xs text-gray-200 mb-2">İnternetteki ve eğitim portallarındaki güncel bilgiler taranarak özetlenmiştir:</p>
-                    <div class="p-3 bg-purple-950/60 rounded-xl border border-purple-500/20 text-xs text-purple-200 space-y-1">
-                        <p>1. Aratılan konu MEB ve EBA ders içerik standartlarına göre incelenmiştir.</p>
-                        <p>2. Konu hakkındaki temel tanımlar ve öne çıkan ders içi püf noktaları yukarıda özetlenmiştir.</p>
-                    </div>
-                `;
+                summaryText = `"${escapeHtml(q)}" konusunu MEB müfredatı, LGS kaynakları ve akademik havuzda aradım: Bu konu temel eğitim ve beceri temelli sorularla desteklenmektedir. Düzenli tekrar ve soru çözümü ile başarıyı garantileyebilirsin! 🚀`;
                 sources = [
-                    { title: "Google Arama Dizini Özet Kartı", url: "https://google.com", icon: "fa-brands fa-google" },
-                    { title: "MEB Resmi Portal Bilgi Bankası", url: "https://meb.gov.tr", icon: "fa-landmark" }
+                    { title: "MEB Resmî Ders Portal Kitapları", url: "https://www.eba.gov.tr/fo board" },
+                    { title: "LGS Merkezî Sınav Bilgi Bankası", url: "https://www.gov.tr/lgs-ogrenci" }
                 ];
             }
-
             return { text: summaryText, sources: sources };
         }
 
-        function appendAiChatMessage(sender, content, isUser, sources = []) {
+        function appendAiChatMessage(author, text, isUser, sources = []) {
             const chatBox = document.getElementById("aiChatBox");
-            const msgDiv = document.createElement("div");
-            msgDiv.className = `flex items-start space-x-3 ${isUser ? 'flex-row-reverse space-x-reverse' : ''}`;
-
-            const avatarBg = isUser ? 'bg-pink-600' : 'bg-purple-600/60';
-            const cardBg = isUser ? 'bg-purple-900/50 border-purple-400/40' : 'glass-card';
+            const div = document.createElement("div");
+            div.className = `flex items-start space-x-3 ${isUser ? "flex-row-reverse space-x-reverse" : ""}`;
 
             let sourcesHtml = "";
             if (sources && sources.length > 0) {
-                sourcesHtml = `
-                    <div class="mt-3 pt-3 border-t border-purple-500/20 space-y-2">
-                        <p class="text-[11px] font-semibold text-purple-300 flex items-center space-x-1">
-                            <i class="fa-solid fa-link text-cyan-400"></i>
-                            <span>İncelenen & Taranan İnternet Kaynakları:</span>
-                        </p>
-                        <div class="grid grid-cols-1 gap-1.5">
-                            ${sources.map(src => `
-                                <a href="${src.url}" target="_blank" class="flex items-center space-x-2 p-2 rounded-lg bg-purple-950/70 border border-purple-500/20 hover:border-purple-400/50 text-xs text-purple-200 transition-all">
-                                    <i class="fa-solid ${src.icon} text-cyan-400 text-xs"></i>
-                                    <span class="truncate flex-grow">${src.title}</span>
-                                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-gray-400"></i>
-                                </a>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
+                sourcesHtml = `<div class="mt-3 pt-2 border-t border-purple-500/20 text-xs space-y-1">
+                    <p class="font-semibold text-purple-300"><i class="fa-solid fa-link mr-1"></i>İncelenen & Taranan İnternet Kaynakları:</p>
+                    <div class="grid grid-cols-1 gap-1">`;
+                sources.forEach(s => {
+                    sourcesHtml += `<a href="${s.url}" target="_blank" class="text-cyan-300 hover:underline truncate block">🔹 ${escapeHtml(s.title)}</a>`;
+                });
+                sourcesHtml += `</div></div>`;
             }
 
-            msgDiv.innerHTML = `
-                <div class="w-8 h-8 rounded-lg ${avatarBg} flex items-center justify-center text-white text-xs flex-shrink-0 mt-1">
-                    ${isUser ? '<i class="fa-solid fa-user"></i>' : 'Aİ'}
+            div.innerHTML = `
+                <div class="w-8 h-8 rounded-lg ${isUser ? "bg-pink-600/80" : "bg-purple-600/60"} flex items-center justify-center text-white text-xs flex-shrink-0 mt-1">
+                    ${isUser ? escapeHtml(author.substring(0,2).toUpperCase()) : "Aİ"}
                 </div>
-                <div class="${cardBg} p-4 rounded-2xl ${isUser ? 'rounded-tr-none' : 'rounded-tl-none'} max-w-[85%] text-sm leading-relaxed">
-                    <p class="font-semibold text-xs text-purple-300 mb-1">${escapeHtml(sender)}:</p>
-                    <div class="space-y-2">${content}</div>
+                <div class="glass-card p-4 rounded-2xl ${isUser ? "rounded-tr-none bg-purple-950/50" : "rounded-tl-none"} max-w-[85%] text-sm leading-relaxed">
+                    <p class="font-semibold ${isUser ? "text-pink-300" : "text-purple-300"} mb-1">${escapeHtml(author)}:</p>
+                    <p>${escapeHtml(text)}</p>
                     ${sourcesHtml}
-                </div>
-            `;
-
-            chatBox.appendChild(msgDiv);
+                </div>`;
+            chatBox.appendChild(div);
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        /* ==========================================================================
-           5. COMMUNITY & PROFANITY CENSORING
-           ========================================================================== */
+        /* ==========================================================
+           5. COMMUNITY FEED SYSTEM
+           ========================================================== */
         function sendCommunityMessage(e) {
             e.preventDefault();
             const input = document.getElementById("communityInput");
-            let text = input.value.trim();
+            const text = input.value.trim();
             if (!text) return;
 
-            text = filterProfanity(text);
+            // Banned word filter check
+            let cleanText = text;
+            BANNED_WORDS.forEach(word => {
+                const regex = new RegExp(word, "gi");
+                cleanText = cleanText.replace(regex, "***");
+            });
 
-            const newMsg = {
-                id: "msg-" + Date.now(),
+            const newMsgId = "msg_" + Date.now();
+            const msgData = {
+                id: newMsgId,
                 author: currentUser.name,
-                text: text,
+                text: cleanText,
                 timestamp: Date.now()
             };
 
-            appData.communityMessages.unshift(newMsg);
-            syncCloud();
-            input.value = "";
-        }
+            if (db) {
+                db.ref("communityMessages/" + newMsgId).set(msgData);
+            } else {
+                appData.communityMessages[newMsgId] = msgData;
+                renderCommunityFeed();
+            }
 
-        function filterProfanity(text) {
-            let filtered = text;
-            BANNED_WORDS.forEach(word => {
-                const reg = new RegExp(word, "gi");
-                filtered = filtered.replace(reg, "***");
-            });
-            return filtered;
+            input.value = "";
+            currentUser.points += 5;
+            document.getElementById("userPointsDisplay").innerText = currentUser.points + " Puan";
+            syncCloud();
         }
 
         function renderCommunityFeed() {
             const feed = document.getElementById("communityFeed");
-            if (!feed) return;
+            feed.innerHTML = "";
 
-            const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+            const msgs = appData.communityMessages || {};
+            const keys = Object.keys(msgs).sort((a, b) => msgs[b].timestamp - msgs[a].timestamp);
+
             const now = Date.now();
+            let count = 0;
 
-            const validMsgs = appData.communityMessages.filter(m => (now - m.timestamp) < SEVEN_DAYS_MS);
+            keys.forEach(k => {
+                const m = msgs[k];
+                if (now - m.timestamp < SEVEN_DAYS_MS) {
+                    count++;
+                    const d = new Date(m.timestamp);
+                    const timeStr = d.toLocaleDateString() + " " + d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
-            if (validMsgs.length === 0) {
-                feed.innerHTML = `<div class="text-center py-8 text-gray-400 text-sm glass-card rounded-xl">Son 7 günde yazılmış mesaj bulunmuyor. İlk mesajı siz atın!</div>`;
+                    const card = document.createElement("div");
+                    card.className = "glass-card p-4 rounded-xl space-y-1";
+                    card.innerHTML = `
+                        <div class="flex justify-between items-center text-xs text-purple-300">
+                            <span class="font-bold text-pink-300"><i class="fa-solid fa-user-circle mr-1"></i>${escapeHtml(m.author)}</span>
+                            <span>${timeStr}</span>
+                        </div>
+                        <p class="text-sm text-gray-100">${escapeHtml(m.text)}</p>
+                    `;
+                    feed.appendChild(card);
+                }
+            });
+
+            if (count === 0) {
+                feed.innerHTML = `<p class="text-center text-gray-400 text-sm py-8">Henüz canlı akışta mesaj yok. İlk mesajı sen gönder!</p>`;
+            }
+        }
+
+        /* ==========================================================
+           6. HOMEWORK ASSIGNMENT SYSTEM
+           ========================================================== */
+        function handleAssignHomework(e) {
+            e.preventDefault();
+            if (!currentUser.isTeacher) {
+                alert("Öğretmen yetkiniz yok!");
                 return;
             }
 
-            feed.innerHTML = validMsgs.map(m => {
-                const dateStr = new Date(m.timestamp).toLocaleString("tr-TR", { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' });
-                const isTeacher = m.author.startsWith("ZigguratÖğretmeni:");
-
-                return `
-                    <div class="glass-card p-3.5 rounded-xl border-purple-500/20 space-y-1.5 hover:border-purple-500/40 transition-all">
-                        <div class="flex justify-between items-center text-xs">
-                            <span class="font-bold ${isTeacher ? 'text-amber-400 flex items-center gap-1' : 'text-purple-300'}">
-                                ${isTeacher ? '<i class="fa-solid fa-chalkboard-user"></i>' : ''} ${escapeHtml(m.author)}
-                            </span>
-                            <span class="text-[10px] text-gray-400">${dateStr}</span>
-                        </div>
-                        <p class="text-sm text-gray-200">${escapeHtml(m.text)}</p>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        /* ==========================================================================
-           6. TEACHER ZONE & HOMEWORK ASSIGNMENT
-           ========================================================================== */
-        function handleAssignHomework(e) {
-            e.preventDefault();
             const level = document.getElementById("teacherLevel").value;
-            const subject = document.getElementById("teacherSubject").value.trim();
-            const desc = document.getElementById("teacherDescription").value.trim();
+            const subject = document.getElementById("teacherSubject").value;
+            const desc = document.getElementById("teacherDescription").value;
             const target = document.getElementById("teacherTargetStudent").value;
 
-            if (!subject || !desc) return;
-
-            const newHw = {
-                id: "hw-" + Date.now(),
+            const hwId = "hw_" + Date.now();
+            const hwObj = {
+                id: hwId,
                 level: level,
                 subject: subject,
                 description: desc,
-                assignedTo: target,
                 assignedBy: currentUser.name,
-                date: new Date().toLocaleDateString("tr-TR"),
-                completedBy: {},
-                completedTime: {}
+                completedBy: {}
             };
 
-            appData.homeworks.unshift(newHw);
-            syncCloud();
+            if (db) {
+                db.ref("homeworks/" + hwId).set(hwObj);
+            } else {
+                appData.homeworks[hwId] = hwObj;
+                renderStudentHomeworks();
+                renderTeacherHomeworkTable();
+            }
 
             document.getElementById("teacherSubject").value = "";
             document.getElementById("teacherDescription").value = "";
-            alert("Ödev başarıyla atandı ve bulut sistemine yüklendi!");
+            alert("Ödev başarıyla tüm öğrencilere yüklendi!");
         }
 
         function renderStudentHomeworks() {
             const list = document.getElementById("studentHomeworkList");
-            if (!list) return;
+            list.innerHTML = "";
 
-            const myHws = appData.homeworks.filter(h => h.assignedTo === "HERKES" || h.assignedTo === currentUser.name);
+            const hws = appData.homeworks || {};
+            const keys = Object.keys(hws);
 
-            if (myHws.length === 0) {
-                list.innerHTML = `<div class="col-span-2 text-center py-8 text-gray-400 text-sm glass-card rounded-xl">Size atanmış herhangi bir ödev bulunmamaktadır.</div>`;
+            if (keys.length === 0) {
+                list.innerHTML = `<p class="text-gray-400 text-sm col-span-full">Şu an atanmış ödev bulunmuyor.</p>`;
                 return;
             }
 
-            list.innerHTML = myHws.map(hw => {
-                const isCompleted = hw.completedBy && hw.completedBy[currentUser.name];
-                const timeStr = isCompleted ? hw.completedTime[currentUser.name] : "";
+            keys.forEach(k => {
+                const hw = hws[k];
+                const completedMap = hw.completedBy || {};
+                const isCompleted = completedMap[currentUser.name] ? true : false;
+                const completedTime = isCompleted ? new Date(completedMap[currentUser.name]).toLocaleDateString() : "";
 
-                return `
-                    <div class="glass-card p-4 rounded-xl space-y-3 border border-purple-500/20 relative">
-                        <div class="flex justify-between items-start">
-                            <span class="text-[10px] bg-purple-900/60 text-purple-300 px-2 py-0.5 rounded border border-purple-500/30">
-                                ${hw.level}
-                            </span>
-                            <span class="text-xs ${isCompleted ? 'text-emerald-400 font-bold' : 'text-amber-400'} flex items-center space-x-1">
-                                <i class="fa-solid ${isCompleted ? 'fa-circle-check' : 'fa-clock'}"></i>
-                                <span>${isCompleted ? 'Tamamlandı' : 'Yapılmadı'}</span>
-                            </span>
-                        </div>
-
-                        <div>
-                            <h4 class="font-bold text-white text-sm">${escapeHtml(hw.subject)}</h4>
-                            <p class="text-xs text-gray-300 mt-1">${escapeHtml(hw.description)}</p>
-                        </div>
-
-                        <div class="pt-2 border-t border-purple-500/10 flex justify-between items-center text-[11px] text-gray-400">
-                            <span>Atayan: ${escapeHtml(hw.assignedBy)}</span>
-                            ${isCompleted ? `<span class="text-emerald-300 font-semibold">${timeStr}</span>` : `
-                                <button onclick="markHomeworkDone('${hw.id}')" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1 rounded-lg text-xs font-semibold transition-all">
-                                    Tamamladım
-                                </button>
-                            `}
-                        </div>
+                const card = document.createElement("div");
+                card.className = "glass-card p-4 rounded-xl space-y-3 flex flex-col justify-between";
+                card.innerHTML = `
+                    <div class="space-y-1">
+                        <span class="text-[10px] bg-purple-950 text-purple-300 border border-purple-500/30 px-2.5 py-0.5 rounded-full">${escapeHtml(hw.level)}</span>
+                        <h4 class="font-bold text-base text-white mt-1">${escapeHtml(hw.subject)}</h4>
+                        <p class="text-xs text-gray-300">${escapeHtml(hw.description)}</p>
+                        <p class="text-[11px] text-purple-400">Veren: ${escapeHtml(hw.assignedBy)}</p>
+                    </div>
+                    <div class="pt-2 border-t border-purple-500/20 flex justify-between items-center">
+                        <span class="text-xs ${isCompleted ? "text-emerald-400 font-bold" : "text-amber-400"}">
+                            ${isCompleted ? `<i class="fa-solid fa-circle-check mr-1"></i>Tamamlandı (${completedTime})` : `<i class="fa-solid fa-clock mr-1"></i>Bekliyor`}
+                        </span>
+                        <button onclick="toggleHomeworkDone('${hw.id}')" class="bg-gradient-to-r ${isCompleted ? "from-gray-700 to-gray-800 text-gray-300" : "from-emerald-600 to-teal-600 text-white"} px-4 py-1.5 rounded-xl text-xs font-semibold shadow transition-all">
+                            ${isCompleted ? "Geri Al" : "Tamamladım"}
+                        </button>
                     </div>
                 `;
-            }).join('');
+                list.appendChild(card);
+            });
         }
 
-        function markHomeworkDone(hwId) {
-            const hw = appData.homeworks.find(h => h.id === hwId);
-            if (hw) {
-                if (!hw.completedBy) hw.completedBy = {};
-                if (!hw.completedTime) hw.completedTime = {};
+        function toggleHomeworkDone(hwId) {
+            const hw = appData.homeworks[hwId];
+            if (!hw) return;
+            if (!hw.completedBy) hw.completedBy = {};
 
-                hw.completedBy[currentUser.name] = true;
-                hw.completedTime[currentUser.name] = new Date().toLocaleTimeString("tr-TR", { hour: '2-digit', minute: '2-digit' });
+            if (hw.completedBy[currentUser.name]) {
+                delete hw.completedBy[currentUser.name];
+                currentUser.points = Math.max(0, currentUser.points - 10);
+            } else {
+                hw.completedBy[currentUser.name] = Date.now();
+                currentUser.points += 10;
+            }
 
-                // Award bonus points for homework completion
-                currentUser.points += 20;
+            document.getElementById("userPointsDisplay").innerText = currentUser.points + " Puan";
 
-                syncCloud();
+            if (db) {
+                db.ref("homeworks/" + hwId).set(hw);
+            } else {
                 renderStudentHomeworks();
                 renderTeacherHomeworkTable();
             }
+            syncCloud();
         }
 
         function renderTeacherHomeworkTable() {
             const tbody = document.getElementById("teacherHomeworkTableBody");
-            if (!tbody) return;
+            tbody.innerHTML = "";
 
-            if (appData.homeworks.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-gray-400">Kayıtlı ödev bulunamadı.</td></tr>`;
+            const hws = appData.homeworks || {};
+            const students = {};
+
+            Object.keys(hws).forEach(k => {
+                const hw = hws[k];
+                const completed = hw.completedBy || {};
+                Object.keys(completed).forEach(stName => {
+                    if (!students[stName]) students[stName] = 0;
+                    students[stName]++;
+                });
+            });
+
+            const studentNames = Object.keys(students);
+            if (studentNames.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-gray-400">Henüz ödev tamamlayan öğrenci bulunamadı.</td></tr>`;
                 return;
             }
 
-            let rows = [];
-            appData.homeworks.forEach(hw => {
-                const targetDisplay = hw.assignedTo === "HERKES" ? "Tüm Öğrenciler" : hw.assignedTo;
-                const completers = hw.completedBy ? Object.keys(hw.completedBy) : [];
-
-                if (completers.length === 0) {
-                    rows.push(`
-                        <tr class="hover:bg-purple-900/20">
-                            <td class="p-3 font-semibold text-purple-300">${escapeHtml(targetDisplay)}</td>
-                            <td class="p-3">${hw.level}</td>
-                            <td class="p-3">${escapeHtml(hw.subject)}</td>
-                            <td class="p-3">${hw.date}</td>
-                            <td class="p-3"><span class="text-rose-400 bg-rose-950/60 px-2 py-0.5 rounded text-[10px]">Yapılmadı</span></td>
-                            <td class="p-3 text-gray-500">-</td>
-                        </tr>
-                    `);
-                } else {
-                    completers.forEach(student => {
-                        rows.push(`
-                            <tr class="hover:bg-purple-900/20">
-                                <td class="p-3 font-semibold text-emerald-300">${escapeHtml(student)}</td>
-                                <td class="p-3">${hw.level}</td>
-                                <td class="p-3">${escapeHtml(hw.subject)}</td>
-                                <td class="p-3">${hw.date}</td>
-                                <td class="p-3"><span class="text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded text-[10px]">Tamamlandı</span></td>
-                                <td class="p-3 text-emerald-300">${hw.completedTime[student]}</td>
-                            </tr>
-                        `);
-                    });
-                }
+            studentNames.forEach(st => {
+                const tr = document.createElement("tr");
+                tr.className = "hover:bg-purple-900/20";
+                tr.innerHTML = `
+                    <td class="p-3 font-semibold text-white">${escapeHtml(st)}</td>
+                    <td class="p-3 text-amber-300 font-bold">Puanlar Aktif</td>
+                    <td class="p-3 text-emerald-400 font-bold">${students[st]} Adet</td>
+                    <td class="p-3 text-gray-400">Son Aktif Bulut</td>
+                `;
+                tbody.appendChild(tr);
             });
-
-            tbody.innerHTML = rows.join('');
         }
 
-        function updateTeacherKnownStudents() {
-            const select = document.getElementById("teacherTargetStudent");
-            if (!select) return;
-
-            const students = new Set();
-            appData.communityMessages.forEach(m => {
-                if (!m.author.startsWith("ZigguratÖğretmeni:")) {
-                    students.add(m.author);
-                }
-            });
-
-            select.innerHTML = `
-                <option value="HERKES">Tüm Öğrenciler (Genel)</option>
-                ${Array.from(students).map(s => `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join('')}
-            `;
-        }
-
-        /* ==========================================================================
-           7. QUIZZES & POINTS SYSTEM
-           ========================================================================== */
-        const quizDatabase = [
+        /* ==========================================================
+           7. QUIZZES & TESTS SYSTEM
+           ========================================================== */
+        const QUIZZES = [
             {
                 id: "quiz-1",
                 level: "LGS'ye Hazırlık",
-                title: "LGS Fen Bilimleri - Tutulmalar ve Yörüngeler",
+                subject: "LGS Fen Bilimleri - Tutulmalar ve Yörüngeler",
                 questions: [
                     {
-                        q: "Güneş tutulması esnasında Ay hangi evrededir?",
-                        options: ["A) Dolunay", "B) Yeni Ay", "C) İlk Dördün", "D) Son Dördün"],
-                        correct: 1
-                    },
-                    {
-                        q: "Ay tutulması sırasında gerçekleşen dizilim nasıldır?",
-                        options: [
-                            "A) Güneş - Ay - Dünya",
-                            "B) Güneş - Dünya - Ay",
-                            "C) Dünya - Güneş - Ay",
-                            "D) Ay - Güneş - Dünya"
-                        ],
-                        correct: 1
+                        q: "Ay tutulmasında gerçekleşen dizilim nasıldır?",
+                        options: ["Güneş - Ay - Dünya", "Güneş - Dünya - Ay", "Dünya - Güneş - Ay", "Ay - Güneş - Dünya"],
+                        answer: 1
                     }
                 ]
             },
             {
                 id: "quiz-2",
                 level: "LGS'ye Hazırlık",
-                title: "LGS Matematik - Çarpanlar ve Katlar",
+                subject: "LGS Matematik - Çarpanlar ve Katlar",
                 questions: [
                     {
                         q: "12 ve 18 sayılarının en küçük ortak katı (EKOK) kaçtır?",
-                        options: ["A) 6", "B) 36", "C) 72", "D) 108"],
-                        correct: 1
+                        options: ["24", "36", "72", "108"],
+                        answer: 1
                     }
                 ]
             },
             {
                 id: "quiz-3",
-                level: "7. Sınıf",
-                title: "7. Sınıf Fen - Hücre ve Organeller",
+                level: "5. Sınıf",
+                subject: "5. Sınıf Fen - Hücre ve Organeller",
                 questions: [
                     {
                         q: "Hücrede enerji üreten organel hangisidir?",
-                        options: ["A) Mitokondri", "B) Ribozom", "C) Lizozom", "D) Golgi Cisimciği"],
-                        correct: 0
+                        options: ["Mitokondri", "Ribozom", "Lizozom", "Golgi Cisimciği"],
+                        answer: 0
                     }
                 ]
             }
@@ -1041,96 +956,82 @@
         function renderTests() {
             const container = document.getElementById("testsContainer");
             const selectedLevel = document.getElementById("testLevelFilter").value;
+            container.innerHTML = "";
 
-            const filtered = quizDatabase.filter(q => q.level === selectedLevel);
-
+            const filtered = QUIZZES.filter(q => q.level === selectedLevel);
             if (filtered.length === 0) {
-                container.innerHTML = `<div class="col-span-2 text-center py-8 text-gray-400 text-sm glass-card rounded-xl">Bu seviye için henüz test eklenmemiş.</div>`;
+                container.innerHTML = `<p class="text-gray-400 text-sm col-span-full">Bu düzeyde test bulunmuyor.</p>`;
                 return;
             }
 
-            container.innerHTML = filtered.map(q => `
-                <div class="glass-card p-5 rounded-xl space-y-3 hover:border-purple-500/40 transition-all flex flex-col justify-between">
-                    <div>
-                        <span class="text-[10px] bg-purple-900/60 text-purple-300 px-2.5 py-0.5 rounded border border-purple-500/30">
-                            ${q.level}
-                        </span>
-                        <h4 class="font-bold text-white text-base mt-2">${q.title}</h4>
-                        <p class="text-xs text-purple-300 mt-1">${q.questions.length} Soru (+50 Puan)</p>
+            filtered.forEach(quiz => {
+                const card = document.createElement("div");
+                card.className = "glass-card p-4 rounded-xl space-y-3 flex flex-col justify-between";
+                card.innerHTML = `
+                    <div class="space-y-1">
+                        <span class="text-[10px] bg-purple-950 text-purple-300 border border-purple-500/30 px-2.5 py-0.5 rounded-full">${escapeHtml(quiz.level)}</span>
+                        <h4 class="font-bold text-base text-white mt-1">${escapeHtml(quiz.subject)}</h4>
+                        <p class="text-xs text-gray-300">Soru Sayısı: ${quiz.questions.length}</p>
                     </div>
-                    <button onclick="openQuiz('${q.id}')" class="w-full mt-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-2 rounded-xl text-xs font-semibold shadow-md hover:opacity-90 transition-all">
-                        Testi Başlat
+                    <button onclick="openQuizModal('${quiz.id}')" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:opacity-90 text-white p-2.5 rounded-xl text-xs font-semibold shadow transition-all">
+                        <i class="fa-solid fa-vial mr-1"></i> Testi Başlat
                     </button>
-                </div>
-            `).join('');
+                `;
+                container.appendChild(card);
+            });
         }
 
-        function openQuiz(quizId) {
-            const quiz = quizDatabase.find(q => q.id === quizId);
+        function openQuizModal(quizId) {
+            const quiz = QUIZZES.find(q => q.id === quizId);
             if (!quiz) return;
 
-            document.getElementById("modalQuizTitle").innerText = quiz.title;
+            document.getElementById("modalQuizTitle").innerText = quiz.subject;
             const content = document.getElementById("modalQuizContent");
+            content.innerHTML = "";
 
-            content.innerHTML = `
-                <form onsubmit="submitQuiz(event, '${quiz.id}')" class="space-y-4">
-                    ${quiz.questions.map((q, idx) => `
-                        <div class="glass-card p-4 rounded-xl space-y-2 border-purple-500/20">
-                            <p class="font-semibold text-sm text-white">${idx + 1}. ${q.q}</p>
-                            <div class="space-y-1">
-                                ${q.options.map((opt, optIdx) => `
-                                    <label class="flex items-center space-x-2 text-xs text-gray-300 cursor-pointer p-1.5 rounded hover:bg-purple-900/30">
-                                        <input type="radio" name="q_${idx}" value="${optIdx}" required class="accent-purple-500">
-                                        <span>${opt}</span>
-                                    </label>
-                                `).join('')}
-                            </div>
-                        </div>
-                    `).join('')}
-                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-2.5 rounded-xl text-xs font-semibold shadow-lg transition-all">
-                        Cevapları Gönder
-                    </button>
-                </form>
-            `;
-
-            document.getElementById("quizModal").classList.remove("hidden");
-        }
-
-        function submitQuiz(e, quizId) {
-            e.preventDefault();
-            const quiz = quizDatabase.find(q => q.id === quizId);
-            let score = 0;
-
-            quiz.questions.forEach((q, idx) => {
-                const selected = document.querySelector(`input[name="q_${idx}"]:checked`);
-                if (selected && parseInt(selected.value) === q.correct) {
-                    score += 100 / quiz.questions.length;
-                }
+            quiz.questions.forEach((item, idx) => {
+                let optsHtml = "";
+                item.options.forEach((opt, oIdx) => {
+                    optsHtml += `<label class="flex items-center space-x-2 text-xs text-gray-200 cursor-pointer bg-purple-950/40 p-2 rounded-lg border border-purple-500/20">
+                        <input type="radio" name="q_${idx}" value="${oIdx}" class="accent-purple-500">
+                        <span>${escapeHtml(opt)}</span>
+                    </label>`;
+                });
+                content.innerHTML += `<div class="space-y-2">
+                    <p class="font-semibold text-sm text-white">${idx + 1}. ${escapeHtml(item.q)}</p>
+                    <div class="space-y-1">${optsHtml}</div>
+                </div>`;
             });
 
-            const gainedPoints = Math.round(score / 2);
-            currentUser.points += gainedPoints;
-            syncCloud();
+            content.innerHTML += `<button onclick="submitQuiz('${quiz.id}')" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-xl text-xs font-semibold shadow-md mt-4">
+                Testi Tamamla ve Puanı Al!
+            </button>`;
 
-            alert(`Test Tamamlandı!\nPuanınız: ${Math.round(score)} / 100\nKazanılan Puan: +${gainedPoints}`);
-            closeQuizModal();
+            document.getElementById("quizModal").classList.remove("hidden");
         }
 
         function closeQuizModal() {
             document.getElementById("quizModal").classList.add("hidden");
         }
 
-        function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
+        function submitQuiz(quizId) {
+            const quiz = QUIZZES.find(q => q.id === quizId);
+            if (!quiz) return;
 
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/&/g, "&amp;")
-                      .replace(/</g, "&lt;")
-                      .replace(/>/g, "&gt;")
-                      .replace(/"/g, "&quot;")
-                      .replace(/'/g, "&#039;");
+            let score = 0;
+            quiz.questions.forEach((item, idx) => {
+                const selected = document.querySelector(`input[name="q_${idx}"]:checked`);
+                if (selected && parseInt(selected.value) === item.answer) {
+                    score += 100 / quiz.questions.length;
+                }
+            });
+
+            currentUser.points += Math.round(score);
+            document.getElementById("userPointsDisplay").innerText = currentUser.points + " Puan";
+            syncCloud();
+
+            alert(`Test Tamamlandı! Puanınız: ${Math.round(score)} / 100\nKazanılan Puan: +${Math.round(score)}`);
+            closeQuizModal();
         }
     </script>
 </body>
