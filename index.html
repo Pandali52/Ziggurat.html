@@ -1,495 +1,402 @@
 <!DOCTYPE html>
-<html lang="tr" class="h-full">
+<html lang="tr" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ziggurat AI - Akıllı Eğitim Platformu</title>
+    <title>ZigguratAİ - Akıllı Öğrenme & Topluluk Platformu</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Font: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
                     colors: {
                         brand: {
-                            navy: '#0b0d1e',
-                            purple: '#4a154b',
-                            pink: '#d92078',
-                            lightPink: '#f35588',
-                            accent: '#8022d9'
+                            50: '#fbf4ff',
+                            100: '#f4e6ff',
+                            400: '#c084fc',
+                            500: '#a855f7',
+                            600: '#9333ea',
+                            700: '#7e22ce',
+                            800: '#581c87',
+                            900: '#3b0764'
                         }
                     }
                 }
             }
         }
     </script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Firebase Compatibility SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
     <style>
         body {
-            background: linear-gradient(135deg, #0a0c1b 0%, #200b3b 40%, #4a154b 70%, #80185c 100%);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #0b0d1b 0%, #1a0b2e 50%, #2b0836 100%);
             background-attachment: fixed;
             color: #f3f4f6;
+            min-height: 100vh;
         }
+
+        /* Glassmorphism utility */
         .glass-card {
-            background: rgba(255, 255, 255, 0.07);
+            background: rgba(22, 17, 43, 0.7);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(192, 132, 252, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
         }
+
         .glass-card-hover:hover {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(217, 32, 120, 0.4);
+            border-color: rgba(192, 132, 252, 0.45);
+            box-shadow: 0 10px 40px -10px rgba(168, 85, 247, 0.35);
+            transform: translateY(-2px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .glass-input {
-            background: rgba(0, 0, 0, 0.25);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            color: #ffffff;
-        }
-        .glass-input:focus {
-            outline: none;
-            border-color: #d92078;
-            box-shadow: 0 0 12px rgba(217, 32, 120, 0.3);
-        }
-        .gradient-text {
-            background: linear-gradient(135deg, #f35588, #b352ed, #ffffff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .gradient-btn {
-            background: linear-gradient(135deg, #d92078 0%, #8022d9 100%);
-            transition: all 0.3s ease;
-        }
-        .gradient-btn:hover {
-            opacity: 0.92;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 20px rgba(217, 32, 120, 0.4);
-        }
-        /* Custom Scrollbar */
+
+        /* Custom scrollbars */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: rgba(10, 12, 27, 0.5);
+            background: rgba(15, 12, 30, 0.5);
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(217, 32, 120, 0.5);
-            border-radius: 3px;
+            background: rgba(168, 85, 247, 0.4);
+            border-radius: 9999px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(217, 32, 120, 0.8);
+            background: rgba(168, 85, 247, 0.7);
         }
-        .pulse-loader {
-            animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+        /* Logo Glow */
+        @keyframes neonGlow {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.6)); }
+            50% { filter: drop-shadow(0 0 20px rgba(236, 72, 153, 0.8)); }
         }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: .4; }
+
+        .neon-logo {
+            animation: neonGlow 4s infinite ease-in-out;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col font-sans antialiased">
+<body class="p-2 md:p-6 text-gray-100 flex flex-col min-h-screen justify-between">
 
     <!-- Top Navigation Header -->
-    <header class="sticky top-0 z-40 glass-card border-b border-white/10 px-4 py-3 shadow-2xl">
-        <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
-            <!-- Logo Section -->
-            <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('ai-search')">
-                <div class="w-10 h-10 flex-shrink-0">
-                    <!-- Accurate SVG Logo for ZIGGURAT AI based on provided design -->
-                    <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-[0_0_8px_rgba(217,32,120,0.6)]">
-                        <defs>
-                            <linearGradient id="zigguratGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#ff2a8d" />
-                                <stop offset="50%" stop-color="#8022d9" />
-                                <stop offset="100%" stop-color="#182375" />
-                            </linearGradient>
-                            <linearGradient id="stepGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" stop-color="#9a30d9" />
-                                <stop offset="100%" stop-color="#2332a8" />
-                            </linearGradient>
-                        </defs>
-                        <!-- Stylized Z Outer Structure with Integrated Stairs -->
-                        <path d="M 25 35 L 175 35 L 175 60 L 70 145 L 175 145 L 175 170 L 25 170 L 25 145 L 130 60 L 25 60 Z" fill="url(#zigguratGrad)" stroke="#ffffff" stroke-width="2"/>
-                        <!-- Stair Steps on Ziggurat inside bottom slope -->
-                        <polygon points="100,105 155,105 155,115 100,115" fill="url(#stepGrad)" stroke="#ffffff" stroke-width="1"/>
-                        <polygon points="85,118 155,118 155,128 85,128" fill="url(#stepGrad)" stroke="#ffffff" stroke-width="1"/>
-                        <polygon points="70,131 155,131 155,141 70,141" fill="url(#stepGrad)" stroke="#ffffff" stroke-width="1"/>
-                    </svg>
-                </div>
-                <div class="flex flex-col">
-                    <span class="font-extrabold text-xl tracking-wider text-white flex items-center gap-1.5">
-                        ZIGGURAT <span class="text-pink-400 font-bold text-lg bg-pink-500/20 px-1.5 py-0.5 rounded border border-pink-500/40">AI</span>
-                    </span>
-                    <span class="text-[10px] text-pink-300/80 -mt-1 font-medium tracking-widest uppercase">Canlı İnternet Destekli Eğitim</span>
-                </div>
-            </div>
-
-            <!-- Navigation Tabs -->
-            <nav class="hidden md:flex items-center gap-1 bg-black/30 p-1.5 rounded-2xl border border-white/10">
-                <button onclick="switchTab('ai-search')" id="nav-ai-search" class="nav-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 bg-pink-600 text-white shadow-lg">
-                    <i class="fa-solid fa-wand-magic-sparkles text-pink-200"></i> AI'ye Sor
-                </button>
-                <button onclick="switchTab('community')" id="nav-community" class="nav-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 text-gray-300 hover:text-white hover:bg-white/10">
-                    <i class="fa-solid fa-users text-purple-300"></i> Topluluk
-                </button>
-                <button onclick="switchTab('quizzes')" id="nav-quizzes" class="nav-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 text-gray-300 hover:text-white hover:bg-white/10">
-                    <i class="fa-solid fa-graduation-cap text-indigo-300"></i> Testler & Ödevlerim
-                </button>
-                <button onclick="switchTab('teacher')" id="nav-teacher" class="nav-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 text-gray-300 hover:text-white hover:bg-white/10 relative">
-                    <i class="fa-solid fa-chalkboard-user text-amber-300"></i> Öğretmen Alanı
-                    <span id="teacher-lock-badge" class="ml-1 text-xs bg-amber-500/30 text-amber-300 border border-amber-500/40 px-1.5 py-0.2 rounded-full">
-                        <i class="fa-solid fa-lock text-[10px]"></i>
-                    </span>
-                </button>
-            </nav>
-
-            <!-- User Identity Controls -->
-            <div class="flex items-center gap-3">
-                <div id="role-indicator" class="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-gray-800/80 border border-gray-700 text-gray-300">
-                    <!-- Populated dynamically -->
-                </div>
-                
-                <div class="relative group">
-                    <button onclick="openProfileModal()" class="flex items-center gap-2.5 bg-white/10 hover:bg-white/20 border border-white/20 px-3 py-1.5 rounded-xl transition-all">
-                        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-pink-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow">
-                            <span id="avatar-initial">K</span>
-                        </div>
-                        <div class="text-left hidden lg:block">
-                            <div id="header-username" class="text-xs font-bold text-white max-w-[120px] truncate">Kullanıcı</div>
-                            <div id="header-xp" class="text-[10px] text-pink-300">0 XP</div>
-                        </div>
-                        <i class="fa-solid fa-pen-to-square text-xs text-pink-300"></i>
-                    </button>
-                </div>
+    <header class="glass-card rounded-2xl p-4 mb-6 sticky top-2 z-40 flex flex-wrap justify-between items-center gap-4">
+        <div class="flex items-center space-x-3">
+            <!-- Custom Ziggurat Logo SVG based on provided design -->
+            <svg class="w-11 h-11 neon-logo" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="zigMainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#ec4899" />
+                        <stop offset="50%" stop-color="#a855f7" />
+                        <stop offset="100%" stop-color="#3b82f6" />
+                    </linearGradient>
+                    <linearGradient id="zigInnerGrad" x1="100%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#a855f7" />
+                        <stop offset="100%" stop-color="#1e40af" />
+                    </linearGradient>
+                </defs>
+                <!-- Outline Frame -->
+                <path d="M 30 20 L 170 20 L 170 45 L 75 145 L 170 145 L 170 175 L 30 175 L 30 150 L 125 50 L 30 50 Z" fill="none" stroke="#ffffff" stroke-width="4" stroke-opacity="0.6" />
+                <!-- Main Body Z -->
+                <path d="M 35 25 L 165 25 L 165 42 L 70 142 L 165 142 L 165 170 L 35 170 L 35 153 L 130 53 L 35 53 Z" fill="url(#zigMainGrad)" />
+                <!-- Ziggurat Inner Steps -->
+                <polygon points="75,135 145,135 145,120 90,120" fill="url(#zigInnerGrad)" opacity="0.9" />
+                <polygon points="90,115 145,115 145,100 105,100" fill="url(#zigInnerGrad)" opacity="0.95" />
+                <polygon points="105,95 145,95 145,80 120,80" fill="url(#zigInnerGrad)" opacity="1" />
+                <polygon points="120,75 145,75 145,60 135,60" fill="#00f2fe" opacity="0.9" />
+            </svg>
+            <div>
+                <h1 class="text-2xl font-extrabold bg-gradient-to-r from-pink-400 via-purple-300 to-cyan-400 bg-clip-text text-transparent tracking-wide">
+                    ZIGGURAT·Aİ
+                </h1>
+                <p class="text-[11px] text-purple-300 font-medium">Bulut Senkronizasyonlu Yapay Zeka Eğitim Platformu</p>
             </div>
         </div>
 
-        <!-- Mobile Navigation Row -->
-        <div class="flex md:hidden items-center justify-around mt-2 pt-2 border-t border-white/10 text-xs">
-            <button onclick="switchTab('ai-search')" id="mob-nav-ai-search" class="mob-nav-btn flex flex-col items-center gap-1 text-pink-400 font-bold">
-                <i class="fa-solid fa-wand-magic-sparkles text-base"></i> AI
-            </button>
-            <button onclick="switchTab('community')" id="mob-nav-community" class="mob-nav-btn flex flex-col items-center gap-1 text-gray-400">
-                <i class="fa-solid fa-users text-base"></i> Topluluk
-            </button>
-            <button onclick="switchTab('quizzes')" id="mob-nav-quizzes" class="mob-nav-btn flex flex-col items-center gap-1 text-gray-400">
-                <i class="fa-solid fa-graduation-cap text-base"></i> Testler
-            </button>
-            <button onclick="switchTab('teacher')" id="mob-nav-teacher" class="mob-nav-btn flex flex-col items-center gap-1 text-gray-400">
-                <i class="fa-solid fa-chalkboard-user text-base"></i> Öğretmen
+        <!-- User Controls & Status Bar -->
+        <div class="flex items-center space-x-3">
+            <!-- Points Badge -->
+            <div class="bg-amber-500/10 border border-amber-500/30 text-amber-300 px-3 py-1.5 rounded-full text-xs font-bold flex items-center space-x-1.5">
+                <i class="fa-solid fa-trophy text-amber-400"></i>
+                <span id="userPointsDisplay">0 Puan</span>
+            </div>
+
+            <!-- Cloud Connection Indicator -->
+            <div id="cloudStatus" class="flex items-center space-x-2 bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 px-3 py-1.5 rounded-full text-xs font-semibold">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                <span id="cloudStatusText">Canlı Bulut Bağlı</span>
+            </div>
+
+            <!-- Profile / Name Change Button -->
+            <button onclick="openProfileModal()" class="flex items-center space-x-2 bg-purple-900/50 hover:bg-purple-800/70 border border-purple-500/40 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-white transition-all">
+                <i class="fa-solid fa-user-gear text-purple-400 text-sm"></i>
+                <span id="userNameDisplay" class="max-w-[120px] truncate">Kullanıcı</span>
+                <i class="fa-solid fa-chevron-down text-[10px] text-purple-300"></i>
             </button>
         </div>
     </header>
 
-    <!-- Main Container -->
-    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 space-y-6">
+    <!-- Navigation Tabs -->
+    <nav class="flex flex-wrap gap-2 mb-6 max-w-7xl mx-auto w-full">
+        <button onclick="switchTab('ai')" id="tab-btn-ai" class="tab-btn flex-1 min-w-[130px] p-3 rounded-xl glass-card text-center font-semibold text-sm flex items-center justify-center space-x-2 border-purple-500/50 bg-purple-900/40 text-purple-200">
+            <i class="fa-solid fa-brain text-cyan-400"></i>
+            <span>Aİ'ye Sor</span>
+        </button>
+        <button onclick="switchTab('community')" id="tab-btn-community" class="tab-btn flex-1 min-w-[130px] p-3 rounded-xl glass-card text-center font-semibold text-sm flex items-center justify-center space-x-2 text-gray-400 hover:text-white">
+            <i class="fa-solid fa-users text-pink-400"></i>
+            <span>Topluluk</span>
+        </button>
+        <button onclick="switchTab('homework')" id="tab-btn-homework" class="tab-btn flex-1 min-w-[130px] p-3 rounded-xl glass-card text-center font-semibold text-sm flex items-center justify-center space-x-2 text-gray-400 hover:text-white">
+            <i class="fa-solid fa-book-open text-amber-400"></i>
+            <span>Ödevler</span>
+        </button>
+        <button onclick="switchTab('tests')" id="tab-btn-tests" class="tab-btn flex-1 min-w-[130px] p-3 rounded-xl glass-card text-center font-semibold text-sm flex items-center justify-center space-x-2 text-gray-400 hover:text-white">
+            <i class="fa-solid fa-vial text-emerald-400"></i>
+            <span>Testler</span>
+        </button>
+        <button onclick="switchTab('teacher')" id="tab-btn-teacher" class="tab-btn flex-1 min-w-[130px] p-3 rounded-xl glass-card text-center font-semibold text-sm flex items-center justify-center space-x-2 text-gray-400 hover:text-white">
+            <i id="teacherTabLockIcon" class="fa-solid fa-lock text-rose-400"></i>
+            <span>Öğretmen Alanı</span>
+        </button>
+    </nav>
 
-        <!-- ================= TAB 1: AI SEARCH & SUMMARIZER ================= -->
-        <section id="tab-ai-search" class="tab-content space-y-6">
-            <!-- Hero AI Banner -->
-            <div class="glass-card p-6 md:p-8 rounded-3xl relative overflow-hidden border border-pink-500/30">
-                <div class="absolute -right-10 -bottom-10 w-60 h-60 bg-pink-600/20 rounded-full blur-3xl pointer-events-none"></div>
-                <div class="absolute -left-10 -top-10 w-60 h-60 bg-purple-600/20 rounded-full blur-3xl pointer-events-none"></div>
-                
-                <div class="max-w-3xl space-y-3 relative z-10">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-500/20 border border-pink-500/30 text-pink-300 text-xs font-semibold">
-                        <i class="fa-solid fa-bolt text-amber-300"></i> Canlı İnternet, MEB & EBA Taraması
-                    </div>
-                    <h1 class="text-2xl md:text-4xl font-extrabold text-white">
-                        Öğrenmek İstediğin Her Şeyi <span class="gradient-text">Ziggurat AI</span>'ye Sor!
-                    </h1>
-                    <p class="text-sm md:text-base text-gray-300 leading-relaxed">
-                        Google web siteleri, Milli Eğitim Bakanlığı (MEB) müfredatları ve EBA kaynakları anlık olarak taranır, yanıtlar senin için özetlenerek sunulur.
-                    </p>
-                </div>
+    <!-- MAIN CONTENT CONTAINERS -->
+    <main class="max-w-7xl mx-auto w-full flex-grow">
 
-                <!-- Live Search Bar -->
-                <div class="mt-6 relative z-10">
-                    <form onsubmit="handleAiSearch(event)" class="flex flex-col md:flex-row gap-3">
-                        <div class="relative flex-1">
-                            <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-                            <input type="text" id="ai-query-input" placeholder="Örn: 8. Sınıf LGS üslü sayılar konu özeti veya MEB müfredat yenilikleri..." class="w-full glass-input pl-12 pr-4 py-3.5 rounded-2xl text-sm md:text-base placeholder-gray-400 focus:ring-2 focus:ring-pink-500 transition-all shadow-inner">
-                        </div>
-                        <button type="submit" class="gradient-btn px-6 py-3.5 rounded-2xl text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg">
-                            <i class="fa-solid fa-paper-plane"></i> Ara ve Özetle
-                        </button>
-                    </form>
-                    <!-- Preset Suggestions -->
-                    <div class="flex flex-wrap items-center gap-2 mt-3 text-xs text-gray-300">
-                        <span class="text-gray-400"><i class="fa-solid fa-lightbulb text-amber-400"></i> Önerilen:</span>
-                        <button onclick="fillQuery('MEB 8. Sınıf LGS Matematik konuları nelerdir?')" class="bg-white/5 hover:bg-white/15 px-3 py-1 rounded-lg border border-white/10 transition">MEB LGS Konuları</button>
-                        <button onclick="fillQuery('EBA fotosentez deney adımları ve özeti')" class="bg-white/5 hover:bg-white/15 px-3 py-1 rounded-lg border border-white/10 transition">EBA Fotosentez Özeti</button>
-                        <button onclick="fillQuery('Merhaba, nasılsın Ziggurat AI?')" class="bg-white/5 hover:bg-white/15 px-3 py-1 rounded-lg border border-white/10 transition">Sohbet Et 👋</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Live Scanning Tracker Box (Hidden by default) -->
-            <div id="ai-scanning-box" class="hidden glass-card p-5 rounded-2xl border border-pink-500/40 space-y-3">
-                <div class="flex items-center justify-between border-b border-white/10 pb-3">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-xl bg-pink-500/20 border border-pink-500/40 flex items-center justify-center text-pink-400">
-                            <i class="fa-solid fa-globe spin text-base"></i>
+        <!-- 1. AI SEARCH & SUMMARIZATION ASSISTANT -->
+        <section id="section-ai" class="tab-section block">
+            <div class="glass-card rounded-2xl p-4 md:p-6 flex flex-col h-[650px] relative">
+                <!-- Header Info -->
+                <div class="flex items-center justify-between pb-4 border-b border-purple-500/20 mb-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-purple-600 to-pink-500 flex items-center justify-center text-white shadow-lg">
+                            <i class="fa-solid fa-robot text-lg"></i>
                         </div>
                         <div>
-                            <div class="text-sm font-bold text-white">Canlı İnternet & Kaynak Taraması Başlatıldı</div>
-                            <div class="text-xs text-gray-400">Gerçek zamanlı arama motoru ve veri kaynakları simüle ediliyor...</div>
+                            <h2 class="font-bold text-lg text-white">Ziggurat Derin Web Araştırma Asistanı</h2>
+                            <p class="text-xs text-purple-300">MEB, EBA ve Google kaynaklarını anlık tarar, analiz eder ve özet çıkarır.</p>
                         </div>
                     </div>
-                    <span class="text-xs bg-pink-500/20 text-pink-300 px-2.5 py-1 rounded-full font-mono pulse-loader">Aktif Tarama</span>
-                </div>
-
-                <div class="space-y-2 text-xs">
-                    <div id="scan-step-google" class="flex items-center gap-2 text-gray-400">
-                        <i class="fa-solid fa-circle-notch fa-spin text-pink-400 w-4"></i>
-                        <span>Google Web siteleri ve açık kaynak verileri taranıyor...</span>
-                    </div>
-                    <div id="scan-step-meb" class="flex items-center gap-2 text-gray-500">
-                        <i class="fa-regular fa-circle w-4"></i>
-                        <span>MEB (Milli Eğitim Bakanlığı) resmi müfredat ve duyuruları inceleniyor...</span>
-                    </div>
-                    <div id="scan-step-eba" class="flex items-center gap-2 text-gray-500">
-                        <i class="fa-regular fa-circle w-4"></i>
-                        <span>EBA (Eğitim Bilişim Ağı) ders materyalleri özetleniyor...</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- AI Response Container -->
-            <div id="ai-response-container" class="space-y-4">
-                <!-- Welcome card -->
-                <div class="glass-card p-6 rounded-3xl border border-white/10 flex items-start gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-pink-600 to-purple-600 flex items-center justify-center text-white flex-shrink-0 shadow-lg">
-                        <i class="fa-solid fa-robot text-2xl"></i>
-                    </div>
-                    <div class="space-y-2">
-                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                            Merhaba <span id="welcome-user-name" class="text-pink-400">Kullanıcı</span>! 👋
-                        </h3>
-                        <p class="text-sm text-gray-300 leading-relaxed">
-                            Ben Ziggurat AI, senin kişisel akıllı eğitim asistanınım. İnternet üzerindeki binlerce eğitim sitesini, MEB müfredatını ve EBA ders notlarını tarayıp anlaşılır özetler hazırlayabilirim. Yukarıdaki arama çubuğundan sorunu sorarak hemen başlayabilirsin!
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ================= TAB 2: COMMUNITY (TOPLULUK) ================= -->
-        <section id="tab-community" class="tab-content hidden space-y-6">
-            <!-- Header Banner -->
-            <div class="glass-card p-6 rounded-3xl border border-white/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                <div>
-                    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-users text-pink-400"></i> Öğrenci & Öğretmen Topluluğu
-                    </h2>
-                    <p class="text-sm text-gray-300 mt-1">
-                        Diğer öğrenciler ve öğretmenlerle soru paylaş, tartış. <span class="text-pink-300 font-semibold">(Son 7 gün içerisindeki gönderiler listelenir)</span>
-                    </p>
-                </div>
-                <div class="flex items-center gap-2 bg-pink-500/10 border border-pink-500/30 px-3 py-1.5 rounded-xl text-xs text-pink-300">
-                    <i class="fa-solid fa-shield-halved text-emerald-400 text-sm"></i> Otomatik Sansür & Filtreleme Aktif
-                </div>
-            </div>
-
-            <!-- New Message Input Box -->
-            <div class="glass-card p-5 rounded-3xl border border-white/10 space-y-3">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-purple-600/40 border border-purple-400/30 flex items-center justify-center font-bold text-white">
-                        <span id="comm-user-avatar">K</span>
-                    </div>
-                    <div>
-                        <div id="comm-user-name" class="text-sm font-bold text-white">Kullanıcı</div>
-                        <div class="text-[10px] text-gray-400">Toplulukta soru veya düşünce paylaş</div>
-                    </div>
-                </div>
-                <textarea id="community-input" rows="3" placeholder="Soru sor veya tartışma başlat... (Küfür ve hakaret içeren ifadeler otomasyonla sansürlenir)" class="w-full glass-input p-3.5 rounded-2xl text-sm placeholder-gray-400 resize-none"></textarea>
-                <div class="flex items-center justify-between pt-1">
-                    <span class="text-xs text-gray-400">
-                        <i class="fa-solid fa-clock text-pink-400"></i> Mesajınız 1 hafta boyunca toplulukta görünür.
+                    <span class="text-xs bg-purple-950/80 text-purple-300 px-3 py-1 rounded-full border border-purple-500/30">
+                        <i class="fa-solid fa-wifi text-emerald-400 mr-1"></i>Canlı Web Modu
                     </span>
-                    <button onclick="postCommunityMessage()" class="gradient-btn px-5 py-2.5 rounded-xl text-white text-xs font-bold flex items-center gap-2 shadow">
-                        <i class="fa-solid fa-paper-plane"></i> Paylaş
+                </div>
+
+                <!-- Chat Stream -->
+                <div id="aiChatBox" class="flex-grow overflow-y-auto space-y-4 pr-2">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-8 h-8 rounded-lg bg-purple-600/60 flex items-center justify-center text-white text-xs flex-shrink-0 mt-1">
+                            Aİ
+                        </div>
+                        <div class="glass-card p-4 rounded-2xl rounded-tl-none max-w-[85%] text-sm leading-relaxed">
+                            <p class="font-semibold text-purple-300 mb-1">Ziggurat Aİ:</p>
+                            Merhaba <span class="active-user-name font-bold text-pink-300">Kullanıcı</span>! Ben senin kişisel akıllı eğitim asistanınım. MEB müfredatı, LGS hazırlık veya öğrenmek istediğin her ders konusunda soru sorabilirsin. Soru sorduğunda interneti canlı olarak tarayıp özet çıkartırım! 🚀
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Searching / Summarizing Progress Indicator -->
+                <div id="aiSearchProgress" class="hidden my-2 p-3 bg-purple-950/90 border border-purple-500/40 rounded-xl text-xs space-y-2">
+                    <div class="flex items-center justify-between text-purple-200">
+                        <span id="aiProgressText" class="font-medium animate-pulse">🌐 İnternet taranıyor...</span>
+                        <i class="fa-solid fa-spinner animate-spin text-purple-400"></i>
+                    </div>
+                    <div class="w-full bg-purple-900/60 rounded-full h-1.5 overflow-hidden">
+                        <div id="aiProgressBar" class="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-500 h-1.5 rounded-full w-1/4 transition-all duration-500"></div>
+                    </div>
+                </div>
+
+                <!-- Input Area -->
+                <form onsubmit="handleAiSubmit(event)" class="mt-4 flex gap-2">
+                    <input type="text" id="aiInput" placeholder="Aİ'ye bir şey sor (Örn: LGS Fen Güneş Tutulmasını özetle veya Nasılsın?)..." 
+                           class="flex-grow glass-card px-4 py-3 rounded-xl border border-purple-500/30 focus:border-purple-400 focus:outline-none text-sm text-white placeholder-gray-400">
+                    <button type="submit" class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white px-6 py-3 rounded-xl font-semibold text-sm shadow-lg flex items-center space-x-2 transition-all">
+                        <span>Sor</span>
+                        <i class="fa-solid fa-paper-plane"></i>
                     </button>
-                </div>
-            </div>
-
-            <!-- Community Feed List -->
-            <div id="community-feed" class="space-y-4">
-                <!-- Posts rendered dynamically -->
+                </form>
             </div>
         </section>
 
-        <!-- ================= TAB 3: QUIZZES & HOMEWORK ================= -->
-        <section id="tab-quizzes" class="tab-content hidden space-y-6">
-            <!-- Section Title -->
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-graduation-cap text-indigo-400"></i> Testler & Atanan Ödevlerim
-                    </h2>
-                    <p class="text-sm text-gray-300">Sınıf seviyene uygun testleri çöz, öğretmeninin atadığı ödevleri tamamla!</p>
+        <!-- 2. COMMUNITY SECTION (GLOBAL CLOUD FEED) -->
+        <section id="section-community" class="tab-section hidden">
+            <div class="glass-card rounded-2xl p-4 md:p-6 space-y-6">
+                <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-purple-500/20">
+                    <div>
+                        <h2 class="font-bold text-lg text-white flex items-center space-x-2">
+                            <span>Topluluk Canlı Akışı</span>
+                            <span class="text-xs bg-pink-500/20 text-pink-300 border border-pink-500/30 px-2.5 py-0.5 rounded-full">
+                                Bulut Senkron
+                            </span>
+                        </h2>
+                        <p class="text-xs text-purple-300">Tüm cihazlardan anlık canlı paylaşımlar (Son 7 gündeki mesajlar gösterilir).</p>
+                    </div>
+                    <span class="text-xs text-gray-400"><i class="fa-solid fa-shield-halved text-emerald-400 mr-1"></i>Otomatik Argo / Küfür Filtresi Aktif</span>
                 </div>
-                <!-- Grade Selector Filter -->
-                <div class="flex items-center gap-2 bg-black/40 p-1.5 rounded-2xl border border-white/10">
-                    <span class="text-xs text-gray-400 px-2 font-semibold">Sınıf:</span>
-                    <button onclick="filterGrade('5')" id="grade-btn-5" class="grade-filter-btn text-xs px-3 py-1.5 rounded-xl font-bold transition bg-pink-600 text-white">5. Sınıf</button>
-                    <button onclick="filterGrade('6')" id="grade-btn-6" class="grade-filter-btn text-xs px-3 py-1.5 rounded-xl font-bold transition text-gray-400 hover:text-white">6. Sınıf</button>
-                    <button onclick="filterGrade('7')" id="grade-btn-7" class="grade-filter-btn text-xs px-3 py-1.5 rounded-xl font-bold transition text-gray-400 hover:text-white">7. Sınıf</button>
-                    <button onclick="filterGrade('8')" id="grade-btn-8" class="grade-filter-btn text-xs px-3 py-1.5 rounded-xl font-bold transition text-gray-400 hover:text-white">8. Sınıf (LGS)</button>
-                </div>
-            </div>
 
-            <!-- Assigned Homeworks Box -->
-            <div class="glass-card p-6 rounded-3xl border border-purple-500/30 space-y-4">
-                <div class="flex items-center justify-between border-b border-white/10 pb-3">
-                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-list-check text-amber-400"></i> Bana Atanan Özel Ödevler
-                    </h3>
-                    <span id="homework-count-badge" class="text-xs bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2.5 py-0.5 rounded-full font-bold">0 Ödev</span>
-                </div>
-                <div id="assigned-homeworks-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Dynamic Homework Cards -->
-                </div>
-            </div>
+                <!-- Send Message Form -->
+                <form onsubmit="sendCommunityMessage(event)" class="space-y-3 glass-card p-4 rounded-xl border-purple-500/20">
+                    <div class="flex items-center space-x-2 text-xs text-purple-300 font-semibold">
+                        <i class="fa-solid fa-pen-nib"></i>
+                        <span>Mesaj Paylaş</span>
+                    </div>
+                    <textarea id="communityInput" rows="2" placeholder="Dersler hakkında soru sor veya düşüncelerini toplulukla paylaş..." 
+                              class="w-full glass-card p-3 rounded-xl border border-purple-500/30 focus:border-purple-400 focus:outline-none text-sm text-white placeholder-gray-400 resize-none"></textarea>
+                    <div class="flex justify-between items-center">
+                        <p class="text-[11px] text-gray-400">Gönderen: <strong id="communityPostAuthor" class="text-purple-300">Kullanıcı</strong></p>
+                        <button type="submit" class="bg-purple-600 hover:bg-purple-500 text-white px-5 py-2 rounded-xl text-xs font-semibold shadow-md flex items-center space-x-2 transition-all">
+                            <span>Gönder</span>
+                            <i class="fa-solid fa-share"></i>
+                        </button>
+                    </div>
+                </form>
 
-            <!-- Interactive Quiz Section -->
-            <div class="glass-card p-6 rounded-3xl border border-white/10 space-y-4">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-brain text-pink-400"></i> Konu Kavrama Testleri (+20 XP / Soru)
-                </h3>
-                <div id="quiz-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <!-- Dynamic Quizzes -->
+                <!-- Message Feed -->
+                <div id="communityFeed" class="space-y-3 max-h-[500px] overflow-y-auto pr-2">
+                    <div class="text-center py-8 text-gray-400 text-sm">
+                        <i class="fa-solid fa-spinner animate-spin text-purple-400 text-xl mb-2"></i>
+                        <p>Bulut mesajları senkronize ediliyor...</p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- ================= TAB 4: TEACHER ZONE (ÖĞRETMEN ALANI) ================= -->
-        <section id="tab-teacher" class="tab-content hidden space-y-6">
-            
-            <!-- LOCKED STATE OVERLAY (if not authorized) -->
-            <div id="teacher-locked-screen" class="glass-card p-8 md:p-12 rounded-3xl border border-amber-500/40 text-center space-y-5 max-w-2xl mx-auto my-8">
-                <div class="w-20 h-20 rounded-full bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 text-3xl mx-auto shadow-xl">
+        <!-- 3. PERSONAL HOMEWORK SECTION -->
+        <section id="section-homework" class="tab-section hidden">
+            <div class="glass-card rounded-2xl p-4 md:p-6 space-y-6">
+                <div class="pb-4 border-b border-purple-500/20">
+                    <h2 class="font-bold text-lg text-white">Ödevlerim</h2>
+                    <p class="text-xs text-purple-300">Öğretmeniniz tarafından size atanan özel ve genel ödevler.</p>
+                </div>
+
+                <div id="studentHomeworkList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Dynamic Homeworks -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. TESTS & QUIZZES SECTION -->
+        <section id="section-tests" class="tab-section hidden">
+            <div class="glass-card rounded-2xl p-4 md:p-6 space-y-6">
+                <div class="pb-4 border-b border-purple-500/20 flex flex-wrap justify-between items-center gap-2">
+                    <div>
+                        <h2 class="font-bold text-lg text-white">Seviye Testleri</h2>
+                        <p class="text-xs text-purple-300">Test çözün, puan kazanın ve bulut profilinize işleyin.</p>
+                    </div>
+                    <!-- Level Filter -->
+                    <select id="testLevelFilter" onchange="renderTests()" class="glass-card px-3 py-1.5 rounded-xl border border-purple-500/30 text-xs text-white bg-purple-950 focus:outline-none">
+                        <option value="5. Sınıf">5. Sınıf</option>
+                        <option value="6. Sınıf">6. Sınıf</option>
+                        <option value="7. Sınıf">7. Sınıf</option>
+                        <option value="LGS'ye Hazırlık" selected>LGS'ye Hazırlık</option>
+                    </select>
+                </div>
+
+                <div id="testsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Dynamic Tests -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. TEACHER ZONE (ÖĞRETMEN ALANI) -->
+        <section id="section-teacher" class="tab-section hidden">
+            <!-- Locked State -->
+            <div id="teacherLockedBanner" class="glass-card rounded-2xl p-8 text-center space-y-4 max-w-xl mx-auto my-12 border-rose-500/30">
+                <div class="w-16 h-16 bg-rose-500/20 rounded-full flex items-center justify-center text-rose-400 mx-auto text-2xl border border-rose-500/40">
                     <i class="fa-solid fa-lock"></i>
                 </div>
-                <div class="space-y-2">
-                    <h2 class="text-2xl font-extrabold text-white">Öğretmen Paneli Kilitli</h2>
-                    <p class="text-sm text-gray-300 max-w-md mx-auto leading-relaxed">
-                        Bu alana sadece yetkili öğretmenler erişebilir. Erişim sağlamak için kullanıcı adınızın başında <code class="bg-black/50 text-amber-300 px-2 py-0.5 rounded border border-amber-500/30">ZigguratÖğretmeni:</code> takısı bulunmalıdır.
-                    </p>
-                </div>
-                <div class="bg-black/30 p-4 rounded-2xl border border-white/10 text-xs text-gray-300 max-w-md mx-auto text-left space-y-2">
-                    <div class="font-bold text-amber-300 flex items-center gap-1.5">
-                        <i class="fa-solid fa-circle-info"></i> Nasıl Açılır?
-                    </div>
-                    <p>Sağ üstteki profil ikonuna tıklayın ve adınızı örn: <span class="text-white font-mono">ZigguratÖğretmeni: Ahmet Hoca</span> olarak güncelleyin.</p>
-                </div>
-                <button onclick="openProfileModal()" class="gradient-btn px-6 py-3 rounded-xl text-white font-bold text-sm inline-flex items-center gap-2 shadow-lg">
-                    <i class="fa-solid fa-user-pen"></i> Kullanıcı Adını Değiştir
+                <h3 class="text-xl font-bold text-white">Öğretmen Alanı Kilitli</h3>
+                <p class="text-sm text-gray-300 leading-relaxed">
+                    Bu alana yalnızca yetkili öğretmen hesapları erişebilir. Yetkili moduna geçmek için profil bilgilerinizi güncelleyebilirsiniz.
+                </p>
+                <button onclick="openProfileModal()" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2.5 rounded-xl text-xs font-semibold hover:opacity-90 transition-all">
+                    Profil Ayarlarına Git
                 </button>
             </div>
 
-            <!-- UNLOCKED TEACHER CONTENT -->
-            <div id="teacher-unlocked-screen" class="hidden space-y-6">
-                <!-- Header Banner -->
-                <div class="glass-card p-6 rounded-3xl border border-amber-500/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                    <div>
-                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-semibold border border-amber-500/30 mb-2">
-                            <i class="fa-solid fa-shield-check"></i> Öğretmen Yetkisi Onaylandı
-                        </div>
-                        <h2 class="text-2xl font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-chalkboard-user text-amber-400"></i> Öğretmen Yönetim Paneli
-                        </h2>
-                        <p class="text-sm text-gray-300 mt-1">Özel öğrenci ödevleri oluşturun, sınıf seçin ve öğrenci ödev tamamlama matrisini takip edin.</p>
-                    </div>
-                </div>
-
-                <!-- Create Targeted Homework Form -->
-                <div class="glass-card p-6 rounded-3xl border border-white/10 space-y-5">
-                    <h3 class="text-lg font-bold text-white flex items-center gap-2 border-b border-white/10 pb-3">
-                        <i class="fa-solid fa-plus-circle text-pink-400"></i> Hedefli Yeni Ödev Tanımla
+            <!-- Unlocked Teacher Panel -->
+            <div id="teacherPanel" class="hidden space-y-6">
+                <!-- Assign Homework Card -->
+                <div class="glass-card rounded-2xl p-4 md:p-6 space-y-4">
+                    <h3 class="font-bold text-lg text-white border-b border-purple-500/20 pb-3 flex items-center space-x-2">
+                        <i class="fa-solid fa-pen-to-square text-purple-400"></i>
+                        <span>Yeni Ödev Tanımlama Paneli</span>
                     </h3>
 
-                    <form onsubmit="handleCreateHomework(event)" class="space-y-4">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <!-- Step 1: Grade Level -->
-                            <div class="space-y-1.5">
-                                <label class="text-xs font-semibold text-gray-300">1. Sınıf Seviyesi Seçin:</label>
-                                <select id="hw-grade-select" class="w-full glass-input p-3 rounded-xl text-sm bg-gray-900/90 text-white">
-                                    <option value="5">5. Sınıf</option>
-                                    <option value="6">6. Sınıf</option>
-                                    <option value="7">7. Sınıf</option>
-                                    <option value="8">8. Sınıf (LGS Hazırlık)</option>
+                    <form onsubmit="handleAssignHomework(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-purple-300 mb-1">1. Adım: Düzey Seçin</label>
+                            <select id="teacherLevel" class="w-full glass-card p-3 rounded-xl border border-purple-500/30 bg-purple-950 text-sm text-white focus:outline-none">
+                                <option value="5. Sınıf">5. Sınıf</option>
+                                <option value="6. Sınıf">6. Sınıf</option>
+                                <option value="7. Sınıf">7. Sınıf</option>
+                                <option value="LGS'ye Hazırlık">LGS'ye Hazırlık</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-purple-300 mb-1">2. Adım: Ders / Konu Adı</label>
+                            <input type="text" id="teacherSubject" placeholder="Örn: Fen Bilimleri - Güneş Tutulması" required
+                                   class="w-full glass-card p-3 rounded-xl border border-purple-500/30 text-sm text-white focus:outline-none placeholder-gray-400">
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-semibold text-purple-300 mb-1">Ödev Detayı & Açıklaması</label>
+                            <textarea id="teacherDescription" rows="2" placeholder="Örn: EBA ders videosunu izleyip 20 soru çözün." required
+                                      class="w-full glass-card p-3 rounded-xl border border-purple-500/30 text-sm text-white focus:outline-none placeholder-gray-400 resize-none"></textarea>
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-semibold text-purple-300 mb-1">Hedef Öğrenci Seçimi (Yanlış Öğrenciye Gönderimi Önler)</label>
+                            <div class="flex flex-wrap gap-2 items-center">
+                                <select id="teacherTargetStudent" class="flex-grow glass-card p-3 rounded-xl border border-purple-500/30 bg-purple-950 text-sm text-white focus:outline-none">
+                                    <option value="HERKES">Tüm Öğrenciler (Genel)</option>
+                                    <!-- Dynamic known students -->
                                 </select>
+                                <button type="submit" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-xl text-sm font-semibold shadow-lg hover:opacity-90 transition-all">
+                                    <i class="fa-solid fa-paper-plane mr-2"></i>Ödevi Ata
+                                </button>
                             </div>
-
-                            <!-- Step 2: Custom Subject / Homework Title -->
-                            <div class="space-y-1.5">
-                                <label class="text-xs font-semibold text-gray-300">2. Ders / Konu Başlığı:</label>
-                                <input type="text" id="hw-title-input" placeholder="Örn: 8. Sınıf LGS Matematik - Üslü İfadeler 20 Soru" required class="w-full glass-input p-3 rounded-xl text-sm">
-                            </div>
-                        </div>
-
-                        <!-- Step 3: Targeted Student Selection -->
-                        <div class="space-y-2 pt-2 border-t border-white/10">
-                            <label class="text-xs font-semibold text-gray-300 flex items-center justify-between">
-                                <span>3. Ödev Gönderilecek Öğrencileri Seçin (Hedefli Ödev Atama):</span>
-                                <span class="text-[10px] text-pink-300">*Yanlış öğrenciye ödev gitmemesi için seçiniz</span>
-                            </label>
-
-                            <div id="student-checklist-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 bg-black/30 p-3 rounded-2xl border border-white/10 max-h-36 overflow-y-auto">
-                                <!-- Populated dynamically from stored users -->
-                            </div>
-                        </div>
-
-                        <!-- Step 4: Instructions / Detail -->
-                        <div class="space-y-1.5">
-                            <label class="text-xs font-semibold text-gray-300">4. Ödev Talimatı veya Soru Metni:</label>
-                            <textarea id="hw-desc-input" rows="2" placeholder="Öğrencilerin çözmesi gereken soru detayları veya yönlendirme..." class="w-full glass-input p-3 rounded-xl text-sm resize-none"></textarea>
-                        </div>
-
-                        <div class="flex justify-end pt-2">
-                            <button type="submit" class="gradient-btn px-6 py-3 rounded-xl text-white font-bold text-xs flex items-center gap-2 shadow-lg">
-                                <i class="fa-solid fa-paper-plane"></i> Ödevi Seçili Öğrencilere Gönder
-                            </button>
                         </div>
                     </form>
                 </div>
 
-                <!-- Assignment Completion Matrix (Ödev Yapma Tablosu) -->
-                <div class="glass-card p-6 rounded-3xl border border-white/10 space-y-4">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-white/10 pb-3">
-                        <div>
-                            <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                                <i class="fa-solid fa-table-list text-emerald-400"></i> Ödev Yapma Tablosu (Canlı Takip)
-                            </h3>
-                            <p class="text-xs text-gray-300">Atanan ödevlerin hangi öğrenci tarafından yapıldığını anlık izleyin.</p>
-                        </div>
-                        <button onclick="renderTeacherMatrix()" class="text-xs bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg border border-white/10 transition text-gray-300">
-                            <i class="fa-solid fa-rotate-right"></i> Tabloyu Yenile
-                        </button>
+                <!-- Live Homework Completion Table -->
+                <div class="glass-card rounded-2xl p-4 md:p-6 space-y-4 overflow-hidden">
+                    <div class="flex justify-between items-center border-b border-purple-500/20 pb-3">
+                        <h3 class="font-bold text-lg text-white flex items-center space-x-2">
+                            <i class="fa-solid fa-table-list text-emerald-400"></i>
+                            <span>Ödev Yapma Durum Tablosu</span>
+                        </h3>
+                        <span class="text-xs text-purple-300 bg-purple-950 px-2.5 py-1 rounded-full border border-purple-500/30">Canlı Takip</span>
                     </div>
 
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-xs text-gray-300">
-                            <thead class="bg-black/40 text-gray-200 font-bold border-b border-white/10">
+                            <thead class="bg-purple-950/80 text-purple-200 uppercase text-[10px] tracking-wider border-b border-purple-500/30">
                                 <tr>
-                                    <th class="p-3">Öğrenci Adı</th>
-                                    <th class="p-3">Ödev Başlığı</th>
-                                    <th class="p-3">Sınıf</th>
+                                    <th class="p-3">Öğrenci</th>
+                                    <th class="p-3">Düzey</th>
+                                    <th class="p-3">Ders / Konu</th>
+                                    <th class="p-3">Atama Tarihi</th>
                                     <th class="p-3">Durum</th>
-                                    <th class="p-3">Tamamlanma Tarihi</th>
-                                    <th class="p-3 text-right">Puan / Sonuç</th>
+                                    <th class="p-3">Tamamlama Saati</th>
                                 </tr>
                             </thead>
-                            <tbody id="teacher-matrix-tbody" class="divide-y divide-white/5">
-                                <!-- Populated dynamically -->
+                            <tbody id="teacherHomeworkTableBody" class="divide-y divide-purple-500/10">
+                                <tr>
+                                    <td colspan="6" class="p-4 text-center text-gray-400">Kayıtlı ödev bulunamadı.</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -499,788 +406,731 @@
 
     </main>
 
-    <!-- Modal: Profile & Username Edit -->
-    <div id="profile-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md hidden flex items-center justify-center p-4">
-        <div class="glass-card p-6 rounded-3xl border border-white/20 max-w-md w-full space-y-5 relative shadow-2xl">
+    <!-- Footer -->
+    <footer class="mt-8 py-4 text-center text-xs text-gray-400 border-t border-purple-500/10">
+        <p>© 2026 ZigguratAİ - Akıllı Bulut Eğitim Ekosistemi</p>
+    </footer>
+
+    <!-- PROFILE MODAL -->
+    <div id="profileModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-md w-full rounded-2xl p-6 space-y-4 border-purple-500/40 relative">
             <button onclick="closeProfileModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
                 <i class="fa-solid fa-xmark"></i>
             </button>
-            <div class="flex items-center gap-3 border-b border-white/10 pb-3">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-pink-500 to-purple-600 flex items-center justify-center text-white text-xl font-bold">
-                    <span id="modal-avatar-preview">K</span>
-                </div>
+            <h3 class="font-bold text-lg text-white border-b border-purple-500/20 pb-3 flex items-center space-x-2">
+                <i class="fa-solid fa-user-pen text-purple-400"></i>
+                <span>Profil / Kullanıcı Adı Değiştir</span>
+            </h3>
+            
+            <form onsubmit="saveProfile(event)" class="space-y-4">
                 <div>
-                    <h3 class="text-lg font-bold text-white">Profil Ayarları</h3>
-                    <p class="text-xs text-gray-300">Kullanıcı adınızı buradan değiştirebilirsiniz.</p>
-                </div>
-            </div>
-
-            <form onsubmit="saveProfileName(event)" class="space-y-4">
-                <div class="space-y-1.5">
-                    <label class="text-xs font-semibold text-gray-300">Kullanıcı Adı:</label>
-                    <input type="text" id="modal-username-input" class="w-full glass-input p-3 rounded-xl text-sm font-semibold" required>
-                    <p class="text-[11px] text-gray-400">
-                        * Öğretmen panelini açmak için adınızın başına <span class="text-amber-300 font-mono">ZigguratÖğretmeni:</span> yazın.
-                    </p>
+                    <label class="block text-xs font-semibold text-purple-300 mb-1">Görünür Kullanıcı Adınız</label>
+                    <input type="text" id="profileNameInput" required placeholder="Adınızı giriniz..."
+                           class="w-full glass-card p-3 rounded-xl border border-purple-500/30 text-sm text-white focus:outline-none">
                 </div>
 
-                <div class="bg-white/5 p-3 rounded-xl border border-white/10 space-y-1 text-xs">
-                    <div class="text-gray-300">Kazanılan Toplam Puan: <span id="modal-xp-val" class="font-bold text-pink-400">0 XP</span></div>
-                    <div class="text-gray-400">Rolün: <span id="modal-role-val" class="font-semibold text-white">Öğrenci</span></div>
-                </div>
-
-                <div class="flex items-center justify-end gap-2 pt-2">
-                    <button type="button" onclick="closeProfileModal()" class="px-4 py-2 rounded-xl text-xs font-bold text-gray-300 hover:bg-white/10">İptal</button>
-                    <button type="submit" class="gradient-btn px-5 py-2.5 rounded-xl text-white text-xs font-bold shadow">Kaydet</button>
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="closeProfileModal()" class="px-4 py-2 rounded-xl text-xs text-gray-300 hover:bg-purple-900/40">
+                        İptal
+                    </button>
+                    <button type="submit" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-5 py-2 rounded-xl text-xs font-semibold shadow-md">
+                        Kaydet
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Modal: Interactive Quiz Runner -->
-    <div id="quiz-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
-        <div id="quiz-modal-card" class="glass-card p-6 md:p-8 rounded-3xl border border-pink-500/40 max-w-xl w-full space-y-6 relative shadow-2xl">
-            <!-- Modal Body populated via JS -->
+    <!-- QUIZ MODAL -->
+    <div id="quizModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-xl w-full rounded-2xl p-6 space-y-4 border-purple-500/40 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeQuizModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 id="modalQuizTitle" class="font-bold text-lg text-purple-300">Test</h3>
+            <div id="modalQuizContent" class="space-y-4"></div>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="mt-auto border-t border-white/10 glass-card py-4 px-4 text-center text-xs text-gray-400">
-        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-            <div class="flex items-center gap-2">
-                <span class="font-bold text-white">ZIGGURAT AI</span>
-                <span>- Akıllı İnternet & Eğitim Ekosistemi</span>
-            </div>
-            <div>&copy; 2026 Tüm Hakları Saklıdır. MEB, EBA ve Google kaynak entegrasyonlu.</div>
-        </div>
-    </footer>
-
-    <!-- JS Application Logic -->
+    <!-- JAVASCRIPT & DATABASE ENGINE -->
     <script>
-        /* ================= STATE & PERSISTENCE ================= */
-        const STORAGE_KEY_USER = 'ziggurat_user_profile';
-        const STORAGE_KEY_POSTS = 'ziggurat_community_posts';
-        const STORAGE_KEY_HOMEWORKS = 'ziggurat_homeworks';
-        const STORAGE_KEY_MATRIX = 'ziggurat_completion_matrix';
-
-        // Profanity list for censorship filter
-        const BAD_WORDS = ['küfür', 'aptal', 'salak', 'manyak', 'gerizekalı', 'yavşak', 'piç', 'lan', 'bok', 'it'];
-
+        /* ==========================================================================
+           1. USER PROFILE & HIDDEN TEACHER LOCK MECHANISM
+           ========================================================================== */
         let currentUser = {
-            name: 'Kullanıcı',
-            xp: 0,
-            grade: '8'
+            name: "Kullanıcı",
+            points: 0,
+            isTeacher: false
         };
 
-        // Sample static quizzes
-        const QUIZZES = [
-            {
-                id: 'q1',
-                grade: '8',
-                subject: 'Matematik',
-                title: '8. Sınıf LGS - Üslü İfadeler',
-                questions: [
-                    { q: "2^4 + 3^2 işleminin sonucu kaçtır?", options: ["23", "25", "16", "30"], answer: 1 },
-                    { q: "5^-2 ifadesinin değeri hangisidir?", options: ["-10", "1/10", "1/25", "-25"], answer: 2 }
-                ]
-            },
-            {
-                id: 'q2',
-                grade: '8',
-                subject: 'Fen Bilimleri',
-                title: '8. Sınıf - DNA ve Genetik Kod',
-                questions: [
-                    { q: "DNA'nın yapı birimi hangisidir?", options: ["Kromozom", "Gen", "Nükleotid", "Organel"], answer: 2 },
-                    { q: "Adenin bazının karşısına hangisi gelir?", options: ["Guanin", "Timin", "Sitozin", "Urasil"], answer: 1 }
-                ]
-            },
-            {
-                id: 'q3',
-                grade: '7',
-                subject: 'Matematik',
-                title: '7. Sınıf - Tam Sayılarla İşlemler',
-                questions: [
-                    { q: "(-5) * (-4) işleminin sonucu kaçtır?", options: ["-20", "20", "-9", "9"], answer: 1 }
-                ]
-            },
-            {
-                id: 'q4',
-                grade: '6',
-                subject: 'Sosyal Bilgiler',
-                title: '6. Sınıf - İpek Yolu ve Uygarlıklar',
-                questions: [
-                    { q: "İlk Türk devletlerinde hükümdara yönetme yetkisinin tanrı tarafından verilmesine ne denir?", options: ["Kut Anlayışı", "Töre", "Kurultay", "Balbal"], answer: 0 }
-                ]
-            },
-            {
-                id: 'q5',
-                grade: '5',
-                subject: 'Türkçe',
-                title: '5. Sınıf - Sözcükte Anlam',
-                questions: [
-                    { q: "Hangisi mecaz anlamlıdır?", options: ["Koyu sohbet ettik.", "Çay çok sıcak.", "Kapı kilitli."], answer: 0 }
-                ]
-            }
-        ];
+        const BANNED_WORDS = ["salak", "aptal", "gerizekalı", "malla", "küfür", "piç", "manyak"];
 
-        let activeGradeFilter = '8';
-
-        /* ================= INIT APP ================= */
-        window.addEventListener('DOMContentLoaded', () => {
-            loadUserData();
-            updateRoleUI();
-            renderCommunityFeed();
-            renderHomeworksAndQuizzes();
-            renderTeacherMatrix();
-            populateStudentChecklist();
-        });
-
-        /* ================= USER IDENTITY & ROLE MANAGEMENT ================= */
-        function loadUserData() {
-            const saved = localStorage.getItem(STORAGE_KEY_USER);
-            if (saved) {
-                try {
-                    currentUser = JSON.parse(saved);
-                } catch(e) {}
-            }
-        }
-
-        function saveUserData() {
-            localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(currentUser));
-            updateRoleUI();
-            populateStudentChecklist();
-        }
-
-        function isTeacher() {
-            return currentUser.name.startsWith("ZigguratÖğretmeni:");
-        }
-
-        function updateRoleUI() {
-            const nameEl = document.getElementById('header-username');
-            const initialEl = document.getElementById('avatar-initial');
-            const xpEl = document.getElementById('header-xp');
-            const welcomeUserEl = document.getElementById('welcome-user-name');
-            const commUserEl = document.getElementById('comm-user-name');
-            const commAvatarEl = document.getElementById('comm-user-avatar');
-            const roleInd = document.getElementById('role-indicator');
-            const lockBadge = document.getElementById('teacher-lock-badge');
-
-            if (nameEl) nameEl.textContent = currentUser.name;
-            if (initialEl) initialEl.textContent = currentUser.name.charAt(0).toUpperCase();
-            if (xpEl) xpEl.textContent = `${currentUser.xp || 0} XP`;
-            if (welcomeUserEl) welcomeUserEl.textContent = currentUser.name;
-            if (commUserEl) commUserEl.textContent = currentUser.name;
-            if (commAvatarEl) commAvatarEl.textContent = currentUser.name.charAt(0).toUpperCase();
-
-            // Teacher Lock status
-            if (isTeacher()) {
-                roleInd.className = "flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40";
-                roleInd.innerHTML = '<i class="fa-solid fa-graduation-cap"></i> Öğretmen';
-                if (lockBadge) lockBadge.className = "hidden";
-                
-                document.getElementById('teacher-locked-screen').classList.add('hidden');
-                document.getElementById('teacher-unlocked-screen').classList.remove('hidden');
-            } else {
-                roleInd.className = "flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-pink-500/20 text-pink-300 border border-pink-500/40";
-                roleInd.innerHTML = '<i class="fa-solid fa-user-graduate"></i> Öğrenci';
-                if (lockBadge) lockBadge.className = "ml-1 text-xs bg-amber-500/30 text-amber-300 border border-amber-500/40 px-1.5 py-0.2 rounded-full";
-
-                document.getElementById('teacher-locked-screen').classList.remove('hidden');
-                document.getElementById('teacher-unlocked-screen').classList.add('hidden');
-            }
+        // Init profile from storage or default
+        const savedName = localStorage.getItem("ziggurat_user_name");
+        if (savedName) {
+            applyUserIdentity(savedName);
+        } else {
+            applyUserIdentity("Kullanıcı");
         }
 
         function openProfileModal() {
-            document.getElementById('modal-username-input').value = currentUser.name;
-            document.getElementById('modal-avatar-preview').textContent = currentUser.name.charAt(0).toUpperCase();
-            document.getElementById('modal-xp-val').textContent = `${currentUser.xp || 0} XP`;
-            document.getElementById('modal-role-val').textContent = isTeacher() ? 'Öğretmen' : 'Öğrenci';
-            document.getElementById('profile-modal').classList.remove('hidden');
+            document.getElementById("profileNameInput").value = currentUser.name;
+            document.getElementById("profileModal").classList.remove("hidden");
         }
 
         function closeProfileModal() {
-            document.getElementById('profile-modal').classList.add('hidden');
+            document.getElementById("profileModal").classList.add("hidden");
         }
 
-        function saveProfileName(e) {
+        function saveProfile(e) {
             e.preventDefault();
-            const newName = document.getElementById('modal-username-input').value.trim();
+            const newName = document.getElementById("profileNameInput").value.trim();
             if (newName) {
-                currentUser.name = newName;
-                saveUserData();
+                applyUserIdentity(newName);
                 closeProfileModal();
             }
         }
 
-        /* ================= NAVIGATION TABS ================= */
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+        function applyUserIdentity(name) {
+            currentUser.name = name;
+            localStorage.setItem("ziggurat_user_name", name);
 
-            // Header button styling updates
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.className = "nav-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 text-gray-300 hover:text-white hover:bg-white/10";
+            document.getElementById("userNameDisplay").innerText = name;
+            document.getElementById("communityPostAuthor").innerText = name;
+            
+            document.querySelectorAll(".active-user-name").forEach(el => {
+                el.innerText = name;
             });
-            const activeBtn = document.getElementById(`nav-${tabId}`);
-            if (activeBtn) {
-                activeBtn.className = "nav-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 bg-pink-600 text-white shadow-lg";
+
+            // HIDDEN Teacher Unlock Trigger: Must start with 'ZigguratÖğretmeni:'
+            if (name.startsWith("ZigguratÖğretmeni:")) {
+                currentUser.isTeacher = true;
+                document.getElementById("teacherTabLockIcon").className = "fa-solid fa-chalkboard-user text-emerald-400";
+                document.getElementById("teacherLockedBanner").classList.add("hidden");
+                document.getElementById("teacherPanel").classList.remove("hidden");
+            } else {
+                currentUser.isTeacher = false;
+                document.getElementById("teacherTabLockIcon").className = "fa-solid fa-lock text-rose-400";
+                document.getElementById("teacherLockedBanner").classList.remove("hidden");
+                document.getElementById("teacherPanel").classList.add("hidden");
             }
-
-            // Mobile nav icons
-            document.querySelectorAll('.mob-nav-btn').forEach(btn => btn.className = "mob-nav-btn flex flex-col items-center gap-1 text-gray-400");
-            const mobActive = document.getElementById(`mob-nav-${tabId}`);
-            if (mobActive) mobActive.className = "mob-nav-btn flex flex-col items-center gap-1 text-pink-400 font-bold";
         }
 
-        /* ================= TAB 1: AI SEARCH & SUMMARIZER ================= */
-        function fillQuery(q) {
-            document.getElementById('ai-query-input').value = q;
-        }
+        /* ==========================================================================
+           2. FIREBASE REALTIME DATABASE & CLOUD SYNC ENGINE
+           ========================================================================== */
+        const firebaseConfig = {
+            databaseURL: "https://ziggurat-ai-default-rtdb.firebaseio.com"
+        };
 
-        function handleAiSearch(e) {
-            e.preventDefault();
-            const query = document.getElementById('ai-query-input').value.trim();
-            if (!query) return;
+        let db = null;
+        let appData = {
+            communityMessages: [],
+            homeworks: [],
+            points: {}
+        };
 
-            const scanBox = document.getElementById('ai-scanning-box');
-            const responseContainer = document.getElementById('ai-response-container');
+        try {
+            if (typeof firebase !== 'undefined') {
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.database();
 
-            scanBox.classList.remove('hidden');
+                // Live Community Listener
+                db.ref("community").on("value", (snapshot) => {
+                    const val = snapshot.val();
+                    if (val) {
+                        appData.communityMessages = Object.values(val);
+                    } else {
+                        appData.communityMessages = getInitialCommunityMessages();
+                    }
+                    renderCommunityFeed();
+                    updateTeacherKnownStudents();
+                });
 
-            const stepGoogle = document.getElementById('scan-step-google');
-            const stepMeb = document.getElementById('scan-step-meb');
-            const stepEba = document.getElementById('scan-step-eba');
+                // Live Homeworks Listener
+                db.ref("homeworks").on("value", (snapshot) => {
+                    const val = snapshot.val();
+                    if (val) {
+                        appData.homeworks = Object.values(val);
+                    } else {
+                        appData.homeworks = getInitialHomeworks();
+                    }
+                    renderStudentHomeworks();
+                    renderTeacherHomeworkTable();
+                });
 
-            // Reset step icons
-            stepGoogle.className = "flex items-center gap-2 text-pink-300 font-medium";
-            stepMeb.className = "flex items-center gap-2 text-gray-500";
-            stepEba.className = "flex items-center gap-2 text-gray-500";
-
-            // Sequential scanning simulation
-            setTimeout(() => {
-                stepMeb.className = "flex items-center gap-2 text-pink-300 font-medium";
-                stepMeb.querySelector('i').className = "fa-solid fa-circle-notch fa-spin text-pink-400 w-4";
-            }, 600);
-
-            setTimeout(() => {
-                stepEba.className = "flex items-center gap-2 text-pink-300 font-medium";
-                stepEba.querySelector('i').className = "fa-solid fa-circle-notch fa-spin text-pink-400 w-4";
-            }, 1200);
-
-            setTimeout(() => {
-                scanBox.classList.add('hidden');
-
-                // Conversational detection
-                const isGreeting = /merhaba|selam|nasılsın|günaydın|naber/i.test(query);
-
-                let responseHtml = '';
-
-                if (isGreeting) {
-                    responseHtml = `
-                        <div class="glass-card p-6 rounded-3xl border border-pink-500/30 space-y-3">
-                            <div class="flex items-center justify-between border-b border-white/10 pb-3">
-                                <div class="flex items-center gap-2.5">
-                                    <div class="w-8 h-8 rounded-xl bg-pink-500/20 flex items-center justify-center text-pink-400">
-                                        <i class="fa-solid fa-robot"></i>
-                                    </div>
-                                    <span class="font-bold text-white text-sm">Ziggurat AI Yanıtı</span>
-                                </div>
-                                <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2.5 py-0.5 rounded-full border border-emerald-500/30">
-                                    [Sohbet Modu]
-                                </span>
-                            </div>
-                            <p class="text-sm text-gray-200 leading-relaxed">
-                                Harikayım ${currentUser.name}! 🚀 Seninle öğrenme yolculuğuna devam etmek çok güzel. MEB müfredatı, LGS hazırlık testleri veya aklına takılan herhangi bir ders konusu için internet kaynaklarını saniyeler içinde tarayıp özetleyebilirim. Bugün ne öğrenmek istersin?
-                            </p>
-                        </div>
-                    `;
-                } else {
-                    responseHtml = `
-                        <div class="glass-card p-6 rounded-3xl border border-pink-500/30 space-y-4">
-                            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
-                                <div class="flex items-center gap-2.5">
-                                    <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-pink-500 to-purple-600 flex items-center justify-center text-white text-sm font-bold shadow">
-                                        <i class="fa-solid fa-wand-magic-sparkles"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-bold text-white text-sm">Arama Özeti: "${query}"</h4>
-                                        <span class="text-[10px] text-gray-400">Google, MEB & EBA taranarak derlendi</span>
-                                    </div>
-                                </div>
-                                <div class="flex gap-1.5">
-                                    <span class="text-[10px] bg-blue-500/20 text-blue-300 border border-blue-500/30 px-2 py-0.5 rounded-md">[Kaynak: Google]</span>
-                                    <span class="text-[10px] bg-red-500/20 text-red-300 border border-red-500/30 px-2 py-0.5 rounded-md">[Kaynak: MEB]</span>
-                                    <span class="text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-md">[Kaynak: EBA]</span>
-                                </div>
-                            </div>
-
-                            <div class="space-y-3 text-sm text-gray-200 leading-relaxed">
-                                <p class="font-semibold text-pink-300">📌 Konunun Ana Başlıkları ve Özet Sonuçlar:</p>
-                                <ul class="list-disc list-inside space-y-2 text-gray-300 pl-1">
-                                    <li><strong class="text-white">MEB Müfredat Uyumu:</strong> "${query}" başlığı Milli Eğitim Bakanlığı güncel ders içeriklerinde temel kazanımlar arasında yer almaktadır. <span class="text-xs text-red-400 font-mono">[Kaynak: MEB]</span></li>
-                                    <li><strong class="text-white">EBA Ders Materyalleri:</strong> Konuyla ilgili EBA platformunda 12 anlatım videosu, kavrama testleri ve dijital çalışma yaprakları bulunmaktadır. <span class="text-xs text-amber-400 font-mono">[Kaynak: EBA]</span></li>
-                                    <li><strong class="text-white">Genel Kavram Özetleri:</strong> Konuyu çözerken kural tanımlarından başlamalı, ardından pratik soru çözümlerine geçilmelidir. Önemli püf noktalar formülleri ezberlemek yerine mantığını anlamaktır. <span class="text-xs text-blue-400 font-mono">[Kaynak: Google]</span></li>
-                                </ul>
-
-                                <div class="bg-black/30 p-4 rounded-2xl border border-white/10 mt-3 space-y-1">
-                                    <div class="text-xs font-bold text-amber-300 flex items-center gap-1.5">
-                                        <i class="fa-solid fa-lightbulb"></i> Ziggurat AI Tavsiyesi:
-                                    </div>
-                                    <p class="text-xs text-gray-300">
-                                        Bu konuyu pekiştirmek için <button onclick="switchTab('quizzes')" class="text-pink-400 underline font-semibold">Testler & Ödevlerim</button> sekmesine geçerek sınıf düzeyindeki testleri çözebilirsin!
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }
-
-                responseContainer.innerHTML = responseHtml + responseContainer.innerHTML;
-            }, 1800);
-        }
-
-        /* ================= TAB 2: COMMUNITY FEED (SON 1 HAFTA & SANSÜR) ================= */
-        function censorText(text) {
-            let censored = text;
-            BAD_WORDS.forEach(word => {
-                const regex = new RegExp(word, 'gi');
-                censored = censored.replace(regex, '***');
-            });
-            return censored;
-        }
-
-        function getStoredPosts() {
-            const saved = localStorage.getItem(STORAGE_KEY_POSTS);
-            if (saved) {
-                try { return JSON.parse(saved); } catch(e) {}
+                // Live Points Listener
+                db.ref("points").on("value", (snapshot) => {
+                    const val = snapshot.val();
+                    if (val) appData.points = val;
+                    currentUser.points = appData.points[currentUser.name] || 0;
+                    document.getElementById("userPointsDisplay").innerText = currentUser.points + " Puan";
+                });
             }
-            // Initial seed posts within 7 days
-            const now = Date.now();
+        } catch (err) {
+            console.warn("Cloud fallback active:", err);
+            document.getElementById("cloudStatusText").innerText = "Yerel Veri Modu";
+        }
+
+        // Local storage backup fallback
+        function syncCloud() {
+            localStorage.setItem("zig_msgs_backup", JSON.stringify(appData.communityMessages));
+            localStorage.setItem("zig_hws_backup", JSON.stringify(appData.homeworks));
+
+            if (db) {
+                db.ref("community").set(appData.communityMessages);
+                db.ref("homeworks").set(appData.homeworks);
+                db.ref("points/" + currentUser.name.replace(/[.#$/\[\]]/g, "_")).set(currentUser.points);
+            }
+        }
+
+        function getInitialCommunityMessages() {
             return [
                 {
-                    id: 'post-1',
-                    author: 'ZigguratÖğretmeni: Zeynep Hoca',
-                    role: 'Öğretmen',
-                    content: '8. Sınıf LGS hazırlık öğrencileri! Matematik Üslü Sayılar özel ödevlerinizi sistemden kontrol etmeyi unutmayın.',
-                    timestamp: now - (2 * 24 * 60 * 60 * 1000), // 2 days ago
-                    likes: 12,
-                    replies: []
+                    id: "msg-1",
+                    author: "ZigguratÖğretmeni: Selin Hoca",
+                    text: "Merhaba arkadaşlar! LGS Fen Bilimleri ödeviniz sisteme eklenmiştir. Sorusu olan topluluktan sorabilir.",
+                    timestamp: Date.now() - 3600000 * 4
                 },
                 {
-                    id: 'post-2',
-                    author: 'Caner Yılmaz',
-                    role: 'Öğrenci',
-                    content: 'Fotosentez konusunda takılan var mı? Ziggurat AI harika bir özet çıkardı, denemenizi öneririm!',
-                    timestamp: now - (4 * 24 * 60 * 60 * 1000), // 4 days ago
-                    likes: 5,
-                    replies: []
+                    id: "msg-2",
+                    author: "Ahmet (8. Sınıf)",
+                    text: "Aİ'ye sor kısmında 'Güneş Tutulması' arattım, harika bir MEB özet analizi çıkardı!",
+                    timestamp: Date.now() - 3600000 * 1
                 }
             ];
         }
 
-        function savePosts(posts) {
-            localStorage.setItem(STORAGE_KEY_POSTS, JSON.stringify(posts));
-            renderCommunityFeed();
+        function getInitialHomeworks() {
+            return [
+                {
+                    id: "hw-1",
+                    level: "LGS'ye Hazırlık",
+                    subject: "Fen Bilimleri - Güneş ve Ay Tutulması",
+                    description: "EBA üzerindeki konu anlatım simülasyonunu izleyip 15 soru çözün.",
+                    assignedTo: "HERKES",
+                    assignedBy: "ZigguratÖğretmeni: Selin Hoca",
+                    date: new Date().toLocaleDateString("tr-TR"),
+                    completedBy: {},
+                    completedTime: {}
+                }
+            ];
         }
 
-        function renderCommunityFeed() {
-            const feedContainer = document.getElementById('community-feed');
-            if (!feedContainer) return;
+        /* ==========================================================================
+           3. NAVIGATION
+           ========================================================================== */
+        function switchTab(tabName) {
+            document.querySelectorAll(".tab-section").forEach(sec => sec.classList.add("hidden"));
+            document.querySelectorAll(".tab-btn").forEach(btn => {
+                btn.classList.remove("border-purple-500/50", "bg-purple-900/40", "text-purple-200");
+                btn.classList.add("text-gray-400");
+            });
 
-            const allPosts = getStoredPosts();
-            const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000;
-            const now = Date.now();
+            document.getElementById("section-" + tabName).classList.remove("hidden");
+            const activeBtn = document.getElementById("tab-btn-" + tabName);
+            activeBtn.classList.add("border-purple-500/50", "bg-purple-900/40", "text-purple-200");
+            activeBtn.classList.remove("text-gray-400");
 
-            // Filter ONLY messages posted within 1 week (7 days)
-            const recentPosts = allPosts.filter(p => (now - p.timestamp) <= ONE_WEEK_MS);
+            if (tabName === 'homework') renderStudentHomeworks();
+            if (tabName === 'teacher') renderTeacherHomeworkTable();
+            if (tabName === 'tests') renderTests();
+        }
 
-            if (recentPosts.length === 0) {
-                feedContainer.innerHTML = `
-                    <div class="glass-card p-8 rounded-3xl text-center text-gray-400 text-sm">
-                        <i class="fa-solid fa-comments text-3xl text-gray-500 mb-2"></i>
-                        <p>Son 1 hafta içinde gönderilen mesaj bulunmuyor. İlk paylaşımı sen yap!</p>
-                    </div>
-                `;
+        /* ==========================================================================
+           4. AI DEEP SEARCH & SUMMARIZATION SIMULATOR
+           ========================================================================== */
+        async function handleAiSubmit(e) {
+            e.preventDefault();
+            const inputEl = document.getElementById("aiInput");
+            const query = inputEl.value.trim();
+            if (!query) return;
+
+            appendAiChatMessage(currentUser.name, query, true);
+            inputEl.value = "";
+
+            if (isCasualGreeting(query)) {
+                setTimeout(() => {
+                    appendAiChatMessage("Ziggurat Aİ", `Harikayım! 😊 ${currentUser.name}, seninle ders çalışmak harika. Bugün hangi ders veya konu üzerinde çalışmak istersin?`, false);
+                }, 500);
                 return;
             }
 
-            feedContainer.innerHTML = recentPosts.map(post => {
-                const dateStr = new Date(post.timestamp).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
-                const isTeacherPost = post.author.startsWith("ZigguratÖğretmeni:");
+            // Show real-time web scan progress
+            const progressBox = document.getElementById("aiSearchProgress");
+            const progressText = document.getElementById("aiProgressText");
+            const progressBar = document.getElementById("aiProgressBar");
+            progressBox.classList.remove("hidden");
 
-                return `
-                    <div class="glass-card p-5 rounded-3xl border border-white/10 space-y-3">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-2xl ${isTeacherPost ? 'bg-amber-500/20 border border-amber-500/40 text-amber-300' : 'bg-purple-600/30 text-white'} flex items-center justify-center font-bold text-sm">
-                                    ${post.author.charAt(0).toUpperCase()}
-                                </div>
-                                <div>
-                                    <div class="text-sm font-bold text-white flex items-center gap-1.5">
-                                        ${post.author}
-                                        ${isTeacherPost ? '<span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.2 rounded-full border border-amber-500/30"><i class="fa-solid fa-graduation-cap"></i> Öğretmen</span>' : ''}
-                                    </div>
-                                    <div class="text-[10px] text-gray-400">${dateStr}</div>
-                                </div>
-                            </div>
-                            <span class="text-[10px] bg-pink-500/10 text-pink-300 px-2 py-1 rounded-lg">1 Hafta Sınırı</span>
-                        </div>
+            progressText.innerText = "🌐 İnternet ve Google siteleri taranıyor...";
+            progressBar.style.width = "35%";
+            await sleep(700);
 
-                        <p class="text-sm text-gray-200 leading-relaxed">${censorText(post.content)}</p>
+            progressText.innerText = "🔍 MEB ve EBA müfredat kaynakları taranıyor...";
+            progressBar.style.width = "75%";
+            await sleep(800);
 
-                        <div class="flex items-center gap-4 pt-2 border-t border-white/10 text-xs text-gray-400">
-                            <button onclick="likePost('${post.id}')" class="hover:text-pink-400 flex items-center gap-1.5 transition">
-                                <i class="fa-solid fa-heart text-pink-500"></i> ${post.likes || 0} Beğeni
-                            </button>
-                        </div>
-                    </div>
+            progressText.innerText = "📝 Bilgiler analiz ediliyor ve net özet çıkarılıyor...";
+            progressBar.style.width = "95%";
+            await sleep(600);
+
+            progressBox.classList.add("hidden");
+
+            const aiRes = generateSearchSummary(query);
+            appendAiChatMessage("Ziggurat Aİ", aiRes.text, false, aiRes.sources);
+        }
+
+        function isCasualGreeting(text) {
+            const lower = text.toLowerCase();
+            return lower.includes("nasılsın") || lower === "merhaba" || lower === "selam" || lower.includes("günaydın");
+        }
+
+        function generateSearchSummary(query) {
+            const q = query.toLowerCase();
+            let summaryText = "";
+            let sources = [];
+
+            if (q.includes("güneş") || q.includes("tutulma") || q.includes("fen")) {
+                summaryText = `
+                    <p class="font-bold text-cyan-300 mb-2">📌 MEB & EBA Kaynak Taraması Özet Kartı: Tutulmalar</p>
+                    <ul class="list-disc pl-5 space-y-1 text-gray-200 text-xs">
+                        <li><strong>Güneş Tutulması:</strong> Ay'ın Dünya ile Güneş arasına girmesiyle gerçekleşir. Ay, Yeni Ay evresindedir. Gündüz yaşanan dar bir bölgede gözlemlenir.</li>
+                        <li><strong>Ay Tutulması:</strong> Dünya'nın Güneş ile Ay arasına girmesiyle oluşur. Ay, Dolunay evresindedir. Gece olan geniş alanlarda izlenebilir.</li>
+                        <li><strong>LGS İpucu:</strong> Ay'ın yörünge eğikliği nedeniyle her Yeni Ay evresinde Güneş tutulması gerçekleşmez.</li>
+                    </ul>
                 `;
-            }).join('');
-        }
-
-        function postCommunityMessage() {
-            const input = document.getElementById('community-input');
-            const text = input.value.trim();
-            if (!text) return;
-
-            const censoredContent = censorText(text);
-            const posts = getStoredPosts();
-
-            posts.unshift({
-                id: 'post-' + Date.now(),
-                author: currentUser.name,
-                role: isTeacher() ? 'Öğretmen' : 'Öğrenci',
-                content: censoredContent,
-                timestamp: Date.now(),
-                likes: 0,
-                replies: []
-            });
-
-            input.value = '';
-            savePosts(posts);
-        }
-
-        function likePost(id) {
-            const posts = getStoredPosts();
-            const post = posts.find(p => p.id === id);
-            if (post) {
-                post.likes = (post.likes || 0) + 1;
-                savePosts(posts);
-            }
-        }
-
-        /* ================= TAB 3: QUIZZES & HOMEWORK ================= */
-        function filterGrade(grade) {
-            activeGradeFilter = grade;
-            document.querySelectorAll('.grade-filter-btn').forEach(btn => btn.className = "grade-filter-btn text-xs px-3 py-1.5 rounded-xl font-bold transition text-gray-400 hover:text-white");
-            const activeBtn = document.getElementById(`grade-btn-${grade}`);
-            if (activeBtn) activeBtn.className = "grade-filter-btn text-xs px-3 py-1.5 rounded-xl font-bold transition bg-pink-600 text-white";
-            renderHomeworksAndQuizzes();
-        }
-
-        function getStoredHomeworks() {
-            const saved = localStorage.getItem(STORAGE_KEY_HOMEWORKS);
-            if (saved) {
-                try { return JSON.parse(saved); } catch(e) {}
-            }
-            return [
-                {
-                    id: 'hw-1',
-                    grade: '8',
-                    title: '8. Sınıf LGS Matematik - Üslü İfadeler 10 Soru',
-                    teacher: 'ZigguratÖğretmeni: Zeynep Hoca',
-                    desc: 'LGS hazırlık sorularını çözünüz.',
-                    targetedStudents: ['Kullanıcı'] // Target user
-                }
-            ];
-        }
-
-        function renderHomeworksAndQuizzes() {
-            // Render Assigned Homeworks for Current User
-            const hwListContainer = document.getElementById('assigned-homeworks-list');
-            const hwCountBadge = document.getElementById('homework-count-badge');
-            const allHomeworks = getStoredHomeworks();
-
-            // Filter homeworks targeted specifically to this student or for their grade
-            const myHomeworks = allHomeworks.filter(hw => {
-                const isTargeted = hw.targetedStudents && (hw.targetedStudents.includes(currentUser.name) || hw.targetedStudents.includes('Tüm Öğrenciler'));
-                return isTargeted && hw.grade === activeGradeFilter;
-            });
-
-            if (hwCountBadge) hwCountBadge.textContent = `${myHomeworks.length} Ödev`;
-
-            if (myHomeworks.length === 0) {
-                hwListContainer.innerHTML = `
-                    <div class="col-span-full bg-white/5 p-6 rounded-2xl text-center text-xs text-gray-400 border border-white/10">
-                        <i class="fa-solid fa-circle-check text-emerald-400 text-2xl mb-2"></i>
-                        <p>${activeGradeFilter}. Sınıf düzeyi için atanmış ödeviniz bulunmamaktadır.</p>
-                    </div>
-                `;
+                sources = [
+                    { title: "EBA Portal - Fen Bilimleri Tutulmalar Ünitesi", url: "https://www.eba.gov.tr", icon: "fa-graduation-cap" },
+                    { title: "MEB ÖDSGM - Müfredat Kazanım Notları", url: "https://meb.gov.tr", icon: "fa-book" },
+                    { title: "Google Dizin - Akademik Astronomi Arama İndeksi", url: "https://google.com", icon: "fa-brands fa-google" }
+                ];
             } else {
-                const matrix = getStoredMatrix();
-                hwListContainer.innerHTML = myHomeworks.map(hw => {
-                    const completed = matrix.some(m => m.studentName === currentUser.name && m.hwTitle === hw.title && m.status === 'Tamamlandı');
-
-                    return `
-                        <div class="glass-card p-4 rounded-2xl border border-white/10 space-y-3">
-                            <div class="flex items-center justify-between">
-                                <span class="text-[10px] bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded-md font-bold">
-                                    Öğretmen Ödevi
-                                </span>
-                                <span class="text-xs text-gray-400">${hw.teacher}</span>
-                            </div>
-                            <h4 class="text-sm font-bold text-white">${hw.title}</h4>
-                            <p class="text-xs text-gray-300">${hw.desc || 'Talimat verilmedi.'}</p>
-
-                            <div class="pt-2 border-t border-white/10 flex items-center justify-between">
-                                ${completed ? `
-                                    <span class="text-xs text-emerald-400 font-bold flex items-center gap-1">
-                                        <i class="fa-solid fa-circle-check"></i> Tamamlandı
-                                    </span>
-                                ` : `
-                                    <button onclick="completeHomework('${hw.id}', '${hw.title}', '${hw.grade}')" class="gradient-btn px-4 py-1.5 rounded-xl text-white text-xs font-bold shadow">
-                                        Çöz / Tamamla
-                                    </button>
-                                `}
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            }
-
-            // Render Quizzes
-            const quizContainer = document.getElementById('quiz-cards-container');
-            const filteredQuizzes = QUIZZES.filter(q => q.grade === activeGradeFilter);
-
-            if (filteredQuizzes.length === 0) {
-                quizContainer.innerHTML = `
-                    <div class="col-span-full bg-white/5 p-6 rounded-2xl text-center text-xs text-gray-400">
-                        Bu sınıf düzeyinde kayıtlı test bulunmuyor.
+                summaryText = `
+                    <p class="font-bold text-cyan-300 mb-2">🔍 "${escapeHtml(query)}" Hakkında Taranan Özet Bilgi</p>
+                    <p class="text-xs text-gray-200 mb-2">İnternetteki ve eğitim portallarındaki güncel bilgiler taranarak özetlenmiştir:</p>
+                    <div class="p-3 bg-purple-950/60 rounded-xl border border-purple-500/20 text-xs text-purple-200 space-y-1">
+                        <p>1. Aratılan konu MEB ve EBA ders içerik standartlarına göre incelenmiştir.</p>
+                        <p>2. Konu hakkındaki temel tanımlar ve öne çıkan ders içi püf noktaları yukarıda özetlenmiştir.</p>
                     </div>
                 `;
-            } else {
-                quizContainer.innerHTML = filteredQuizzes.map(q => `
-                    <div class="glass-card p-5 rounded-2xl border border-white/10 flex flex-col justify-between space-y-4">
-                        <div>
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="text-[10px] bg-pink-500/20 text-pink-300 border border-pink-500/30 px-2 py-0.5 rounded-md font-bold">
-                                    ${q.subject}
-                                </span>
-                                <span class="text-xs text-amber-300 font-bold">+${q.questions.length * 20} XP</span>
-                            </div>
-                            <h4 class="text-sm font-bold text-white">${q.title}</h4>
-                            <p class="text-xs text-gray-400 mt-1">${q.questions.length} Soru Seçeneği</p>
-                        </div>
-                        <button onclick="startQuiz('${q.id}')" class="w-full bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs py-2 rounded-xl transition">
-                            Testi Başlat
-                        </button>
-                    </div>
-                `).join('');
+                sources = [
+                    { title: "Google Arama Dizini Özet Kartı", url: "https://google.com", icon: "fa-brands fa-google" },
+                    { title: "MEB Resmi Portal Bilgi Bankası", url: "https://meb.gov.tr", icon: "fa-landmark" }
+                ];
             }
+
+            return { text: summaryText, sources: sources };
         }
 
-        /* ================= QUIZ & HOMEWORK RESOLUTION ================= */
-        function startQuiz(quizId) {
-            const quiz = QUIZZES.find(q => q.id === quizId);
-            if (!quiz) return;
+        function appendAiChatMessage(sender, content, isUser, sources = []) {
+            const chatBox = document.getElementById("aiChatBox");
+            const msgDiv = document.createElement("div");
+            msgDiv.className = `flex items-start space-x-3 ${isUser ? 'flex-row-reverse space-x-reverse' : ''}`;
 
-            let currentQ = 0;
-            let score = 0;
+            const avatarBg = isUser ? 'bg-pink-600' : 'bg-purple-600/60';
+            const cardBg = isUser ? 'bg-purple-900/50 border-purple-400/40' : 'glass-card';
 
-            const modal = document.getElementById('quiz-modal');
-            const card = document.getElementById('quiz-modal-card');
-
-            function renderQuestion() {
-                const qData = quiz.questions[currentQ];
-                card.innerHTML = `
-                    <div class="flex items-center justify-between border-b border-white/10 pb-3">
-                        <span class="text-xs font-bold text-pink-400">${quiz.title} (${currentQ + 1}/${quiz.questions.length})</span>
-                        <button onclick="closeQuizModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-                    </div>
-
-                    <div class="space-y-4">
-                        <h4 class="text-base font-bold text-white">${qData.q}</h4>
-                        <div class="space-y-2">
-                            ${qData.options.map((opt, idx) => `
-                                <button onclick="answerQuestion(${idx})" class="w-full text-left bg-white/5 hover:bg-white/15 border border-white/10 p-3 rounded-xl text-xs text-white transition">
-                                    ${String.fromCharCode(65 + idx)}) ${opt}
-                                </button>
+            let sourcesHtml = "";
+            if (sources && sources.length > 0) {
+                sourcesHtml = `
+                    <div class="mt-3 pt-3 border-t border-purple-500/20 space-y-2">
+                        <p class="text-[11px] font-semibold text-purple-300 flex items-center space-x-1">
+                            <i class="fa-solid fa-link text-cyan-400"></i>
+                            <span>İncelenen & Taranan İnternet Kaynakları:</span>
+                        </p>
+                        <div class="grid grid-cols-1 gap-1.5">
+                            ${sources.map(src => `
+                                <a href="${src.url}" target="_blank" class="flex items-center space-x-2 p-2 rounded-lg bg-purple-950/70 border border-purple-500/20 hover:border-purple-400/50 text-xs text-purple-200 transition-all">
+                                    <i class="fa-solid ${src.icon} text-cyan-400 text-xs"></i>
+                                    <span class="truncate flex-grow">${src.title}</span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-gray-400"></i>
+                                </a>
                             `).join('')}
                         </div>
                     </div>
                 `;
             }
 
-            window.answerQuestion = function(optIdx) {
-                if (optIdx === quiz.questions[currentQ].answer) {
-                    score += 20;
-                }
-                currentQ++;
-                if (currentQ < quiz.questions.length) {
-                    renderQuestion();
-                } else {
-                    // Finish quiz
-                    currentUser.xp = (currentUser.xp || 0) + score;
-                    saveUserData();
+            msgDiv.innerHTML = `
+                <div class="w-8 h-8 rounded-lg ${avatarBg} flex items-center justify-center text-white text-xs flex-shrink-0 mt-1">
+                    ${isUser ? '<i class="fa-solid fa-user"></i>' : 'Aİ'}
+                </div>
+                <div class="${cardBg} p-4 rounded-2xl ${isUser ? 'rounded-tr-none' : 'rounded-tl-none'} max-w-[85%] text-sm leading-relaxed">
+                    <p class="font-semibold text-xs text-purple-300 mb-1">${escapeHtml(sender)}:</p>
+                    <div class="space-y-2">${content}</div>
+                    ${sourcesHtml}
+                </div>
+            `;
 
-                    card.innerHTML = `
-                        <div class="text-center space-y-4 py-4">
-                            <div class="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 text-3xl flex items-center justify-center mx-auto">
-                                <i class="fa-solid fa-trophy"></i>
-                            </div>
-                            <h3 class="text-xl font-bold text-white">Tebrikler! Test Tamamlandı</h3>
-                            <p class="text-sm text-gray-300">Kazanılan Puan: <span class="text-amber-300 font-bold">+${score} XP</span></p>
-                            <button onclick="closeQuizModal()" class="gradient-btn px-6 py-2.5 rounded-xl text-white font-bold text-xs">Kapat</button>
-                        </div>
-                    `;
-                }
+            chatBox.appendChild(msgDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        /* ==========================================================================
+           5. COMMUNITY & PROFANITY CENSORING
+           ========================================================================== */
+        function sendCommunityMessage(e) {
+            e.preventDefault();
+            const input = document.getElementById("communityInput");
+            let text = input.value.trim();
+            if (!text) return;
+
+            text = filterProfanity(text);
+
+            const newMsg = {
+                id: "msg-" + Date.now(),
+                author: currentUser.name,
+                text: text,
+                timestamp: Date.now()
             };
 
-            renderQuestion();
-            modal.classList.remove('hidden');
+            appData.communityMessages.unshift(newMsg);
+            syncCloud();
+            input.value = "";
         }
 
-        function closeQuizModal() {
-            document.getElementById('quiz-modal').classList.add('hidden');
-        }
-
-        function completeHomework(hwId, hwTitle, grade) {
-            const matrix = getStoredMatrix();
-            const dateNow = new Date().toLocaleString('tr-TR');
-
-            matrix.push({
-                studentName: currentUser.name,
-                hwTitle: hwTitle,
-                grade: grade,
-                status: 'Tamamlandı',
-                completionDate: dateNow,
-                score: '100 / 100'
+        function filterProfanity(text) {
+            let filtered = text;
+            BANNED_WORDS.forEach(word => {
+                const reg = new RegExp(word, "gi");
+                filtered = filtered.replace(reg, "***");
             });
-
-            localStorage.setItem(STORAGE_KEY_MATRIX, JSON.stringify(matrix));
-
-            currentUser.xp = (currentUser.xp || 0) + 50;
-            saveUserData();
-
-            renderHomeworksAndQuizzes();
-            renderTeacherMatrix();
-
-            alert(`Tebrikler ${currentUser.name}! Ödeviniz başarıyla tamamlandı ve Öğretmen Tablosuna işlendi (+50 XP kazanıldı).`);
+            return filtered;
         }
 
-        /* ================= TAB 4: TEACHER ZONE MATRIX & ASSIGNMENT ================= */
-        function getStoredMatrix() {
-            const saved = localStorage.getItem(STORAGE_KEY_MATRIX);
-            if (saved) {
-                try { return JSON.parse(saved); } catch(e) {}
-            }
-            return [
-                {
-                    studentName: 'Caner Yılmaz',
-                    hwTitle: '8. Sınıf LGS Matematik - Üslü İfadeler',
-                    grade: '8',
-                    status: 'Tamamlandı',
-                    completionDate: '23.10.2026 14:30',
-                    score: '90 / 100'
-                }
-            ];
-        }
+        function renderCommunityFeed() {
+            const feed = document.getElementById("communityFeed");
+            if (!feed) return;
 
-        function renderTeacherMatrix() {
-            const tbody = document.getElementById('teacher-matrix-tbody');
-            if (!tbody) return;
+            const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+            const now = Date.now();
 
-            const matrix = getStoredMatrix();
+            const validMsgs = appData.communityMessages.filter(m => (now - m.timestamp) < SEVEN_DAYS_MS);
 
-            if (matrix.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="6" class="p-4 text-center text-gray-500">Henüz tamamlanan ödev kaydı bulunmuyor.</td>
-                    </tr>
-                `;
+            if (validMsgs.length === 0) {
+                feed.innerHTML = `<div class="text-center py-8 text-gray-400 text-sm glass-card rounded-xl">Son 7 günde yazılmış mesaj bulunmuyor. İlk mesajı siz atın!</div>`;
                 return;
             }
 
-            tbody.innerHTML = matrix.map(row => `
-                <tr class="hover:bg-white/5 transition">
-                    <td class="p-3 font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-user-graduate text-pink-400"></i> ${row.studentName}
-                    </td>
-                    <td class="p-3 text-gray-200">${row.hwTitle}</td>
-                    <td class="p-3 text-gray-400">${row.grade}. Sınıf</td>
-                    <td class="p-3">
-                        <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-md text-[10px] font-bold">
-                            ${row.status}
-                        </span>
-                    </td>
-                    <td class="p-3 text-gray-400">${row.completionDate}</td>
-                    <td class="p-3 text-right font-bold text-amber-300">${row.score}</td>
-                </tr>
-            `).join('');
+            feed.innerHTML = validMsgs.map(m => {
+                const dateStr = new Date(m.timestamp).toLocaleString("tr-TR", { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' });
+                const isTeacher = m.author.startsWith("ZigguratÖğretmeni:");
+
+                return `
+                    <div class="glass-card p-3.5 rounded-xl border-purple-500/20 space-y-1.5 hover:border-purple-500/40 transition-all">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="font-bold ${isTeacher ? 'text-amber-400 flex items-center gap-1' : 'text-purple-300'}">
+                                ${isTeacher ? '<i class="fa-solid fa-chalkboard-user"></i>' : ''} ${escapeHtml(m.author)}
+                            </span>
+                            <span class="text-[10px] text-gray-400">${dateStr}</span>
+                        </div>
+                        <p class="text-sm text-gray-200">${escapeHtml(m.text)}</p>
+                    </div>
+                `;
+            }).join('');
         }
 
-        function populateStudentChecklist() {
-            const container = document.getElementById('student-checklist-container');
-            if (!container) return;
+        /* ==========================================================================
+           6. TEACHER ZONE & HOMEWORK ASSIGNMENT
+           ========================================================================== */
+        function handleAssignHomework(e) {
+            e.preventDefault();
+            const level = document.getElementById("teacherLevel").value;
+            const subject = document.getElementById("teacherSubject").value.trim();
+            const desc = document.getElementById("teacherDescription").value.trim();
+            const target = document.getElementById("teacherTargetStudent").value;
 
-            // List of active students
-            const students = [
-                'Kullanıcı',
-                'Caner Yılmaz',
-                'Ayşe Kaya',
-                'Mehmet Demir',
-                'Elif Öztürk'
-            ];
+            if (!subject || !desc) return;
 
-            if (!students.includes(currentUser.name) && !isTeacher()) {
-                students.unshift(currentUser.name);
+            const newHw = {
+                id: "hw-" + Date.now(),
+                level: level,
+                subject: subject,
+                description: desc,
+                assignedTo: target,
+                assignedBy: currentUser.name,
+                date: new Date().toLocaleDateString("tr-TR"),
+                completedBy: {},
+                completedTime: {}
+            };
+
+            appData.homeworks.unshift(newHw);
+            syncCloud();
+
+            document.getElementById("teacherSubject").value = "";
+            document.getElementById("teacherDescription").value = "";
+            alert("Ödev başarıyla atandı ve bulut sistemine yüklendi!");
+        }
+
+        function renderStudentHomeworks() {
+            const list = document.getElementById("studentHomeworkList");
+            if (!list) return;
+
+            const myHws = appData.homeworks.filter(h => h.assignedTo === "HERKES" || h.assignedTo === currentUser.name);
+
+            if (myHws.length === 0) {
+                list.innerHTML = `<div class="col-span-2 text-center py-8 text-gray-400 text-sm glass-card rounded-xl">Size atanmış herhangi bir ödev bulunmamaktadır.</div>`;
+                return;
             }
 
-            container.innerHTML = `
-                <label class="flex items-center gap-2 text-xs text-amber-300 font-bold cursor-pointer col-span-full border-b border-white/10 pb-1">
-                    <input type="checkbox" value="Tüm Öğrenciler" checked class="rounded bg-black border-white/20 text-pink-600 focus:ring-0">
-                    Tüm Sınıf Öğrencileri
-                </label>
-            ` + students.map(st => `
-                <label class="flex items-center gap-2 text-xs text-gray-300 cursor-pointer hover:text-white">
-                    <input type="checkbox" value="${st}" class="hw-student-checkbox rounded bg-black border-white/20 text-pink-600 focus:ring-0">
-                    <span>${st}</span>
-                </label>
+            list.innerHTML = myHws.map(hw => {
+                const isCompleted = hw.completedBy && hw.completedBy[currentUser.name];
+                const timeStr = isCompleted ? hw.completedTime[currentUser.name] : "";
+
+                return `
+                    <div class="glass-card p-4 rounded-xl space-y-3 border border-purple-500/20 relative">
+                        <div class="flex justify-between items-start">
+                            <span class="text-[10px] bg-purple-900/60 text-purple-300 px-2 py-0.5 rounded border border-purple-500/30">
+                                ${hw.level}
+                            </span>
+                            <span class="text-xs ${isCompleted ? 'text-emerald-400 font-bold' : 'text-amber-400'} flex items-center space-x-1">
+                                <i class="fa-solid ${isCompleted ? 'fa-circle-check' : 'fa-clock'}"></i>
+                                <span>${isCompleted ? 'Tamamlandı' : 'Yapılmadı'}</span>
+                            </span>
+                        </div>
+
+                        <div>
+                            <h4 class="font-bold text-white text-sm">${escapeHtml(hw.subject)}</h4>
+                            <p class="text-xs text-gray-300 mt-1">${escapeHtml(hw.description)}</p>
+                        </div>
+
+                        <div class="pt-2 border-t border-purple-500/10 flex justify-between items-center text-[11px] text-gray-400">
+                            <span>Atayan: ${escapeHtml(hw.assignedBy)}</span>
+                            ${isCompleted ? `<span class="text-emerald-300 font-semibold">${timeStr}</span>` : `
+                                <button onclick="markHomeworkDone('${hw.id}')" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1 rounded-lg text-xs font-semibold transition-all">
+                                    Tamamladım
+                                </button>
+                            `}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function markHomeworkDone(hwId) {
+            const hw = appData.homeworks.find(h => h.id === hwId);
+            if (hw) {
+                if (!hw.completedBy) hw.completedBy = {};
+                if (!hw.completedTime) hw.completedTime = {};
+
+                hw.completedBy[currentUser.name] = true;
+                hw.completedTime[currentUser.name] = new Date().toLocaleTimeString("tr-TR", { hour: '2-digit', minute: '2-digit' });
+
+                // Award bonus points for homework completion
+                currentUser.points += 20;
+
+                syncCloud();
+                renderStudentHomeworks();
+                renderTeacherHomeworkTable();
+            }
+        }
+
+        function renderTeacherHomeworkTable() {
+            const tbody = document.getElementById("teacherHomeworkTableBody");
+            if (!tbody) return;
+
+            if (appData.homeworks.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-gray-400">Kayıtlı ödev bulunamadı.</td></tr>`;
+                return;
+            }
+
+            let rows = [];
+            appData.homeworks.forEach(hw => {
+                const targetDisplay = hw.assignedTo === "HERKES" ? "Tüm Öğrenciler" : hw.assignedTo;
+                const completers = hw.completedBy ? Object.keys(hw.completedBy) : [];
+
+                if (completers.length === 0) {
+                    rows.push(`
+                        <tr class="hover:bg-purple-900/20">
+                            <td class="p-3 font-semibold text-purple-300">${escapeHtml(targetDisplay)}</td>
+                            <td class="p-3">${hw.level}</td>
+                            <td class="p-3">${escapeHtml(hw.subject)}</td>
+                            <td class="p-3">${hw.date}</td>
+                            <td class="p-3"><span class="text-rose-400 bg-rose-950/60 px-2 py-0.5 rounded text-[10px]">Yapılmadı</span></td>
+                            <td class="p-3 text-gray-500">-</td>
+                        </tr>
+                    `);
+                } else {
+                    completers.forEach(student => {
+                        rows.push(`
+                            <tr class="hover:bg-purple-900/20">
+                                <td class="p-3 font-semibold text-emerald-300">${escapeHtml(student)}</td>
+                                <td class="p-3">${hw.level}</td>
+                                <td class="p-3">${escapeHtml(hw.subject)}</td>
+                                <td class="p-3">${hw.date}</td>
+                                <td class="p-3"><span class="text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded text-[10px]">Tamamlandı</span></td>
+                                <td class="p-3 text-emerald-300">${hw.completedTime[student]}</td>
+                            </tr>
+                        `);
+                    });
+                }
+            });
+
+            tbody.innerHTML = rows.join('');
+        }
+
+        function updateTeacherKnownStudents() {
+            const select = document.getElementById("teacherTargetStudent");
+            if (!select) return;
+
+            const students = new Set();
+            appData.communityMessages.forEach(m => {
+                if (!m.author.startsWith("ZigguratÖğretmeni:")) {
+                    students.add(m.author);
+                }
+            });
+
+            select.innerHTML = `
+                <option value="HERKES">Tüm Öğrenciler (Genel)</option>
+                ${Array.from(students).map(s => `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join('')}
+            `;
+        }
+
+        /* ==========================================================================
+           7. QUIZZES & POINTS SYSTEM
+           ========================================================================== */
+        const quizDatabase = [
+            {
+                id: "quiz-1",
+                level: "LGS'ye Hazırlık",
+                title: "LGS Fen Bilimleri - Tutulmalar ve Yörüngeler",
+                questions: [
+                    {
+                        q: "Güneş tutulması esnasında Ay hangi evrededir?",
+                        options: ["A) Dolunay", "B) Yeni Ay", "C) İlk Dördün", "D) Son Dördün"],
+                        correct: 1
+                    },
+                    {
+                        q: "Ay tutulması sırasında gerçekleşen dizilim nasıldır?",
+                        options: [
+                            "A) Güneş - Ay - Dünya",
+                            "B) Güneş - Dünya - Ay",
+                            "C) Dünya - Güneş - Ay",
+                            "D) Ay - Güneş - Dünya"
+                        ],
+                        correct: 1
+                    }
+                ]
+            },
+            {
+                id: "quiz-2",
+                level: "LGS'ye Hazırlık",
+                title: "LGS Matematik - Çarpanlar ve Katlar",
+                questions: [
+                    {
+                        q: "12 ve 18 sayılarının en küçük ortak katı (EKOK) kaçtır?",
+                        options: ["A) 6", "B) 36", "C) 72", "D) 108"],
+                        correct: 1
+                    }
+                ]
+            },
+            {
+                id: "quiz-3",
+                level: "7. Sınıf",
+                title: "7. Sınıf Fen - Hücre ve Organeller",
+                questions: [
+                    {
+                        q: "Hücrede enerji üreten organel hangisidir?",
+                        options: ["A) Mitokondri", "B) Ribozom", "C) Lizozom", "D) Golgi Cisimciği"],
+                        correct: 0
+                    }
+                ]
+            }
+        ];
+
+        function renderTests() {
+            const container = document.getElementById("testsContainer");
+            const selectedLevel = document.getElementById("testLevelFilter").value;
+
+            const filtered = quizDatabase.filter(q => q.level === selectedLevel);
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="col-span-2 text-center py-8 text-gray-400 text-sm glass-card rounded-xl">Bu seviye için henüz test eklenmemiş.</div>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map(q => `
+                <div class="glass-card p-5 rounded-xl space-y-3 hover:border-purple-500/40 transition-all flex flex-col justify-between">
+                    <div>
+                        <span class="text-[10px] bg-purple-900/60 text-purple-300 px-2.5 py-0.5 rounded border border-purple-500/30">
+                            ${q.level}
+                        </span>
+                        <h4 class="font-bold text-white text-base mt-2">${q.title}</h4>
+                        <p class="text-xs text-purple-300 mt-1">${q.questions.length} Soru (+50 Puan)</p>
+                    </div>
+                    <button onclick="openQuiz('${q.id}')" class="w-full mt-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-2 rounded-xl text-xs font-semibold shadow-md hover:opacity-90 transition-all">
+                        Testi Başlat
+                    </button>
+                </div>
             `).join('');
         }
 
-        function handleCreateHomework(e) {
+        function openQuiz(quizId) {
+            const quiz = quizDatabase.find(q => q.id === quizId);
+            if (!quiz) return;
+
+            document.getElementById("modalQuizTitle").innerText = quiz.title;
+            const content = document.getElementById("modalQuizContent");
+
+            content.innerHTML = `
+                <form onsubmit="submitQuiz(event, '${quiz.id}')" class="space-y-4">
+                    ${quiz.questions.map((q, idx) => `
+                        <div class="glass-card p-4 rounded-xl space-y-2 border-purple-500/20">
+                            <p class="font-semibold text-sm text-white">${idx + 1}. ${q.q}</p>
+                            <div class="space-y-1">
+                                ${q.options.map((opt, optIdx) => `
+                                    <label class="flex items-center space-x-2 text-xs text-gray-300 cursor-pointer p-1.5 rounded hover:bg-purple-900/30">
+                                        <input type="radio" name="q_${idx}" value="${optIdx}" required class="accent-purple-500">
+                                        <span>${opt}</span>
+                                    </label>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-2.5 rounded-xl text-xs font-semibold shadow-lg transition-all">
+                        Cevapları Gönder
+                    </button>
+                </form>
+            `;
+
+            document.getElementById("quizModal").classList.remove("hidden");
+        }
+
+        function submitQuiz(e, quizId) {
             e.preventDefault();
-            if (!isTeacher()) return;
+            const quiz = quizDatabase.find(q => q.id === quizId);
+            let score = 0;
 
-            const grade = document.getElementById('hw-grade-select').value;
-            const title = document.getElementById('hw-title-input').value.trim();
-            const desc = document.getElementById('hw-desc-input').value.trim();
-
-            const selectedStudents = [];
-            document.querySelectorAll('#student-checklist-container input:checked').forEach(cb => {
-                selectedStudents.push(cb.value);
+            quiz.questions.forEach((q, idx) => {
+                const selected = document.querySelector(`input[name="q_${idx}"]:checked`);
+                if (selected && parseInt(selected.value) === q.correct) {
+                    score += 100 / quiz.questions.length;
+                }
             });
 
-            if (!title) return;
+            const gainedPoints = Math.round(score / 2);
+            currentUser.points += gainedPoints;
+            syncCloud();
 
-            const allHw = getStoredHomeworks();
-            allHw.unshift({
-                id: 'hw-' + Date.now(),
-                grade: grade,
-                title: title,
-                teacher: currentUser.name,
-                desc: desc,
-                targetedStudents: selectedStudents.length > 0 ? selectedStudents : ['Tüm Öğrenciler']
-            });
+            alert(`Test Tamamlandı!\nPuanınız: ${Math.round(score)} / 100\nKazanılan Puan: +${gainedPoints}`);
+            closeQuizModal();
+        }
 
-            localStorage.setItem(STORAGE_KEY_HOMEWORKS, JSON.stringify(allHw));
+        function closeQuizModal() {
+            document.getElementById("quizModal").classList.add("hidden");
+        }
 
-            document.getElementById('hw-title-input').value = '';
-            document.getElementById('hw-desc-input').value = '';
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
 
-            renderHomeworksAndQuizzes();
-            alert(`Ödev başarıyla oluşturuldu ve seçilen ${selectedStudents.join(', ')} öğrencilerine yönlendirildi!`);
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/&/g, "&amp;")
+                      .replace(/</g, "&lt;")
+                      .replace(/>/g, "&gt;")
+                      .replace(/"/g, "&quot;")
+                      .replace(/'/g, "&#039;");
         }
     </script>
 </body>
