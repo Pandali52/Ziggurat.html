@@ -301,7 +301,7 @@
                 </div>
                 <h3 class="text-xl font-bold text-white">Öğretmen Alanı Kilitli</h3>
                 <p class="text-sm text-gray-300 leading-relaxed">
-                    Bu alana yalnızca yetkili öğretmen hesapları erişebilir. Yetkili moduna geçmek için profil bilgilerinizi güncelleyebilirsiniz.
+                    Bu alana erişebilmek için profil adınızın başında <strong class="text-purple-300">"ZigguratÖğretmeni:"</strong> takısı olmalıdır.
                 </p>
                 <button onclick="openProfileModal()" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2.5 rounded-xl text-xs font-semibold hover:opacity-90 transition-all">
                     Profil Ayarlarına Git
@@ -309,44 +309,122 @@
             </div>
 
             <div id="teacherPanel" class="hidden space-y-6">
+                <!-- Assign Homework Card -->
                 <div class="glass-card rounded-2xl p-4 md:p-6 space-y-4">
                     <h3 class="font-bold text-lg text-white border-b border-purple-500/20 pb-3 flex items-center space-x-2">
                         <i class="fa-solid fa-pen-to-square text-purple-400"></i>
                         <span>Yeni Ödev Tanımlama Paneli</span>
                     </h3>
 
-                    <form onsubmit="handleAssignHomework(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <form onsubmit="handleAssignHomework(event)" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-purple-300 mb-1">Düzey Seçin</label>
+                                <select id="teacherLevel" class="w-full glass-card p-3 rounded-xl border border-purple-500/30 bg-purple-950 text-sm text-white focus:outline-none">
+                                    <option value="5. Sınıf">5. Sınıf</option>
+                                    <option value="6. Sınıf">6. Sınıf</option>
+                                    <option value="7. Sınıf">7. Sınıf</option>
+                                    <option value="LGS'ye Hazırlık">LGS'ye Hazırlık</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-purple-300 mb-1">Ders / Konu</label>
+                                <input type="text" id="teacherSubject" placeholder="Örn: LGS Fen - Basınç" required class="w-full glass-card p-3 rounded-xl border border-purple-500/30 text-sm text-white placeholder-gray-400 focus:outline-none">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-xs font-semibold text-purple-300 mb-1">Ödev Açıklaması & Talimatlar</label>
+                                <textarea id="teacherDescription" rows="2" placeholder="Ödev detaylarını ve yönergeleri girin..." required class="w-full glass-card p-3 rounded-xl border border-purple-500/30 text-sm text-white placeholder-gray-400 focus:outline-none resize-none"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- User Search & Selection for Homework -->
+                        <div class="space-y-2">
+                            <label class="block text-xs font-semibold text-purple-300">Ödev Verilecek Kullanıcıları Seçin (Arama & Seçim)</label>
+                            <input type="text" id="userSearchInput" oninput="filterStudentList()" placeholder="Kullanıcı adı ara..." class="w-full glass-card p-2.5 rounded-xl border border-purple-500/30 text-xs text-white placeholder-gray-400 focus:outline-none">
+                            <div class="flex items-center space-x-2 mt-2">
+                                <input type="checkbox" id="selectAllStudents" onchange="toggleSelectAllStudents(this)" class="accent-purple-600 rounded">
+                                <label for="selectAllStudents" class="text-xs text-purple-200 font-semibold">Tüm Öğrencilere Gönder (HERKES)</label>
+                            </div>
+                            <div id="studentCheckboxList" class="max-h-40 overflow-y-auto space-y-1 p-2 glass-card rounded-xl border border-purple-500/20">
+                                <!-- Dynamic checkboxes of students -->
+                            </div>
+                        </div>
+
                         <div>
-                            <label class="block text-xs font-semibold text-purple-300 mb-1">1. Adım: Düzey Seçin</label>
-                            <select id="teacherLevel" class="w-full glass-card p-3 rounded-xl border border-purple-500/30 bg-purple-950 text-sm text-white focus:outline-none">
-                                <option value="5. Sınıf">5. Sınıf</option>
-                                <option value="6. Sınıf">6. Sınıf</option>
-                                <option value="7. Sınıf">7. Sınıf</option>
-                                <option value="LGS'ye Hazırlık">LGS'ye Hazırlık</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-purple-300 mb-1">2. Adım: Ders / Konu</label>
-                            <input type="text" id="teacherSubject" placeholder="Örn: LGS Fen - Basınç" required class="w-full glass-card p-3 rounded-xl border border-purple-500/30 text-sm text-white placeholder-gray-400 focus:outline-none">
-                        </div>
-                        <div class="md:col-span-2">
-                            <label class="block text-xs font-semibold text-purple-300 mb-1">3. Adım: Ödev Açıklaması & Talimatlar</label>
-                            <textarea id="teacherDescription" rows="2" placeholder="Ödev detaylarını ve yönergeleri girin..." required class="w-full glass-card p-3 rounded-xl border border-purple-500/30 text-sm text-white placeholder-gray-400 focus:outline-none resize-none"></textarea>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-purple-300 mb-1">4. Adım: Hedef Öğrenci Grubu</label>
-                            <select id="teacherTargetStudent" class="w-full glass-card p-3 rounded-xl border border-purple-500/30 bg-purple-950 text-sm text-white focus:outline-none">
-                                <option value="HERKES">TÜM Öğrenciler (Genel)</option>
-                            </select>
-                        </div>
-                        <div class="flex items-end">
                             <button type="submit" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white p-3 rounded-xl text-sm font-semibold shadow-md transition-all">
-                                <i class="fa-solid fa-paper-plane mr-2"></i> Ödevi Sisteme Yükle!
+                                <i class="fa-solid fa-paper-plane mr-2"></i> Ödevi Seçilenlere Yükle!
                             </button>
                         </div>
                     </form>
                 </div>
 
+                <!-- Test Creation Panel (Up to 10 Questions) -->
+                <div class="glass-card rounded-2xl p-4 md:p-6 space-y-4">
+                    <h3 class="font-bold text-lg text-white border-b border-purple-500/20 pb-3 flex items-center space-x-2">
+                        <i class="fa-solid fa-vial-circle-check text-purple-400"></i>
+                        <span>Öğretmen Test / Sınav Oluşturma Paneli (Maks 10 Soru)</span>
+                    </h3>
+
+                    <form onsubmit="handleCreateTeacherTest(event)" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-purple-300 mb-1">Test Düzeyi</label>
+                                <select id="testCreatorLevel" class="w-full glass-card p-3 rounded-xl border border-purple-500/30 bg-purple-950 text-sm text-white focus:outline-none">
+                                    <option value="5. Sınıf">5. Sınıf</option>
+                                    <option value="6. Sınıf">6. Sınıf</option>
+                                    <option value="7. Sınıf">7. Sınıf</option>
+                                    <option value="LGS'ye Hazırlık">LGS'ye Hazırlık</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-purple-300 mb-1">Test Başlığı / Konusu</label>
+                                <input type="text" id="testCreatorTitle" placeholder="Örn: 7. Sınıf Hücre Deneme" required class="w-full glass-card p-3 rounded-xl border border-purple-500/30 text-sm text-white placeholder-gray-400 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-purple-300 mb-1">Soru Sayısı (1 - 10)</label>
+                                <input type="number" id="testCreatorCount" min="1" max="10" value="3" onchange="generateTestQuestionFields()" required class="w-full glass-card p-3 rounded-xl border border-purple-500/30 text-sm text-white focus:outline-none">
+                            </div>
+                        </div>
+
+                        <!-- Dynamic Question Builder Container -->
+                        <div id="testQuestionsBuilderContainer" class="space-y-4 max-h-96 overflow-y-auto pr-2">
+                            <!-- Dynamic question forms generated here -->
+                        </div>
+
+                        <!-- Action Options: Ödev mi Yükle mi? -->
+                        <div class="p-3 glass-card rounded-xl border border-purple-500/30 space-y-2">
+                            <label class="block text-xs font-semibold text-purple-300">Yayınlama Seçeneği:</label>
+                            <div class="flex gap-4">
+                                <label class="flex items-center space-x-2 text-xs text-white cursor-pointer">
+                                    <input type="radio" name="testPublishAction" value="homework" checked class="accent-purple-600">
+                                    <span>Ödev Olarak Ata (Seçilen Öğrencilere)</span>
+                                </label>
+                                <label class="flex items-center space-x-2 text-xs text-white cursor-pointer">
+                                    <input type="radio" name="testPublishAction" value="upload" class="accent-purple-600">
+                                    <span>Sisteme Test Olarak Yükle (Testler Sekmesinde Yayınla)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Target Student Selection for Test as Homework -->
+                        <div id="testTargetStudentBox" class="space-y-2">
+                            <label class="block text-xs font-semibold text-purple-300">Testi Ödev Olarak Alacak Öğrenciler</label>
+                            <input type="text" id="testUserSearchInput" oninput="filterTestStudentList()" placeholder="Öğrenci ara..." class="w-full glass-card p-2.5 rounded-xl border border-purple-500/30 text-xs text-white placeholder-gray-400 focus:outline-none">
+                            <div class="flex items-center space-x-2 mt-1">
+                                <input type="checkbox" id="testSelectAllStudents" onchange="toggleTestSelectAllStudents(this)" class="accent-purple-600 rounded">
+                                <label for="testSelectAllStudents" class="text-xs text-purple-200 font-semibold">Tüm Öğrencilere Gönder (HERKES)</label>
+                            </div>
+                            <div id="testStudentCheckboxList" class="max-h-32 overflow-y-auto space-y-1 p-2 glass-card rounded-xl border border-purple-500/20">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:opacity-90 text-white p-3 rounded-xl text-sm font-semibold shadow-md transition-all">
+                            <i class="fa-solid fa-cloud-arrow-up mr-2"></i> Testi / Ödevi Oluştur ve Yayınla!
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Student Performance Table -->
                 <div class="glass-card rounded-2xl p-4 md:p-6 space-y-4">
                     <h3 class="font-bold text-lg text-white border-b border-purple-500/20 pb-3 flex items-center space-x-2">
                         <i class="fa-solid fa-clipboard-user text-purple-400"></i>
@@ -384,14 +462,13 @@
                 <i class="fa-solid fa-xmark"></i>
             </button>
             <h3 class="font-bold text-lg text-purple-300">Profil Ayarları</h3>
+            <p class="text-xs text-purple-300 leading-relaxed">
+                İstediğiniz ismi yazabilirsiniz. Öğretmen olmak için isminizin başına <strong class="text-pink-300">"ZigguratÖğretmeni:"</strong> yazmanız yeterlidir.
+            </p>
             <form onsubmit="applyUserIdentity(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold text-purple-300 mb-1">Adınız / Kullanıcı Adınız</label>
-                    <input type="text" id="profileInputName" placeholder="Adınızı giriniz..." required class="w-full glass-card p-3 rounded-xl border border-purple-500/30 text-sm text-white placeholder-gray-400 focus:outline-none">
-                </div>
-                <div class="flex items-center space-x-2">
-                    <input type="checkbox" id="profileInputTeacher" class="w-4 h-4 accent-purple-600 rounded">
-                    <label for="profileInputTeacher" class="text-xs text-purple-200">Öğretmen Modunu Etkinleştir (Şifre veya Yetki)</label>
+                    <input type="text" id="profileInputName" placeholder="Örn: ZigguratÖğretmeni:Ahmet veya Ali" required class="w-full glass-card p-3 rounded-xl border border-purple-500/30 text-sm text-white placeholder-gray-400 focus:outline-none">
                 </div>
                 <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-2.5 rounded-xl text-xs font-semibold shadow-md">
                     Kaydet ve Uygula
@@ -416,7 +493,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     <script>
         /* ==========================================================
-           1. USER PROFILE & HIDDEN TEACHER LOCK MECHANISM
+           1. USER PROFILE & TEACHER PREFIX LOCK MECHANISM
            ========================================================== */
         let currentUser = {
             name: "Kullanıcı",
@@ -429,10 +506,11 @@
         // Init profile from storage or default
         const savedName = localStorage.getItem("ziggurat_user_name");
         if (savedName) currentUser.name = savedName;
-        const savedTeacher = localStorage.getItem("ziggurat_is_teacher");
-        if (savedTeacher === "true") currentUser.isTeacher = true;
         const savedPoints = localStorage.getItem("ziggurat_user_points");
         if (savedPoints) currentUser.points = parseInt(savedPoints) || 0;
+
+        // Check teacher status based on prefix "ZigguratÖğretmeni:"
+        currentUser.isTeacher = currentUser.name.startsWith("ZigguratÖğretmeni:");
 
         function applyUserIdentityName() {
             document.getElementById("userNameDisplay").innerText = currentUser.name;
@@ -452,6 +530,7 @@
                 panel.classList.remove("hidden");
                 lockIcon.classList.remove("fa-lock", "text-rose-400");
                 lockIcon.classList.add("fa-lock-open", "text-emerald-400");
+                loadStudentCheckboxes();
             } else {
                 banner.classList.remove("hidden");
                 panel.classList.add("hidden");
@@ -462,7 +541,6 @@
 
         function openProfileModal() {
             document.getElementById("profileInputName").value = currentUser.name;
-            document.getElementById("profileInputTeacher").checked = currentUser.isTeacher;
             document.getElementById("profileModal").classList.remove("hidden");
         }
 
@@ -473,9 +551,10 @@
         function applyUserIdentity(e) {
             e.preventDefault();
             const newName = document.getElementById("profileInputName").value.trim();
-            const newTeacher = document.getElementById("profileInputTeacher").checked;
-            if (newName) currentUser.name = newName;
-            currentUser.isTeacher = newTeacher;
+            if (newName) {
+                currentUser.name = newName;
+                currentUser.isTeacher = newName.startsWith("ZigguratÖğretmeni:");
+            }
 
             localStorage.setItem("ziggurat_user_name", currentUser.name);
             localStorage.setItem("ziggurat_is_teacher", currentUser.isTeacher);
@@ -505,7 +584,8 @@
         let appData = {
             communityMessages: {},
             homeworks: {},
-            points: {}
+            points: {},
+            customQuizzes: {}
         };
 
         try {
@@ -532,6 +612,7 @@
                     appData.communityMessages = getInitialCommunityMessages();
                 }
                 renderCommunityFeed();
+                updateKnownUsersList();
             });
 
             // Live Homeworks Listener
@@ -546,11 +627,36 @@
                 renderStudentHomeworks();
                 renderTeacherHomeworkTable();
             });
+
+            // Live Quizzes Listener
+            const dbRefQz = db.ref("customQuizzes");
+            dbRefQz.on("value", (snapshot) => {
+                const val = snapshot.val();
+                if (val) {
+                    appData.customQuizzes = val;
+                } else {
+                    appData.customQuizzes = {};
+                }
+                if (!document.getElementById("section-tests").classList.contains("hidden")) {
+                    renderTests();
+                }
+            });
+
+            // Points Listener to gather all student names
+            const dbRefPts = db.ref("points");
+            dbRefPts.on("value", (snapshot) => {
+                const val = snapshot.val();
+                if (val) {
+                    appData.points = val;
+                }
+                updateKnownUsersList();
+            });
         } else {
             appData.communityMessages = getInitialCommunityMessages();
             appData.homeworks = getInitialHomeworks();
             renderCommunityFeed();
             renderStudentHomeworks();
+            updateKnownUsersList();
         }
 
         function syncCloud() {
@@ -577,10 +683,103 @@
                     level: "LGS'ye Hazırlık",
                     subject: "LGS Fen Bilimleri - Güneş ve Ay Tutulması",
                     description: "EBA üzerindeki konu anlatım simülasyonunu izleyip 15 soru çözün.",
-                    assignedBy: "HERKES",
+                    assignedBy: "ZigguratÖğretmeni:Sistem",
+                    targetUsers: ["HERKES"],
                     completedBy: {}
                 }
             };
+        }
+
+        // Gather all known users from points, community messages, and current user
+        function getKnownUsers() {
+            let usersSet = new Set();
+            usersSet.add(currentUser.name);
+            if (appData.points) {
+                Object.keys(appData.points).forEach(u => usersSet.add(u.replace(/_/g, ".")));
+            }
+            if (appData.communityMessages) {
+                Object.values(appData.communityMessages).forEach(m => {
+                    if (m.author) usersSet.add(m.author);
+                });
+            }
+            // Filter out teacher prefixes if desired, or keep all students
+            let list = Array.from(usersSet).filter(u => !u.startsWith("ZigguratÖğretmeni:"));
+            if (list.length === 0) list = ["Kullanıcı"];
+            return list;
+        }
+
+        function updateKnownUsersList() {
+            if (currentUser.isTeacher) {
+                loadStudentCheckboxes();
+            }
+        }
+
+        function loadStudentCheckboxes() {
+            const users = getKnownUsers();
+            
+            // Homework checkboxes
+            const hwContainer = document.getElementById("studentCheckboxList");
+            if (hwContainer) {
+                hwContainer.innerHTML = "";
+                users.forEach(user => {
+                    hwContainer.innerHTML += `
+                        <label class="flex items-center space-x-2 text-xs text-gray-200 cursor-pointer p-1 hover:bg-purple-900/30 rounded">
+                            <input type="checkbox" name="targetStudentCheckbox" value="${escapeHtml(user)}" class="accent-purple-600 rounded">
+                            <span>${escapeHtml(user)}</span>
+                        </label>`;
+                });
+            }
+
+            // Test as homework checkboxes
+            const testHwContainer = document.getElementById("testStudentCheckboxList");
+            if (testHwContainer) {
+                testHwContainer.innerHTML = "";
+                users.forEach(user => {
+                    testHwContainer.innerHTML += `
+                        <label class="flex items-center space-x-2 text-xs text-gray-200 cursor-pointer p-1 hover:bg-purple-900/30 rounded">
+                            <input type="checkbox" name="testTargetStudentCheckbox" value="${escapeHtml(user)}" class="accent-purple-600 rounded">
+                            <span>${escapeHtml(user)}</span>
+                        </label>`;
+                });
+            }
+        }
+
+        function filterStudentList() {
+            const query = document.getElementById("userSearchInput").value.toLowerCase();
+            const container = document.getElementById("studentCheckboxList");
+            const labels = container.getElementsByTagName("label");
+            for (let label of labels) {
+                const text = label.innerText.toLowerCase();
+                if (text.includes(query)) {
+                    label.style.display = "flex";
+                } else {
+                    label.style.display = "none";
+                }
+            }
+        }
+
+        function filterTestStudentList() {
+            const query = document.getElementById("testUserSearchInput").value.toLowerCase();
+            const container = document.getElementById("testStudentCheckboxList");
+            const labels = container.getElementsByTagName("label");
+            for (let label of labels) {
+                const text = label.innerText.toLowerCase();
+                if (text.includes(query)) {
+                    label.style.display = "flex";
+                } else {
+                    label.style.display = "none";
+                }
+            }
+        }
+
+        function toggleSelectAllStudents(master) {
+            const checkboxes = document.querySelectorAll('input[name="targetStudentCheckbox"]');
+            checkboxes.forEach(cb => cb.checked = master.checked);
+        }
+
+        function toggleTestSelectAllStudents(master) {
+            const checkboxes = document.querySelectorAll('input[name="testTargetStudentCheckbox"]');
+            checkboxes.forEach(cb => cb.checked = master.checked);
         }
 
         /* ==========================================================
@@ -656,8 +855,8 @@
             if (query.includes("güneş") || query.includes("tutulma")) {
                 summaryText = "Güneş Tutulması, Ay'ın Dünya ile Güneş arasına girmesi ve Güneş'in ışığını engellemesiyle gerçekleşen doğa olayıdır. MEB Fen Bilimleri kaynaklarına göre yalnızca Yeni Ay evresinde gözlemlenir.";
                 sources = [
-                    { title: "MEB Fen Bilimleri Tutulmalar Ünitesi", url: "https://www.eba.gov.tr/go graduation cap" },
-                    { title: "MEB EDSGOL - Müfredat Kazanım Notları", url: "https://www.eba.gov.tr/focus" },
+                    { title: "MEB Fen Bilimleri Tutulmalar Ünitesi", url: "https://www.eba.gov.tr" },
+                    { title: "MEB EDSGOL - Müfredat Kazanım Notları", url: "https://www.eba.gov.tr" },
                     { title: "Google Datasheet - Akademik Astronomi Proy. İndeksi", url: "https://en.brands-for-google.com/" }
                 ];
             } else if (query.includes("nasılsın") || query.includes("merhaba")) {
@@ -666,7 +865,7 @@
             } else {
                 summaryText = `"${escapeHtml(q)}" konusunu MEB müfredatı, LGS kaynakları ve akademik havuzda aradım: Bu konu temel eğitim ve beceri temelli sorularla desteklenmektedir. Düzenli tekrar ve soru çözümü ile başarıyı garantileyebilirsin! 🚀`;
                 sources = [
-                    { title: "MEB Resmî Ders Portal Kitapları", url: "https://www.eba.gov.tr/fo board" },
+                    { title: "MEB Resmî Ders Portal Kitapları", url: "https://www.eba.gov.tr" },
                     { title: "LGS Merkezî Sınav Bilgi Bankası", url: "https://www.gov.tr/lgs-ogrenci" }
                 ];
             }
@@ -711,7 +910,6 @@
             const text = input.value.trim();
             if (!text) return;
 
-            // Banned word filter check
             let cleanText = text;
             BANNED_WORDS.forEach(word => {
                 const regex = new RegExp(word, "gi");
@@ -775,19 +973,31 @@
         }
 
         /* ==========================================================
-           6. HOMEWORK ASSIGNMENT SYSTEM
+           6. HOMEWORK ASSIGNMENT SYSTEM (Targeted Users)
            ========================================================== */
         function handleAssignHomework(e) {
             e.preventDefault();
             if (!currentUser.isTeacher) {
-                alert("Öğretmen yetkiniz yok!");
+                alert("Öğretmen yetkiniz yok! İsminizin başına 'ZigguratÖğretmeni:' eklemelisiniz.");
                 return;
             }
 
             const level = document.getElementById("teacherLevel").value;
             const subject = document.getElementById("teacherSubject").value;
             const desc = document.getElementById("teacherDescription").value;
-            const target = document.getElementById("teacherTargetStudent").value;
+
+            const selectAll = document.getElementById("selectAllStudents").checked;
+            let targetUsers = [];
+            if (selectAll) {
+                targetUsers = ["HERKES"];
+            } else {
+                const checkboxes = document.querySelectorAll('input[name="targetStudentCheckbox"]:checked');
+                checkboxes.forEach(cb => targetUsers.push(cb.value));
+                if (targetUsers.length === 0) {
+                    alert("Lütfen en az bir öğrenci seçin veya 'Tüm Öğrencilere Gönder' seçeneğini işaretleyin.");
+                    return;
+                }
+            }
 
             const hwId = "hw_" + Date.now();
             const hwObj = {
@@ -796,6 +1006,7 @@
                 subject: subject,
                 description: desc,
                 assignedBy: currentUser.name,
+                targetUsers: targetUsers,
                 completedBy: {}
             };
 
@@ -809,7 +1020,9 @@
 
             document.getElementById("teacherSubject").value = "";
             document.getElementById("teacherDescription").value = "";
-            alert("Ödev başarıyla tüm öğrencilere yüklendi!");
+            document.querySelectorAll('input[name="targetStudentCheckbox"]').forEach(cb => cb.checked = false);
+            document.getElementById("selectAllStudents").checked = false;
+            alert("Ödev başarıyla seçilen kullanıcılara yüklendi!");
         }
 
         function renderStudentHomeworks() {
@@ -819,13 +1032,19 @@
             const hws = appData.homeworks || {};
             const keys = Object.keys(hws);
 
-            if (keys.length === 0) {
-                list.innerHTML = `<p class="text-gray-400 text-sm col-span-full">Şu an atanmış ödev bulunmuyor.</p>`;
-                return;
-            }
+            let visibleCount = 0;
 
             keys.forEach(k => {
                 const hw = hws[k];
+                const targets = hw.targetUsers || ["HERKES"];
+                const isForEveryone = targets.includes("HERKES");
+                const isForMe = targets.includes(currentUser.name);
+
+                if (!isForEveryone && !isForMe && !currentUser.isTeacher) {
+                    return; // Skip if not targeted to this user
+                }
+
+                visibleCount++;
                 const completedMap = hw.completedBy || {};
                 const isCompleted = completedMap[currentUser.name] ? true : false;
                 const completedTime = isCompleted ? new Date(completedMap[currentUser.name]).toLocaleDateString() : "";
@@ -834,7 +1053,10 @@
                 card.className = "glass-card p-4 rounded-xl space-y-3 flex flex-col justify-between";
                 card.innerHTML = `
                     <div class="space-y-1">
-                        <span class="text-[10px] bg-purple-950 text-purple-300 border border-purple-500/30 px-2.5 py-0.5 rounded-full">${escapeHtml(hw.level)}</span>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] bg-purple-950 text-purple-300 border border-purple-500/30 px-2.5 py-0.5 rounded-full">${escapeHtml(hw.level)}</span>
+                            <span class="text-[10px] text-pink-300 bg-pink-950/40 px-2 py-0.5 rounded border border-pink-500/20">Hedef: ${isForEveryone ? 'Tüm Öğrenciler' : targets.join(', ')}</span>
+                        </div>
                         <h4 class="font-bold text-base text-white mt-1">${escapeHtml(hw.subject)}</h4>
                         <p class="text-xs text-gray-300">${escapeHtml(hw.description)}</p>
                         <p class="text-[11px] text-purple-400">Veren: ${escapeHtml(hw.assignedBy)}</p>
@@ -850,6 +1072,10 @@
                 `;
                 list.appendChild(card);
             });
+
+            if (visibleCount === 0) {
+                list.innerHTML = `<p class="text-gray-400 text-sm col-span-full">Şu an size atanmış özel veya genel ödev bulunmuyor.</p>`;
+            }
         }
 
         function toggleHomeworkDone(hwId) {
@@ -912,9 +1138,9 @@
         }
 
         /* ==========================================================
-           7. QUIZZES & TESTS SYSTEM
+           7. QUIZZES & TESTS SYSTEM (With Teacher Creator up to 10 Qs)
            ========================================================== */
-        const QUIZZES = [
+        const DEFAULT_QUIZZES = [
             {
                 id: "quiz-1",
                 level: "LGS'ye Hazırlık",
@@ -953,12 +1179,148 @@
             }
         ];
 
+        // Generate dynamic question input fields in teacher panel (up to 10)
+        function generateTestQuestionFields() {
+            const countInput = document.getElementById("testCreatorCount");
+            let count = parseInt(countInput.value) || 1;
+            if (count > 10) count = 10;
+            if (count < 1) count = 1;
+            countInput.value = count;
+
+            const container = document.getElementById("testQuestionsBuilderContainer");
+            container.innerHTML = "";
+
+            for (let i = 0; i < count; i++) {
+                container.innerHTML += `
+                    <div class="glass-card p-3 rounded-xl space-y-2 border border-purple-500/20">
+                        <p class="text-xs font-bold text-purple-300">Soru ${i + 1}</p>
+                        <input type="text" id="t_q_${i}" placeholder="Soru metnini yazın..." required class="w-full glass-card p-2.5 rounded-lg border border-purple-500/30 text-xs text-white placeholder-gray-400 focus:outline-none">
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" id="t_q_${i}_opt_0" placeholder="A Seçeneği" required class="glass-card p-2 rounded-lg border border-purple-500/30 text-xs text-white placeholder-gray-400 focus:outline-none">
+                            <input type="text" id="t_q_${i}_opt_1" placeholder="B Seçeneği" required class="glass-card p-2 rounded-lg border border-purple-500/30 text-xs text-white placeholder-gray-400 focus:outline-none">
+                            <input type="text" id="t_q_${i}_opt_2" placeholder="C Seçeneği" required class="glass-card p-2 rounded-lg border border-purple-500/30 text-xs text-white placeholder-gray-400 focus:outline-none">
+                            <input type="text" id="t_q_${i}_opt_3" placeholder="D Seçeneği" required class="glass-card p-2 rounded-lg border border-purple-500/30 text-xs text-white placeholder-gray-400 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="text-[11px] text-purple-300">Doğru Cevap:</label>
+                            <select id="t_q_${i}_ans" class="glass-card p-1.5 rounded-lg border border-purple-500/30 text-xs text-white bg-purple-950 focus:outline-none ml-2">
+                                <option value="0">A Seçeneği</option>
+                                <option value="1">B Seçeneği</option>
+                                <option value="2">C Seçeneği</option>
+                                <option value="3">D Seçeneği</option>
+                            </select>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Initialize question builder on load
+        window.addEventListener('DOMContentLoaded', () => {
+            generateTestQuestionFields();
+        });
+
+        function handleCreateTeacherTest(e) {
+            e.preventDefault();
+            if (!currentUser.isTeacher) {
+                alert("Öğretmen yetkiniz yok!");
+                return;
+            }
+
+            const level = document.getElementById("testCreatorLevel").value;
+            const title = document.getElementById("testCreatorTitle").value.trim();
+            const count = parseInt(document.getElementById("testCreatorCount").value) || 1;
+            const action = document.querySelector('input[name="testPublishAction"]:checked').value;
+
+            let questions = [];
+            for (let i = 0; i < count; i++) {
+                const qText = document.getElementById(`t_q_${i}`).value.trim();
+                const opt0 = document.getElementById(`t_q_${i}_opt_0`).value.trim();
+                const opt1 = document.getElementById(`t_q_${i}_opt_1`).value.trim();
+                const opt2 = document.getElementById(`t_q_${i}_opt_2`).value.trim();
+                const opt3 = document.getElementById(`t_q_${i}_opt_3`).value.trim();
+                const ans = parseInt(document.getElementById(`t_q_${i}_ans`).value);
+
+                if (!qText || !opt0 || !opt1 || !opt2 || !opt3) {
+                    alert(`Lütfen ${i + 1}. sorunun tüm alanlarını doldurun.`);
+                    return;
+                }
+                questions.push({
+                    q: qText,
+                    options: [opt0, opt1, opt2, opt3],
+                    answer: ans
+                });
+            }
+
+            const quizId = "quiz_custom_" + Date.now();
+            const quizObj = {
+                id: quizId,
+                level: level,
+                subject: title,
+                questions: questions,
+                createdBy: currentUser.name
+            };
+
+            if (action === "upload") {
+                // Publish to tests tab
+                if (db) {
+                    db.ref("customQuizzes/" + quizId).set(quizObj);
+                } else {
+                    appData.customQuizzes[quizId] = quizObj;
+                }
+                alert("Test başarıyla 'Testler' sekmesine yüklendi!");
+            } else {
+                // Publish as homework to selected students
+                const selectAll = document.getElementById("testSelectAllStudents").checked;
+                let targetUsers = [];
+                if (selectAll) {
+                    targetUsers = ["HERKES"];
+                } else {
+                    const checkboxes = document.querySelectorAll('input[name="testTargetStudentCheckbox"]:checked');
+                    checkboxes.forEach(cb => targetUsers.push(cb.value));
+                    if (targetUsers.length === 0) {
+                        alert("Lütfen ödev olarak atanacak en az bir öğrenci seçin.");
+                        return;
+                    }
+                }
+
+                const hwId = "hw_quiz_" + Date.now();
+                const hwObj = {
+                    id: hwId,
+                    level: level,
+                    subject: "[Test Ödevi] " + title,
+                    description: `Öğretmen tarafından atanan ${questions.length} soruluk test ödevi.`,
+                    assignedBy: currentUser.name,
+                    targetUsers: targetUsers,
+                    quizData: quizObj,
+                    completedBy: {}
+                };
+
+                if (db) {
+                    db.ref("homeworks/" + hwId).set(hwObj);
+                } else {
+                    appData.homeworks[hwId] = hwObj;
+                    renderStudentHomeworks();
+                    renderTeacherHomeworkTable();
+                }
+                alert("Test ödevi seçilen kullanıcılara başarıyla atandı!");
+            }
+
+            document.getElementById("testCreatorTitle").value = "";
+        }
+
         function renderTests() {
             const container = document.getElementById("testsContainer");
             const selectedLevel = document.getElementById("testLevelFilter").value;
             container.innerHTML = "";
 
-            const filtered = QUIZZES.filter(q => q.level === selectedLevel);
+            let allQuizzes = [...DEFAULT_QUIZZES];
+            const custom = appData.customQuizzes || {};
+            Object.keys(custom).forEach(k => {
+                allQuizzes.push(custom[k]);
+            });
+
+            const filtered = allQuizzes.filter(q => q.level === selectedLevel);
             if (filtered.length === 0) {
                 container.innerHTML = `<p class="text-gray-400 text-sm col-span-full">Bu düzeyde test bulunmuyor.</p>`;
                 return;
@@ -982,7 +1344,10 @@
         }
 
         function openQuizModal(quizId) {
-            const quiz = QUIZZES.find(q => q.id === quizId);
+            let quiz = DEFAULT_QUIZZES.find(q => q.id === quizId);
+            if (!quiz && appData.customQuizzes) {
+                quiz = appData.customQuizzes[quizId];
+            }
             if (!quiz) return;
 
             document.getElementById("modalQuizTitle").innerText = quiz.subject;
@@ -1015,7 +1380,10 @@
         }
 
         function submitQuiz(quizId) {
-            const quiz = QUIZZES.find(q => q.id === quizId);
+            let quiz = DEFAULT_QUIZZES.find(q => q.id === quizId);
+            if (!quiz && appData.customQuizzes) {
+                quiz = appData.customQuizzes[quizId];
+            }
             if (!quiz) return;
 
             let score = 0;
